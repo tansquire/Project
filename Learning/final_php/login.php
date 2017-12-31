@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
     <html>
     <head>
         <title></title>
@@ -42,11 +42,11 @@
         <?php
         if (isset($_POST['submit']))
             {     
-        include("config.php");
+        include("Config.php");
         session_start();
         $username=$_POST['username'];
         $password=$_POST['password'];
-        $_SESSION['login_user']=$username; 
+       // $_SESSION['login_user']=$username; 
 
         $sql = "SELECT * FROM Login WHERE username='$username' and password='$password'";
 
@@ -54,12 +54,27 @@
 	$row = mysqli_fetch_assoc($result);
 
         $x=$row[password];
+	//$user=$row[username];
+        
+
+	//$sql1 = "SELECT * FROM Login WHERE user_id='1'"; 
+
+	//$result1 = $conn->query($sql1);
+	//$row1 = mysqli_fetch_assoc($result1);
+
+        //$administrator=$row1[username];
+
+      
 
 
-       // $query = mysql_query("SELECT username FROM Login WHERE username='$username' and password='$password'");
+
+ // $query = mysql_query("SELECT username FROM Login WHERE username='$username' and password='$password'");
         if ($x!= 0)
         {
-         echo "<script language='javascript' type='text/javascript'> location.href='home.php' </script>";   
+
+         $_SESSION['login_user']=$username;
+         //session_register("username");
+         echo "<script language='javascript' type='text/javascript'> location.href='water1.php' </script>";   
          }
           else
           {
