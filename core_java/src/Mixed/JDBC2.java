@@ -3,7 +3,7 @@ package Mixed;
 import java.sql.*;
 //For netbeans, right click on library->add library->mysql jdbc driver->add
 //For eclips, you have to download the library(jar file) first
-//and then follow the abobe steps(master)
+//and then follow the abobe steps(master)added.
 
 public class JDBC2 //pring first row, and single element
 {
