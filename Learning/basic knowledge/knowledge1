@@ -1,0 +1,50 @@
+Gparted is used to format a pendrive
+Winusb is best to create bootable windows usb from iso
+windows 10 iso is downloaded from microsoft site
+rufus and unetbootin is used create bootable usb in windows. For linux
+only unetboot. However winusb is best.
+Win usb is not possible to install in ubuntu using gui, only commandline works.
+for installation of ubuntu take 20 gb for root, 2 gb for swap area, and rest gb for home. Install ubuntu in root.
+for ubuntu login problem, sudo apt-get install ubuntu-desktop
+then you will get idea
+cntrl+alt+t for terminal
+if login problem, cntrl+alt+f1
+easybcd works only on windows.it is for adding various os in bootloader
+F10 is bios for hp
+sudo date --set="2017-05-22 14:45:59.990" ----------Date time update command
+
+5000542763-----HP complain No
+
+
+
+
+Dear all, 
+           Please go through guidelines to install bluespec in your laptop. You need to have ubuntu 14.04 installed in your laptop to do this.
+
+            BLUESPEC INSTALLATION GUIDE
+1. Enter the address 10.6.5.254:8000 into your browser and
+download the Bluespec folder listed.
+    To copy the folder into your home folder.
+                cp -r <path-to-downloads>/ Bluespec-2017.03.beta1/ ~/
+2. open terminal and type the following-
+                gedit ~/.bashrc
+3. Add the following lines at the bottom of the opened file (~/.bashrc)
+                export BLUESPEC_HOME=~/Bluespec-2017.03.beta1/
+                export BLUESPECDIR=$BLUESPEC_HOME/lib
+                export PATH=$PATH:$BLUESPEC_HOME/bin
+                export LM_LICENSE_FILE=28000@risegateway:27000@vayu
+4. type "sudo gedit /etc/hosts" and add the following at the bottom of the file:
+                10.6.5.254 risegateway.
+                192.168.1.8 vayu
+5. Open new terminal and enter the following commands:
+                sudo apt-get install g++
+                sudo ln -s /usr/lib/x86_64-linux-gnu/libgmp.so.10 /usr/lib/x86_64-linux-gnu/libgmp.so.3
+6. Type bluespec in the terminal to open workstation.
+      
+Try example problems in the folder and explore the reference manual in the doc folder
+
+
+
+
+
+copy bluespec folder in home dir, do from step 2.

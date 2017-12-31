@@ -1,0 +1,182 @@
+##########################Installation of LAMP server##############################################  
+
+php database access
+http://www.krizna.com/ubuntu/install-lamp-server-ubuntu-14-04/#apache
+
+########################mysql workbench install###################
+sudo apt-get install mysql-workbench
+################apache start/stop/restart#########################
+
+
+##################For remote access of mysql from python ##########################################
+
+nano /etc/mysql/my.cnf   ................change binding address from 127.0.0.1 to 0.0.0.0 
+sudo chmod 774 /etc/mysql/my.cnf   --------------mysql starting problem(dont give permission as 777)
+sudo service mysql restart
+sudo ufw allow 3306
+mysql -u root -p
+GRANT ALL ON db_test.* TO root@’10.78.32.45’ IDENTIFIED BY ‘123456’;
+GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY '123456' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'10.22.52.214' IDENTIFIED BY '123456' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+FLUSH PRIVILEGES; 
+\q; .....exit from mysql
+sudo service mysql restart
+mysql -u fooUser -p -h 10.78.32.45 ..............To check remote connection
+
+SOURCES
+https://stackoverflow.com/questions/15663001/remote-connections-mysql-ubuntu  (section-16)
+https://support.rackspace.com/how-to/mysql-connect-to-your-database-remotely/ 
+
+##################  Direct checking from python    ####################################################
+
+import mysql.connector
+conn=mysql.connector.connect(user='root',password='123456',host='10.22.52.214',database='test_db')
+mycursor=conn.cursor()
+mycursor.execute('show tables')
+print(mycursor.fetchall())
+
+
+or
+
+x='10.22.52.214'
+conn=mysql.connector.connect(user='root',password='123456',host=x,database='test_db')
+
+
+##################mysql start/stop/restart######
+sudo chmod 774 /etc/mysql/my.cnf
+mysql
+stop mysql
+sudo service mysql stop
+start mysql
+sudo service mysql start
+restart mysql
+sudo service mysql restart
+
+###########my sql connection from terminal #################
+To go to mysql mode from linux(This is previlage to superuser also)
+mysql -u root -p
+enter the password which was given during installation of mysql
+In mysql mode  \h   gives all command details, \q is to quit from mysql mode
+
+#############################################################
+
+#######  complete uninstall of only mysql###########
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo rm -rf /var/lib/mysql
+
+########################## only mysql installation ######################
+sudo apt-get update
+sudo apt-get install mysql-server
+sudo apt-get install mysql-server php5-mysql  (During lamp server installation)
+Use any one of above. During installation set a mysql password
+default username is root. Then Do the following.
+sudo mysql_install_db
+sudo mysql_secure_installation
+During this, they will ask some question. press n for all question.
+completed
+to check version mysql -v
+
+##############################Apache start stop###########
+stop apache
+sudo service apache2 stop
+start apache
+sudo service apache2 start
+restart apache
+sudo service apache2 restart
+
+################ mysql configuration file##############
+my.cnf file directory will be any one of the following
+
+/etc/mysql/mysql.conf.d/mysqld.cnf --------------------- for ubuntu 16.04
+
+/etc/mysql/my.cnf   .....................................for ubuntu 14.04
+/etc/mysql/mysql.conf.d/mysqld.cnf
+/etc/mysql/mysql.cnf
+/etc/mysql/conf.d/mysqldump.cnf
+/etc/mysql/conf.d/mysql.cnf
+
+10.22.52.214
+
+But, in most cases it will be in the first directory
+
+/etc/mysql/my.cnf
+skip-networking
+Bind-address is set to either 0.0.0.0
+
+############ complete uninstall lamp server incl mysql php apache ##########################################
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo rm -rf /var/lib/mysql
+sudo apt-get purge libapache2-mod-auth-mysql phpmyadmin
+sudo apt-get purge apache2 apache2-mpm-preforkapache2-utils apache2.2-bin apache2.2-common libapache2-mod-php
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get purge mysql-server apache2 php5
+sudo apt-get purge apache2 apache2-mpm-prefork apache2-utils apache2.2-common libapache2-mod-php5 libapr1 libaprutil1 libdbd-mysql-perl libdbi-perl libmysqlclient15off libnet-daemon-perl libplrpc-perl libpq5 mysql-client-5.0 mysql-common mysql-server mysql-server-5.0 php5-common php5-mysql
+sudo apt-get autoremove
+sudo apt-get autoclean
+########################inslall lamp server##################################################################
+https://www.youtube.com/watch?v=avEDRh8gGGY&t=182s
+(best)
+
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-14-04
+
+Dont do my sql part from this webpage. Do mysql part from this file.
+
+locate apache2.conf
+
+sudo apt-get remove apache2*
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get purge apache2*
+sudo apt-get autoremove
+sudo apt-get autoclean
+dpkg -l|grep apache2
+sudo dpkg -P apache2
+
+https://www.youtube.com/watch?v=jsDnUpCUGPM
+
+xampp uninstall
+sudo chmod +x /opt/lampp/uninstall
+sudo /opt/lampp/uninstall
+
+#######################Ajax concept############################
+
+write the following line in ajax.html file, 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+Alternatively, Download jquery file (jquery-3.2.1.min.js) for ubuntu 14.04, and put it inside html folder, and write fpllowing in ajax.html
+<script src="jquery-3.2.1.min.js"></script>
+
+ajax.html file is like following
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/
+libs/jquery/1.3.0/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+var auto_refresh = setInterval(
+function ()
+{
+$('#position').load('ready1.php').fadeIn("slow");
+}, 100); // refresh every 10000 milliseconds
+</script>
+</head>
+
+
+<body>
+<div id="position"> </div>
+</body>
+</html>
+
+#####################################################################################

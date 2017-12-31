@@ -1,0 +1,151 @@
+
+
+User Access Verification
+
+Password:
+Password:
+BOLPURCCTV>en
+Password:
+% Password:  timeout expired!
+Password:
+Password:
+% Bad secrets
+
+BOLPURCCTV>en
+Password:
+BOLPURCCTV#show
+BOLPURCCTV#show run
+Building configuration...
+
+Current configuration : 1700 bytes
+!
+! Last configuration change at 11:39:30 UTC Wed Mar 26 2014
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname BOLPURCCTV
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$0KdX$ZULWb65fyD4KVLZ.5ISnZ/
+enable password phbplbol
+!
+no aaa new-model
+!
+ip cef
+!
+!
+!
+!
+!
+!
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FGL172212T5
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ no mop enabled
+!
+interface GigabitEthernet0/1
+ ip address 10.78.32.131 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ ip address 10.1.0.10 255.255.0.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ bandwidth 64000
+ ip address 192.168.10.1 255.255.255.252
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip nat inside source static 10.1.0.2 10.78.32.102
+ip nat outside source static 10.75.100.102 200.200.200.221
+ip route 0.0.0.0 0.0.0.0 192.168.10.2
+ip route 0.0.0.0 0.0.0.0 10.78.32.1 10
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 3
+ password phbpl
+ login
+ transport input all
+line vty 4
+ password phbplbolpur
+ login
+ transport input all
+!
+scheduler allocate 20000 1000
+!
+end
+
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#
+BOLPURCCTV#

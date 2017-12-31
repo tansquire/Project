@@ -1,0 +1,33 @@
+https://askubuntu.com/questions/635625/how-do-i-get-a-realtek-rtl8723be-wireless-card-to-work
+
+############If wifi not connecting################
+
+
+sudo add-apt-repository ppa:hanipouspilot/rtlwifi
+sudo apt-get update
+sudo apt-get install rtlwifi-new-dkms
+echo "options rtl8723be ant_sel=2"  | sudo tee /etc/modprobe.d/rtl8723be.conf
+
+Then reboot
+
+
+
+########If wifi connecting but no internet########
+
+
+
+gksudo gedit /etc/pm/power.d/wireless
+
+If not completed and If you will get a display from terminal, do as per that.
+
+then again do 
+gksudo gedit /etc/pm/power.d/wireless
+
+A file called wireless will be created. Write the followings and save.
+
+/sbin/iwconfig wlan0 power off
+gksudo gedit /etc/modprobe.d/iwlwifi.conf
+options iwlwifi 11n_disable=1
+
+
+then reboot.

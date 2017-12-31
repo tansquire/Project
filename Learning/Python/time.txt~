@@ -1,0 +1,21 @@
+import.time
+time.time() give a haphazard number(let 123.456) corresponding to present time stamp 
+This number contains all the information of the time stamp. time.localtime(123.456) gives a tuple. See as per the following.
+time.localtime(time.time())  returns a tuple like following.
+(year,month,day,hour,min,second,day no of week,day no of year,0)
+day no of week: day no of monday=0. e.g., day no of wednesday=2
+If you create a tuple like tuple=(1994,6,23,11,58,59,0,0,0), timt.mktime(tuple) gives another haphazerd number correspoding to
+year 1994, month june, day 23, hour 11, min 58, second 59.
+
+
+import time
+print('hi')
+time.sleep(5)
+print('how are you?')
+
+Here hi will be displayed then after 5 sec how are you will be displayed
+import calender
+print(calendar.month(1965,3))............To display for a month
+print (calendar.calendar(year,row width,column width,month to month column width))........To display one year 
+example print (calendar.calendar(1994,1,1,1))
+

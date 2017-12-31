@@ -1,0 +1,6 @@
+Router(config)# ip route 0.0.0.0 0.0.0.0 outside int name
+Router(config-if)#ip nat inside (after going to the perticular interface)
+Router(config-if)#ip nat outside (after going to the perticular interface)
+Router(config)#ip nat inside source static 192.168.1.1 200.200.200.2
+router# show ip nat translation
+router# show ip nat statistics
