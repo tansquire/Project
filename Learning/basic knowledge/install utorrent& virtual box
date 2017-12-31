@@ -1,0 +1,9 @@
+install utorrent
+http://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/install-%CE%BCtorrent-utorrent-on-ubuntu-14-04.html
+install virtual box
+
+http://www.infoworld.com/article/2696611/install-virtualbox-4-3-14-in-ubuntu-14-04.html
+
+
+https://www.youtube.com/watch?v=NgYA7F4PR5k
+sudo usermod -aG vboxusers dadu

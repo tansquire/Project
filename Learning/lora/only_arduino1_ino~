@@ -1,0 +1,119 @@
+/*
+  Blink
+  Turns on an LED on for one second, then off for one second, repeatedly.
+ 
+  This example code is in the public domain.
+ */
+ 
+// Pin 13 has an LED connected on most Arduino boards.
+// give it a name:
+int open = 12;
+int close = 8;
+int opened = 2;
+int remote = 4;
+int closed = 7;
+char input1;
+int x,y;
+
+// the setup routine runs once when you press reset:
+void setup() {                
+  // initialize the digital pin as an output.
+  pinMode(open, OUTPUT); 
+   pinMode(close, OUTPUT); 
+   pinMode(opened, INPUT);
+    pinMode(remote, INPUT);
+    pinMode(closed, INPUT);
+Serial.begin(9600);  
+}
+
+// the loop routine runs over and over again forever:
+void loop() {
+  
+input1=Serial.read();
+
+if(input1 == 'a')
+x=1;
+if(input1 == 'b')
+x=2;
+
+  if(!digitalRead(opened) && !digitalRead(remote))
+  {
+  if(x==1)
+ {
+  digitalWrite(close, LOW);
+  delay(5);
+  digitalWrite(open, HIGH);
+
+}
+  }
+else
+digitalWrite(open, LOW);
+
+
+
+ if(!digitalRead(closed) && !digitalRead(remote))
+  {
+  if(x==2)
+ {
+   digitalWrite(open, LOW);
+   delay(5);
+   digitalWrite(close, HIGH);
+
+}
+  }
+else
+digitalWrite(close, LOW);
+
+
+
+
+
+if(input1 == 'c') 
+{
+ if(digitalRead(opened))
+ Serial.println(7);
+ else
+ Serial.println(6);
+  delay(1);        // delay in between reads for stability
+}
+
+if(input1 == 'd') 
+{
+  if(digitalRead(remote))
+ Serial.println(7);
+ else
+ Serial.println(6);
+  delay(1);        
+}
+
+
+if(input1 == 'e') 
+{
+  if(digitalRead(closed))
+ Serial.println(7);
+ else
+ Serial.println(6);
+  delay(1);            
+}
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

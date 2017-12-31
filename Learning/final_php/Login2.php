@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+
+
+<table align="center" border="0" cellpadding="0"
+        cellspacing="1" width="100%"><tr><td align="center" colspan="1" height="50px" height=270px align="middle" style="background-color:#aad327;font-size: 150%">IIT Madras water network control system</td></tr><table>
+
+
+<table align="center" bgcolor="#CCCCCC" border="0" cellpadding="0"
+        cellspacing="1" width="100%"><tr><td td align="center" colspan="1" height="50px" height=270px align="middle" style="background-color:#0cf5b9;font-size: 150%">Please login to monitor and control</td></tr><table>
+
+
+<table align="center" bgcolor="#CCCCCC" border="0" cellpadding="0"
+        cellspacing="1" width="100%"><tr><td td align="center" colspan="1" height="50px" height=270px align="middle" style=font-size: 100%">To minitor login as username: root and password: 123456. To control Login as username: admin and password: ******.</td></tr><table>
+
+
+<br></br>
+
+
+        <table align="center" bgcolor="#3B170B" border="0" cellpadding="0"
+        cellspacing="1" width="300">
+            <tr>
+                <td>
+                    <form method="post" name="">
+                        <table bgcolor="#FFFFFF" border="0" cellpadding="3"
+                        cellspacing="1" width="100%">
+                            <tr>
+                                <td align="center" colspan="3"><strong>User
+                                Login</strong></td>
+                            </tr>
+                            <tr>
+                                <td width="78">Username</td>
+                                <td width="6">:</td>
+                                <td width="294"><input id="username" name=
+                                "username" type="text"></td>
+                            </tr>
+                            <tr>
+                                <td>Password</td>
+                                <td>:</td>
+                                <td><input id="password" name="password" type=
+                                "password"></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><input name="submit" type="submit" value=
+                                "Login"> <input name="reset" type="reset" value=
+                                "reset"></td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<table align="center" bgcolor="#CCCCCC" border="0" cellpadding="0"
+        cellspacing="1" width="100%"><tr><td td align="center" colspan="1" height="50px" height=270px align="middle" style="background-color:#848484;font-size: 150%">Copyright@Process control Lab, IIT Madras</td></tr><table>
+
+
+
+
+        <?php
+        if (isset($_POST['submit']))
+            {     
+        include("Config.php");
+        session_start();
+        $username=$_POST['username'];
+        $password=$_POST['password'];
+       // $_SESSION['login_user']=$username; 
+
+        $sql = "SELECT * FROM Login WHERE username='$username' and password='$password'";
+
+	$result = $conn->query($sql);
+	$row = mysqli_fetch_assoc($result);
+
+        $x=$row[password];
+	//$user=$row[username];
+        
+
+	//$sql1 = "SELECT * FROM Login WHERE user_id='1'"; 
+
+	//$result1 = $conn->query($sql1);
+	//$row1 = mysqli_fetch_assoc($result1);
+
+        //$administrator=$row1[username];
+
+      
+
+
+
+ // $query = mysql_query("SELECT username FROM Login WHERE username='$username' and password='$password'");
+        if ($x!= 0)
+        {
+
+         $_SESSION['login_user']=$username;
+         //session_register("username");
+         echo "<script language='javascript' type='text/javascript'> location.href='water2.php' </script>";   
+         }
+          else
+          {
+        echo "<script type='text/javascript'>alert('User Name Or Password Invalid!')</script>";
+        }
+        }
+        ?>
+    </body>
+    </html>

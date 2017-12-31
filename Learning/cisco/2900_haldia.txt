@@ -1,0 +1,143 @@
+
+
+User Access Verification
+
+Password:
+haldiascada>en
+haldiascada>enable
+Password:
+haldiascada#show
+haldiascada#show run
+haldiascada#show running-config
+Building configuration...
+
+Current configuration : 1666 bytes
+!
+! Last configuration change at 07:59:08 UTC Thu Mar 20 2014
+version 15.2
+service config
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname haldiascada
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$1S5i$V4O3kVMiuajqKczynZs0p1
+enable password phbplhal
+!
+no aaa new-model
+!
+ip cef
+!
+!
+!
+!
+!
+!
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FGL172212T4
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 200.200.200.252 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ no cdp enable
+ no mop enabled
+!
+interface GigabitEthernet0/1
+ ip address 10.75.100.140 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ no cdp enable
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 192.168.10.2 255.255.255.252
+ encapsulation ppp
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip nat inside source static 200.200.200.221 10.75.100.102
+ip nat outside source static 10.78.32.102 10.1.0.2
+ip route 0.0.0.0 0.0.0.0 10.75.100.1
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ password phbpl
+ login
+ transport input all
+!
+scheduler allocate 20000 1000
+!
+end
+
+haldiascada#
+haldiascada#
+haldiascada#
+***********************************************************************************
+ebable secret: phbplhaldia
+enable: phbplhal
+telnet: phbpl

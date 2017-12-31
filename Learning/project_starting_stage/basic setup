@@ -1,0 +1,59 @@
+sudo apt-get update
+##########install arduino#########################
+sudo apt-get install aurdino
+################install python####################
+Open a terminal and go to home directory
+sudo apt-get install biuld-essential
+sudo apt-get install libsqlite3-dev
+sudo apt-get install libbz2-dev
+
+downdoad python-3.3.2.tar.bz2 for linux from www.python.org
+Double click on the file
+press Extract
+Select home directory and the press extract again
+After extraction is complete, quite the archive manager, and go to home directory. You will see python folder
+
+Open a terminal and go to root user
+Give permission of python directory
+
+Go to home/python directory and configure 
+./configure
+make
+sudo make altinstall
+
+Now python is installed, ready to use
+
+Go to home and write python
+
+You can write program now
+To exit, write quit() and enter
+
+
+write which python in a terminal to know the directory of python
+Create a file nano file1.py and write the following in the file
+
+#!python directory
+
+print("hellow world")
+
+
+save the file and exit from nano
+
+Give the user execute permission of the file by chmod u+x file1.py
+
+To run the program ./file1.py   and then enter
+#########install piserial#########################
+write python -V on terminal to check installed python version. If it is 2.7 version, then download from the link below.
+Go to https://pypi.python.org/pypi/pyserial/2.7#downloads
+Click on pyserial-2.7.tar.gz (md5). Pyserial is downloaded now.
+Copy pyserial-2.7.tar.gz from Download to home
+Go to home directory from terminal and unzip by   tar -zxvf pyserial-2.7.tar.gz
+
+cd pyserial-2.7
+ls  to check setup.py is there
+python setup.py build
+sudo python setup.py install
+sudo usermod -a -G dialout <username>
+
+
+

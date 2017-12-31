@@ -1,0 +1,19 @@
+char input;
+
+void setup()
+{
+Serial.begin(9600);
+}
+
+void loop()
+{
+
+
+for(long x=0;x<20;x++)
+{
+input=Serial.read();
+if(input == 'g')
+Serial.println(x);
+}
+
+}

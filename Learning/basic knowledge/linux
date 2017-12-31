@@ -1,0 +1,199 @@
+https://www.youtube.com/watch?v=M2-nXbi3qmk
+http://axelta.com/AxAcademy.php
+
+/var/www/html/indexa.php..........apache
+
+I am doing one mini project with two aurduinos, one Respbary Pi, and one apache server(different machine). I have to  control the aurdino from webpage  , as well as get temperature reading from aurdino on the webpage. So communication will be like server to respbari pi to aurdino and vice versa. Can you help doing this project?I know php, mySQL, basic linux command , and basic python.
+
+################Linux basic command############################
+case sensitive
+If any file or folder name is with space like    new folder   then use 'new folder' in command line, otherwise linux will take the first word
+Let a directory: a/b/c/d and d is a folder, and we want to access d
+Relative path: If I am inside b, then we have to write c/d
+If I am inside a, we have to wrire b/c/d
+If I am at c, we have to write d
+If I am inside d then dont write anything. Now d means d/d, If there does not exist any d inside d, it will give an error
+Fromany Directory root can be accessed, by simply writing ~. Fromany Directory home can be accessed by simply writing ~
+folder means directory
+a/b/c/ram.txt   means c is top level directory, and a/b/c is called whole directory
+To get help of a command
+man command,   example man ls
+
+To see previous command entered, use history command
+
+To clear the terminal use clear command
+To copy from terminal ctrl+shift+C
+To paste to terminal ctrl+shift+v
+
+But  to copy and paste from and to a text file shift is not required
+
+##########ls command##########
+ls----show everything
+ls -R-----show with hierarchically
+ls -a-----show everything incl hiden
+ls -al----show incl user group, permission, size, date of creation etc
+ls -l---- also show incl user group, permission, size, date of creation etc
+By default we are at hole directory
+ls directoryname gives everything in thet dir
+ls ~ will give everything of home dir
+ls ..    show everything of previous dir
+ls ../..     show everything previous to previous dir
+ls -ls    show as per file size
+ls directoryname/*.extentionname  shows all files of the same extention name
+ls -ls>test.txt    a new txt file test will be created in the same directory. Test fill now contains all file and foldername of current directory
+To see only directory 
+ls -d */
+#########################
+##########cd command#######
+
+cd dirictory name to to to the diectory
+cd ..    previous directory
+cd ~     default directory, i.e., home directory
+
+################################
+#########cat ##################
+
+For text file we use cat command
+
+cat > file1...creat file
+
+then write something
+then press cntr+D to go to command line
+
+To see file,
+cat file1
+To see double file
+cat file1 file2
+
+Now creat another file, by cat > file2
+
+write something
+
+Cntr+D
+
+Now to concatinate both file into a new file called file3,
+
+cat file1 file2 >file3
+Here cntr+D not required
+
+cat file1>>file2  will update file2, file1 will be appended on file2
+
+> is called redirection operator.For example  ls -l >test.tst  will create a new file containing the output of ls -l.
+
+cat -b file name will add line no to non blank line
+cat -n file name will add line no to all line
+cat -s filename  will show file without unnecessary blank, if any in the the file
+cat -E filename will add $ sign after each line
+################## mv command #########################
+
+To move, mv is used. mv filename directoryname, or mv dir1 dir2. To get a confirmation, mv -i dir1/file1 dir2
+mv -v file1/dir1 dir2.........samething happens, but with explanation
+To rename file, mv oldfilename newfilename
+To rename a folder
+mv oldfolder newfolder
+###########################mkdir#########################
+To make a new folder(directory) inside current directory,
+mkdir foldername
+mkdir a/b/c means inside a/b c folder will be created.
+
+Let you are inside Desktop. now you want to create two folder a abd b such that b is inside a. Then mkdir -p a/b.
+Let you are inside Desktop. now you want to create two folder a, b and c such that b, c are inside a. Then mkdir -p a/{b,c}---no space b/w b and c.
+To make a new folder(directory) inside any directory,
+mkdir desired_directory_name foldername
+
+To create multiple directory,
+mkdir folder1 folder2 folder3
+################## rm command ########################
+To delete file, rm filename
+To remove folder(directory)
+rmdir foldername
+To delete whole directory, rmdir -p directoryname
+rmdir will work if the folder is empty.
+To delete folder contatining a file, like to delete a/b/c/d.txt, rm -r a/b/c/d.txt, then d.txt will be deleted to make the folder empty
+then do rmdir -p a/b/c
+Or To delete folder contatining a file, rm -r directoryname
+
+##################cp command#########################################
+cp a/b/c.txt d/e.txt..............the file c.txt will be coppied in side as e.txt, i.e. e.txt will be ceated, and content of c.txt will be copied into it. If e.txt is already there in d folder, then it will be over written. So, when file already exists, To get an option, cp -i a/b/c.txt d/e.txt
+now it will as whether u want to overwrite or not. If you enter y . then it will be overwritten, otherwise not.
+
+To copy a directory cp -R dir1 dir2...... (if dir2 does not exist) dir 2 wiil be created, and content od dir1 will be copied to dir2
+cp -vR dir1 dir2......... Here dir2 exist(let). Then directly dir1 will be copied to dir2.
+
+cp a/b/c.txt d/e/f............the file c.txt will be coppied in side d/e/f directory
+
+########################permission###################################
+user means owner. let user ram who is in cricket group has created a file test. So ram is the user or owner, cricket is the group.
+
+drwxrwxrwx---d means its a directory, 1st 3 rwx=for owner, 2nd 3 for group, last 3 for other
+-rwxrwxrwx---  - means its a file, 1st 3 rwx=for owner, 2nd 3 for group, last 3 for other
+example
+-rw-rw---x means its a file, owner and group has read write permossion, but other has only execute permission
+7=wrx,--x=1, means rwx=111=7, --x=001=1, binary concept
+
+Permission setting
+Absolute mode: chmod command is used
+
+chmod 764 file1 means file1 has perission settings of 7 for owner, 6 for group and 4 for other. Ingeneral woner>group>other
+
+Symbolic mode
+u=user/owner
+o=other
+g=group
+
+chmod o=rw- file1 means owner has pririty rw-, chmod g+x file1 meand x permission is now added with group, chmod o-x file1 means x is now removed from other
+
+To change user(owner) and group of a file
+To change user: sudo chown username filename
+To change both user and group: sudo chown username:groupname file name
+To change group: sudo chgrp groupname filename
+
+
+#############################less command#########################
+Used to read a file
+
+less filename
+page up/dn  or up/dn keys are used. press G to go to end of the file, and press 1g or g  to go to start of the file.
+To search a word from up to down, write /word and enter and then keep pressing n
+To search a word from down to up, write ?word and enter and then keep pressing n
+To exit from less, press q
+
+
+############## touch command ###################
+Used to create an empty file
+or to update the time stamp of a existing file
+touch filename is command used for both the case
+
+########### nano command ####################
+can be used for creating or editing. We can create different types of file
+
+To create, 
+nano filename,  write something, press cntr+o and then enter.............file will be saved
+
+To edit
+nano filename
+write whatever u want
+U can use: cntr+k......cut, and cntr+U.....paste
+Then cnt+o and then enter to save file
+cntr+x......To exit from nano
+whole line can be cut or pasted
+
+
+So
+cnt+K.....cut   (remmember cut from commamd line is cnt+shift+c)
+cnt+U......paste/Uncut  (remmember paste from commamd line is cnt+shift+v)
+cnt+X......exit from nano
+cnt+o and then enter to save file
+
+#################### sudo command ###################################
+When permission denies, just add sudo before any command, the system will ask the password. Enter it. It will be permitted
+sudo -s enters into root previlage mode. Password is required to be entered after this command.
+If you press exit, you will be in user privilage mode again.
+
+##################
+
+
+
+
+
+

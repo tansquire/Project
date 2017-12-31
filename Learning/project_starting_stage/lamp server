@@ -1,0 +1,106 @@
+import mysql.connector
+conn=mysql.connector.connect(user='root',password='123456',host='localhost',database='test_db')
+mycursor=conn.cursor()
+mycursor.execute('show tables')
+print(mycursor.fetchall())
+
+##################mysql start/stop/restart######
+mysql
+stop mysql
+sudo service mysql stop
+start mysql
+sudo service mysql start
+restart mysql
+sudo service mysql restart
+
+#######complete uninstall of only mysql###########
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo rm -rf /var/lib/mysql
+##############################################
+
+###########my sql connection from terminal ###########
+To go to mysql mode from linux(This is previlage to superuser also)
+mysql -u root -p
+enter the password which was given during installation of mysql
+In mysql mode  \h   gives all command details, \q is to quit from mysql mode
+
+########################## mysql installation ######################
+sudo apt-get update
+sudo apt-get install mysql-server  (If you need only mysql)
+sudo apt-get install mysql-server php5-mysql  (During lamp server installation)
+Use any one of above. During installation set a mysql password
+default username is root. Then Do the following.
+sudo mysql_install_db
+sudo mysql_secure_installation
+During this, they will ask some question. press n for all question.
+completed
+to check version mysql -v
+
+gowsalya
+########################mysql workbench install###################
+sudo apt-get install mysql-workbench
+################apache start/stop/restart#########################
+stop apache
+sudo service apache2 stop
+start apache
+sudo service apache2 start
+restart apache
+sudo service apache2 restart
+
+################ mysql configuration file##############
+my.cnf file directory will be any one of the following
+
+/etc/mysql/my.cnf
+/etc/mysql/mysql.conf.d/mysqld.cnf
+/etc/mysql/mysql.cnf
+/etc/mysql/conf.d/mysqldump.cnf
+/etc/mysql/conf.d/mysql.cnf
+
+But, in most cases it will be in the first directory
+
+/etc/mysql/my.cnf
+skip-networking
+Bind-address is set to either 0.0.0.0
+
+############complete uninstall lamp server incl mysql php apache ##########################################
+sudo apt-get remove --purge mysql-server mysql-client mysql-common
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo rm -rf /var/lib/mysql
+sudo apt-get purge libapache2-mod-auth-mysql phpmyadmin
+sudo apt-get purge apache2 apache2-mpm-preforkapache2-utils apache2.2-bin apache2.2-common libapache2-mod-php
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get purge mysql-server apache2 php5
+sudo apt-get purge apache2 apache2-mpm-prefork apache2-utils apache2.2-common libapache2-mod-php5 libapr1 libaprutil1 libdbd-mysql-perl libdbi-perl libmysqlclient15off libnet-daemon-perl libplrpc-perl libpq5 mysql-client-5.0 mysql-common mysql-server mysql-server-5.0 php5-common php5-mysql
+sudo apt-get autoremove
+sudo apt-get autoclean
+########################inslall lamp server##################################################################
+https://www.youtube.com/watch?v=avEDRh8gGGY&t=182s
+(best)
+
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-14-04
+
+Dont do my sql part from this webpage. Do mysql part from this file.
+
+locate apache2.conf
+
+sudo apt-get remove apache2*
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo apt-get purge apache2*
+sudo apt-get autoremove
+sudo apt-get autoclean
+dpkg -l|grep apache2
+sudo dpkg -P apache2
+
+https://www.youtube.com/watch?v=jsDnUpCUGPM
+
+xampp uninstall
+sudo chmod +x /opt/lampp/uninstall
+sudo /opt/lampp/uninstall
+
+php database access
+http://www.krizna.com/ubuntu/install-lamp-server-ubuntu-14-04/#apache

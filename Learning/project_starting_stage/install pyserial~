@@ -1,0 +1,13 @@
+write python -V on terminal to check installed python version. If it is 2.7 version, then download from the link below.
+Go to https://pypi.python.org/pypi/pyserial/2.7#downloads
+Click on pyserial-2.7.tar.gz (md5). Pyserial is downloaded now.
+Copy pyserial-2.7.tar.gz from Download to home
+Go to home directory from terminal and unzip by   tar -zxvf pyserial-2.7.tar.gz
+
+cd pyserial-2.7
+ls  to check setup.py is there
+python setup.py build
+sudo python setup.py install
+sudo usermod -a -G dialout <username>
+
+
