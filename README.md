@@ -4,10 +4,10 @@ I am Partha Paul, and  doing my Mtech on Electrical Engineering at IIT Madras, a
 Folders contain the following
 
 
-Core-jave: This folder has been created to understand core-java which is required to start with the project.
+Core-jave: This folder has been created while understanding core-java which is required to start with the project.
 
 
-Learning: This folder has been created to understand various other aspect like python, php, LoRA, basic linux,Arduino, Raspberry Pi etc which are required to complete the project.
+Learning: This folder has been created while understanding various other aspect like python, php, LoRA, basic linux,Arduino, Raspberry Pi etc which are required to complete the project.
 
 
 Test: This is a test folder created to understand github.
