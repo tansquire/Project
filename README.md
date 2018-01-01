@@ -6,7 +6,7 @@ Folders contain the following
 Core-jave: This folder has been created to understand core-java which is required to start with the project.
 
 
-Learning: This folder has been created to understand various other aspect like python, php, LoRA, basic linux which are required to complete the project.
+Learning: This folder has been created to understand various other aspect like python, php, LoRA, basic linux,Arduino, Raspberry Pi etc which are required to complete the project.
 
 
 Test: This is a test folder created to understand github.
