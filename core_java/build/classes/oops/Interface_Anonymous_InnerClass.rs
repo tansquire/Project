@@ -1,0 +1,2 @@
+oops.I3
+oops.Interface_Anonymous_InnerClass
