@@ -1,9 +1,14 @@
 install utorrent
 http://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/install-%CE%BCtorrent-utorrent-on-ubuntu-14-04.html
+
+
 install virtual box
 
-http://www.infoworld.com/article/2696611/install-virtualbox-4-3-14-in-ubuntu-14-04.html
 
+sudo apt remove virtualbox
+sudo nano /etc/apt/sources.list
+deb http://download.virtualbox.org/virtualbox/debian xenial contrib
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add 
+sudo apt update
+sudo apt install virtualbox-5.1
 
-https://www.youtube.com/watch?v=NgYA7F4PR5k
-sudo usermod -aG vboxusers dadu
