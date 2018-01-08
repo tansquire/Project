@@ -12,3 +12,6 @@ wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-
 sudo apt update
 sudo apt install virtualbox-5.1
 
+Download ubuntu 16.04 LTS -64 bit Desktop iso from here
+http://releases.ubuntu.com/16.04/
+
