@@ -1,0 +1,57 @@
+#include <SPI.h>
+#include <LoRa.h>
+int gateway = 0;
+
+void setup() 
+{
+Serial.begin(9600);
+LoRa.setPins(10,9,2);
+while (!Serial);
+Serial.println("LoRa gateway");
+
+if (!LoRa.begin(433E6)) 
+{
+Serial.println("Starting LoRa failed!");
+while (1);
+}
+}
+
+void loop() 
+{
+//Serial.print("Sending packet: ");
+//Serial.println(counter);
+LoRa.beginPacket();
+LoRa.print("hello ");
+LoRa.print(gateway);
+LoRa.print("<gateway>");
+LoRa.endPacket();
+
+gateway++;
+
+
+int packetSize = LoRa.parsePacket();
+if (packetSize) 
+{
+Serial.print("Received packet '");
+while (LoRa.available()) 
+{
+String str=(String)LoRa.readString();
+int bra = str.indexOf('<');
+int ket = str.indexOf('>');
+String str1=str.substring(bra+1,ket);
+if(str1=="node")
+{
+String str_node=str.substring(0,bra);
+Serial.print(str_node);
+}
+
+Serial.print(" ");
+
+}
+
+Serial.print("' with RSSI ");
+Serial.println(LoRa.packetRssi());
+}
+
+delay(5000);
+}
