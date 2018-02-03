@@ -1,0 +1,137 @@
+ #include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(9, 10);
+String incomingString ="";
+String inputString="";
+int startIndex = 0;
+int endIndex = 0;
+boolean stringComplete = false; 
+
+void setup()
+{
+  mySerial.begin(9600);   // Setting the baud rate of GSM Module  
+  Serial.begin(9600);    // Setting the baud rate of Serial Monitor (Arduino)
+  delay(100);
+  SendMessage();
+  
+}
+
+
+void loop()
+{
+ SmsTask();
+
+}
+
+
+void SmsTask()
+{
+   if (Serial.available()>0)
+   switch(Serial.read())
+  {
+    case 's':
+      SendMessage();
+      break;
+    case 'r':
+      RecieveMessage();
+      break;
+  }
+
+
+ if(stringComplete == false)
+
+       { 
+
+            incomingString = mySerial.readString();
+            Serial.print(incomingString);
+
+            if(incomingString!="")
+
+            {
+
+              startIndex = incomingString.indexOf("@");
+
+              endIndex = incomingString.indexOf("#");
+
+
+              if(startIndex>0 && endIndex>0)
+
+              {
+
+                 inputString = incomingString.substring(startIndex,endIndex+1);
+
+                 stringComplete = true;
+
+              }
+
+       }
+
+    }
+
+
+
+
+      if (stringComplete && inputString!="") {
+
+
+        
+
+        //inputString.toLowerCase();
+
+
+        if(inputString=="@MT#")
+
+        {
+
+          SendMessage();
+
+        }
+
+       
+       Serial.print("AT+CMGDA=\""); 
+
+       Serial.println("DEL ALL\""); // To Delete Messages from SIM Memory
+
+       delay(1000);
+
+      // clear the string:
+
+       inputString = "";
+
+       stringComplete = false;
+
+      }
+  
+}
+
+ void SendMessage()
+{
+  mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+  delay(1000);  // Delay of 1000 milli seconds or 1 second
+  mySerial.println("AT+CMGS=\"+917602304567\"\r"); // Replace x with mobile number
+  delay(1000);
+  mySerial.println("I am SMS from GSM Module");// The SMS text you want to send
+  delay(100);
+   mySerial.println((char)26);// ASCII code of CTRL+Z
+  delay(1000);
+}
+
+
+ void RecieveMessage()
+{
+  //mySerial.println("AT+CMGF=1"); 
+  mySerial.println("AT+CNMI=2,2,0,0,0"); // AT Command to receive a live SMS
+  delay(1000);
+ }
+
+ void DeleteMessage()
+{
+  //mySerial.println("AT+CMGF=1"); 
+  mySerial.println("AT+CMGD=1,4"); // AT Command to receive a live SMS
+  delay(1000);
+ }
+
+
+ 
+
+
