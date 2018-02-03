@@ -1,0 +1,61 @@
+unsigned int oldvalue, newvalue = 5;
+bool updating=1;
+int x=0;
+bool start;
+static int LED=13;
+char input;
+void setup() 
+{
+  Serial.begin(9600);
+  pinMode(LED, OUTPUT);
+}
+
+
+void loop() {
+
+if(Serial.available())
+{
+input=Serial.read();
+if(input=='a')
+updating=1;
+else if(input=='b')
+updating=0;
+}
+newvalue=getvalue();
+Serial.print("oldvalue=");
+Serial.print(oldvalue);
+Serial.print("  ");
+Serial.print("newvalue=");
+Serial.print(newvalue);
+Serial.print("  ");
+Serial.print("updating=");
+Serial.println(updating);
+
+if (newvalue != oldvalue) 
+{
+  start=0;
+  oldvalue = newvalue;
+  
+}
+else
+start=1;
+Serial.print("start=");
+Serial.println(start);
+
+if(start)
+digitalWrite(LED, HIGH);   // turn the LED on (HIGH is the voltage level)
+else
+digitalWrite(LED, LOW);
+  
+}
+
+
+int getvalue()
+{
+  
+  if(updating==1)
+  x=random(1, 500);
+  delay(3000);
+  return(x);
+  
+}
