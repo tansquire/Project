@@ -1,0 +1,11 @@
+                                  1   How Dragino LoRA shield worked
+
+With the both radiohead library (following 2 links)installed, and with arduino ide 1.8.5 dragino loRA shield is working with
+LoRa_Simple_Client_Arduino.ino  and LoRa_Simple_Server_Arduino.ino files (both files are here)
+https://github.com/dragino/RadioHead               ........LoRA RadioHead Master library
+http://www.airspayce.com/mikem/arduino/RadioHead/RadioHead-1.82.zip  ..........Radio
+(This is latest zip file of     http://www.airspayce.com/mikem/arduino/RadioHead/    website)
+ Both library can be added using zip files
+ To be noted that,  http://www.dragino.com/downloads/downloads/YunShield/package_dragino_yun_test_ index.json   
+ was added in ide software under file->preference. Then tool->board->board manager. Here Arduino AVR board by arduino
+ version 1.6.19 was installed. After that latest version was selected, and then installed.
