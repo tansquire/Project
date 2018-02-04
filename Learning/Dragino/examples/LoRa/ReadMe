@@ -1,5 +1,6 @@
                                   1   How Dragino LoRA shield worked
-
+                                  
+Tested LoRA shield works as server, and LoRA GPS shield as client
 With the both radiohead library (following 2 links)installed, and with arduino ide 1.8.5 dragino loRA shield is working with
 LoRa_Simple_Client_Arduino.ino  and LoRa_Simple_Server_Arduino.ino files (both files are here)
 https://github.com/dragino/RadioHead               ........LoRA RadioHead Master library
