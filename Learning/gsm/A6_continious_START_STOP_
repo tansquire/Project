@@ -115,7 +115,7 @@ void SmsTask()
         {
 
           SendMessage();
-          delay(20000);
+          delay(30000);
 
         }
   
