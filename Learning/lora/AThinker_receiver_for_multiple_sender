@@ -1,0 +1,60 @@
+#include <SPI.h>
+#include <LoRa.h>
+
+void setup() {
+Serial.begin(9600);
+LoRa.setPins(10,9,2);
+//LoRa.setSPIFrequency(433);
+while (!Serial);
+
+Serial.println("LoRa Receiver");
+
+if (!LoRa.begin(433E6)) {
+Serial.println("Starting LoRa failed!");
+while (1);
+}
+}
+
+void loop() {
+// try to parse packet
+int packetSize = LoRa.parsePacket();
+if (packetSize) {
+// received a packet
+Serial.print("Received packet '");
+
+// read packet
+while (LoRa.available()) 
+{
+ String str=(String)LoRa.readString();
+//Serial.print((char)LoRa.read());
+//Serial.print(str);
+int bra = str.indexOf('<');
+int ket = str.indexOf('>');
+String str1=str.substring(bra+1,ket);
+if(str1=="biplab" || str1=="partha")
+{
+if(str1=="partha")
+{
+String str_partha=str.substring(0,bra);
+Serial.print(str_partha);
+}
+if(str1=="biplab")
+{
+String str_biplab=str.substring(0,bra);
+Serial.print(str_biplab);
+}
+}
+
+else
+return;
+
+Serial.print(" ");
+//Serial.print(str1);
+//Serial.print(str[2]);
+}
+
+// print RSSI of packet
+Serial.print("' with RSSI ");
+Serial.println(LoRa.packetRssi());
+}
+}
