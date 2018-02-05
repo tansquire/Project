@@ -1,0 +1,34 @@
+#include <SPI.h>
+#include <LoRa.h>
+
+int counter = 0;
+
+void setup() {
+Serial.begin(9600);
+LoRa.setPins(10,9,2);
+//LoRa.setSPIFrequency(433E6);
+while (!Serial);
+
+Serial.println("LoRa Sender");
+
+if (!LoRa.begin(433E6)) {
+Serial.println("Starting LoRa failed!");
+while (1);
+}
+}
+
+void loop() {
+Serial.print("Sending packet: ");
+Serial.println(counter);
+
+// send packet
+LoRa.beginPacket();
+LoRa.print("hello I am Partha");
+LoRa.print(counter);
+LoRa.print("<partha>");
+LoRa.endPacket();
+
+counter++;
+
+delay(5000);
+}
