@@ -28,7 +28,14 @@ void loop()
       break;
   }
 
-if (mySerial.available()>0)
+smstask();
+
+}
+
+void smstask()
+{
+
+  if (mySerial.available()>0)
 {
 String str=(String)mySerial.readString();
 int bra = str.indexOf('@');
@@ -66,20 +73,10 @@ mySerial.println(str3);// The SMS text you want to send
 delay(100);
 mySerial.println((char)26);// ASCII code of CTRL+Z
 delay(1000);
-
-
-
 }
-
-
-  
 }
-
-
-
 else
 return;
-
 }
 
 
