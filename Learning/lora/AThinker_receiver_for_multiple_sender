@@ -1,3 +1,5 @@
+//This prog works with AThinker_multipleSender_sender1.ino and AThinker_multipleSender_sender2.ino
+
 #include <SPI.h>
 #include <LoRa.h>
 
