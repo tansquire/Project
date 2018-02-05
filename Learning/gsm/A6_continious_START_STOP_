@@ -1,4 +1,5 @@
 //connection details: EN(A6)->VCC(A6);9(UNO)->UTXD(A6);10(UNO)->URXD(A6);GND(UNO)->GND(A6);VCC(A6)->5V(UNO)
+//not working sometime
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(9, 10);
