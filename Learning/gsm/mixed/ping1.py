@@ -1,0 +1,107 @@
+
+#It will work without any problem if mysql and this program is in same machine if inside last except update data in db using localhost
+
+
+#!/usr/bin/python
+import os
+import subprocess, platform
+import time
+import mysql.connector
+import socket, struct, fcntl
+remoteIP1="10.22.54.85"
+remoteIP2="10.21.160.201"
+myport="eno1"
+
+
+def pingOk(sHost):
+ try:
+  output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower()=="windows" else 'c', sHost), shell=True)
+ except Exception, e:
+  return 0
+ return 1
+
+
+def get_ip(iface = myport):
+ ifreq = struct.pack('16sH14s', iface, socket.AF_INET, '\x00'*14)
+ try:
+  res = fcntl.ioctl(sockfd, SIOCGIFADDR, ifreq)
+ except:
+  return None
+ ip = struct.unpack('16sH2x4s8x', res)[2]
+ return socket.inet_ntoa(ip)
+
+
+
+time.sleep(1)
+while(1):
+ try:
+  conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+  mycursor=conn.cursor()
+
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  sockfd = sock.fileno()
+  SIOCGIFADDR = 0x8915
+  myIP=get_ip(myport)
+ 
+  try:
+      if ('10' in myIP):
+         x=1
+  except:
+        x=0
+
+  if x:
+      print("My IP address is '%s'"%myIP)
+      pingstatus1 = pingOk(remoteIP1)
+      pingstatus2 = pingOk(remoteIP2)
+
+  else:
+      print('no ip')
+      pingstatus1=0
+      pingstatus2=0
+
+  print ("Status of remote IP1 is '%s'"%pingstatus1)
+  print ("Status of remote IP2 is '%s'"%pingstatus2)
+  mycursor.execute("UPDATE DI SET value='%s'WHERE id='%s'" % (pingstatus1, 2))
+  mycursor.execute("UPDATE DI SET value='%s'WHERE id='%s'" % (pingstatus2, 3))
+  conn.commit()
+  conn.close()
+  mycursor.close()
+  time.sleep(1)
+
+ except:
+       print("own cable opened")
+       conn=mysql.connector.connect(user='root',password='123456',host='localhost',database='scada')
+       mycursor=conn.cursor()
+       print ("Status of remote IP1 is '%s'"%'0')
+       print ("Status of remote IP2 is '%s'"%'0')
+       mycursor.execute("UPDATE DI SET value='%s'WHERE id='%s'" % ('0', 1))
+       mycursor.execute("UPDATE DI SET value='%s'WHERE id='%s'" % ('0', 2))
+       conn.commit()
+       conn.close()
+       mycursor.close()
+       time.sleep(1)
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
