@@ -1,3 +1,4 @@
+#Tested, and working ok for cliend side
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(9, 10);
