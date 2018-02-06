@@ -1,0 +1,92 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(9, 10);
+String str="";
+
+
+bool start=0;
+void setup()
+{
+  mySerial.begin(9600);   // Setting the baud rate of GSM Module  
+  Serial.begin(9600);    // Setting the baud rate of Serial Monitor (Arduino)
+  delay(100);
+  SendMessageA();
+  DeleteMessage();
+}
+
+
+void loop()
+{
+  if (Serial.available()>0)
+   switch(Serial.read())
+  {
+    case 'a':
+      SendMessageA(); //send message to deviceA for taking value
+      break;
+    case 'b':
+      SendMessageB(); ////send message to deviceB for taking value
+      break;
+    case 'r':
+      RecieveMessage();
+      break;
+  }
+
+smstask();
+
+}
+
+void smstask()
+{
+
+  if (mySerial.available()>0)
+{
+String str=(String)mySerial.readString();
+int bra = str.indexOf('@');
+int ket = str.indexOf('#');
+String str1=str.substring(bra+1,ket);
+if(str1=="deviceA")
+Serial.println(str);     //if something comes from device A, then only print
+else if(str1=="deviceB")
+Serial.println(str);     //if something comes from device B, then only print
+else
+return;
+}
+}
+
+ void SendMessageA()
+{
+  mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+  delay(1000); 
+  mySerial.println("AT+CMGS=\"+917602304567\"\r"); 
+  delay(1000);
+  mySerial.println("@server#"); // send the word @server# to device A
+  delay(100);
+  mySerial.println((char)26);// end of sending message(AT command ctrl+Z to GSM modem)
+  delay(1000);
+}
+
+ void SendMessageB()
+{
+  mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+  delay(1000);  
+  mySerial.println("AT+CMGS=\"+919080404532\"\r");
+  delay(1000);
+  mySerial.println("@server#");// send the word @server# to device B
+  delay(100);
+   mySerial.println((char)26);// end of sending message(AT command ctrl+Z to GSM modem)
+  delay(1000);
+}
+
+ void RecieveMessage()
+{
+  //mySerial.println("AT+CMGF=1"); 
+  mySerial.println("AT+CNMI=2,2,0,0,0"); // AT Command to receive a live SMS
+  delay(1000);
+ }
+
+ void DeleteMessage()
+{
+  //mySerial.println("AT+CMGF=1"); 
+  mySerial.println("AT+CMGD=1,4"); // AT Command to delete all message
+  delay(9000);
+}
