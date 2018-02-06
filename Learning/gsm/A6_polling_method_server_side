@@ -10,7 +10,7 @@ void setup()
   mySerial.begin(9600);   // Setting the baud rate of GSM Module  
   Serial.begin(9600);    // Setting the baud rate of Serial Monitor (Arduino)
   delay(100);
-  SendMessageA();
+  SendMessage();
   DeleteMessage();
 }
 
@@ -57,12 +57,14 @@ return;
 {
   mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
   delay(1000); 
-  mySerial.println("AT+CMGS=\"+917602304567\"\r"); 
+  mySerial.println("AT+CMGS=\"+919952987526\"\r"); 
   delay(1000);
   mySerial.println("@server#"); // send the word @server# to device A
   delay(100);
   mySerial.println((char)26);// end of sending message(AT command ctrl+Z to GSM modem)
   delay(1000);
+  mySerial.println("AT+CMGD=1,4"); // AT Command to delete all message
+  delay(5000);
 }
 
  void SendMessageB()
@@ -75,6 +77,22 @@ return;
   delay(100);
    mySerial.println((char)26);// end of sending message(AT command ctrl+Z to GSM modem)
   delay(1000);
+  mySerial.println("AT+CMGD=1,4"); // AT Command to delete all message
+  delay(5000);
+}
+
+ void SendMessage()
+{
+  mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+  delay(1000); 
+  mySerial.println("AT+CMGS=\"+917602304567\"\r"); 
+  delay(1000);
+  mySerial.println("@server#"); // send the word @server# to device A
+  delay(100);
+  mySerial.println((char)26);// end of sending message(AT command ctrl+Z to GSM modem)
+  delay(1000);
+  mySerial.println("AT+CMGD=1,4"); // AT Command to delete all message
+  delay(5000);
 }
 
  void RecieveMessage()
