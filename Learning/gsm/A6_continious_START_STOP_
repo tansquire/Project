@@ -1,5 +1,5 @@
 //connection details: EN(A6)->VCC(A6);9(UNO)->UTXD(A6);10(UNO)->URXD(A6);GND(UNO)->GND(A6);VCC(A6)->5V(UNO)
-//not working sometime
+//not working sometime  (when start sending, then unable to display any anything in serial monitor)
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(9, 10);
