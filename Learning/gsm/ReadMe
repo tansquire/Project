@@ -1,0 +1,4 @@
+value_change_detector.py   -----run continiously at server
+level_data_redundancy.py   -----run continiously at server
+import to db.py.py         -----run continiously at server
+comm_status_from_random_value.py  -------run continiously at gateway
