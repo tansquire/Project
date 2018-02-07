@@ -5,22 +5,20 @@ import mysql.connector
 ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
 time.sleep(3)
 
-
 def do():
- lake_well_data=childrenpark_data='0';
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
  while(ser.inWaiting()>0):
   data=ser.readline().decode().split('\r\n')
   print(data[0])
   if('deviceA' in data[0]):
-   lake_well_data=data[0][9:]
+   mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][9:], 1))
+   print"lakewell data=%s"%(data[0][9:])
   if('deviceB' in data[0]):
-   childrenpark_data=data[0][9:]
+   mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][9:], 2))
+   print"childrenpark data=%s"%(data[0][9:])
+ 
 
- conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
- mycursor=conn.cursor()
- mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (lake_well_data, 1))
- mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (childrenpark_data, 2))
- print"lakewell and childrenparh datas are=%s and %s"%(lake_well_data,childrenpark_data)
  conn.commit()
  conn.close()
  mycursor.close() 
