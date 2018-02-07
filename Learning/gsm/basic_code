@@ -1,0 +1,29 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(9, 10);
+String serial="";
+String myserial="";
+void setup()
+{
+  mySerial.begin(9600);   // Setting the baud rate of GSM Module  
+  Serial.begin(9600);    // Setting the baud rate of Serial Monitor (Arduino)
+}
+
+
+void loop()
+{
+  if (Serial.available()>0)
+ 
+  {
+    serial=Serial.readString();
+    mySerial.println(serial);
+    
+  }
+
+if (mySerial.available()>0)
+{
+myserial=mySerial.readString();
+Serial.println(myserial);
+}
+
+}
