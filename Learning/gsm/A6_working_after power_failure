@@ -1,3 +1,4 @@
+//even working after power failure, but serial monitor should be open
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
 void updateSerial()
