@@ -1,4 +1,5 @@
 //while Introducing any delay in function loop, incoming message cant be read
+//working with power failure but with serial monitor
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
 String str="";
