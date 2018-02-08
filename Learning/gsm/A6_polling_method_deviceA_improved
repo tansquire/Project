@@ -22,6 +22,13 @@ void setup()
 
 void loop()
 { 
+ Serial.println("I am working other job");
+ //delay(10000);            //If you give this delay, then incoming message cant be read
+ smstask();
+}
+
+void smstask()
+{
 if(mySerial.available()) 
 {
 str=mySerial.readString();
@@ -48,6 +55,8 @@ mySerial.println("AT+CMGD=1,4"); // AT Command to receive a live SMS
 updateSerial();
 }
 }
+  
+  
 }
 
 void modemsetup()
