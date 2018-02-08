@@ -44,14 +44,20 @@ void loop()
   mySerial.println("AT+CMGF=1"); 
   updateSerial();
 
-  mySerial.println("AT+CNMI=2,2,0,0,0");
+  mySerial.println("AT+CNMI=2,2,0,0,0");   //received message format
   updateSerial();
 
-  mySerial.println("AT+CMGD=1,4");
+  //mySerial.println("AT+CMGD=1,4");  // delete message
+  //updateSerial();
+  
+  mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory
+  updateSerial();
+  
+  mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message
   updateSerial();
 
-  mySerial.println("AT+CPMS=\"MT\"\r");
-  updateSerial();
+  //mySerial.println("AT+CPMS=\"MT\"\r");
+  //updateSerial();
   
   //mySerial.println("AT+CMGS=\"+917602304567\"\r");
   //updateSerial();
