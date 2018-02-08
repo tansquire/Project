@@ -1,0 +1,69 @@
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
+
+
+void setup()
+{
+  //Serial.begin(9600);
+  mySerial.begin(9600);
+}
+
+void loop()
+{ 
+  mySerial.println("AT");          //Once the handshake test is successful, it will back to OK
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+    
+  mySerial.println("AT+CSQ");      //Signal quality test, value range is 0-31, 31 is the best
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+    
+  mySerial.println("AT+CCID");    //Read SIM information to confirm whether the SIM is plugged
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+  
+  mySerial.println("AT+CREG?");    //Check whether it has registered in the network
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();    
+ 
+  mySerial.println("AT+SNFS=0");  //Adjust to earphone mode(AT+SNFS=1 is microphone mode) 
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+     
+  mySerial.println("AT+CRSL=2");  //Adjust volume, volume range is 0-15, maximum:15
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+
+  mySerial.println("AT+CMGF=1"); 
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+
+  mySerial.println("AT+CMGD=1,4");
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+
+  mySerial.println("AT+CMGS=\"+917602304567\"\r");
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+  
+  mySerial.println("I am SMS from GSM Module");
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+
+  mySerial.println((char)26);// ASCII code of CTRL+Z
+  delay(2000);
+  mySerial.flush();
+  //updateSerial();
+
+  
+}
