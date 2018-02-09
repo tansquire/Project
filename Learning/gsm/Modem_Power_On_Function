@@ -1,0 +1,119 @@
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
+String str="";
+
+void setup()
+{
+  Serial.begin(9600);
+  mySerial.begin(9600);
+  power_on();
+  Serial.println("modem is ready");
+  
+}
+
+void loop()
+{ 
+ 
+  mySerial.println("AT");          //Once the handshake test is successful, it will back to OK
+  updateSerial();
+    
+  mySerial.println("AT+CSQ");      //Signal quality test, value range is 0-31, 31 is the best
+  updateSerial();
+    
+  mySerial.println("AT+CCID");    //Read SIM information to confirm whether the SIM is plugged
+  updateSerial();
+  
+  mySerial.println("AT+CREG?");    //Check whether it has registered in the network
+  updateSerial();    
+ 
+  mySerial.println("AT+SNFS=0");  //Adjust to earphone mode(AT+SNFS=1 is microphone mode) 
+  updateSerial();
+     
+  mySerial.println("AT+CRSL=2");  //Adjust volume, volume range is 0-15, maximum:15
+  updateSerial();
+
+  mySerial.println("AT+CMGF=1"); 
+  updateSerial();
+
+  mySerial.println("AT+CNMI=2,2,0,0,0");   //received message format
+  updateSerial();
+
+  //mySerial.println("AT+CMGD=1,4");  // delete message
+  //updateSerial();
+  
+  mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory
+  updateSerial();
+  
+  mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message
+  updateSerial();
+
+  //mySerial.println("AT+CPMS=\"MT\"\r");
+  //updateSerial();
+  
+  //mySerial.println("AT+CMGS=\"+917602304567\"\r");
+  //updateSerial();
+  
+  //mySerial.println("I am SMS from GSM Module");
+  //updateSerial();
+
+  //mySerial.println((char)26);// ASCII code of CTRL+Z
+  //updateSerial();
+  
+  
+}
+
+void updateSerial()
+{
+  delay(2000);
+  while (Serial.available()) {
+    mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+  while(mySerial.available()) 
+  {
+    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
+  }
+  
+}   
+
+void power_on()
+{
+uint8_t answer=0;
+answer = power1();
+if (answer == 0)
+{
+while(answer == 0)   // Send AT every two seconds and wait for the answer
+answer = power1(); 
+}
+}
+
+int8_t power1()   //This function return 1, if within timeout the modem response "OK". After timeout, (mostly 2 sec) the modem can give eratic result.It works for max 2 sec.
+{
+unsigned int timeout=2000;  //expected moded response time
+uint8_t answer=0;
+uint8_t x=0;  
+char response[100];
+unsigned long previous;
+memset(response, '\0', 100);
+while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+mySerial.println("AT"); 
+previous = millis();
+do{
+        // if there are data in the UART input buffer, reads it and checks for the asnwer
+        if(mySerial.available() != 0)
+        {   
+            response[x] = mySerial.read();
+            Serial.print(response[x]);
+            x++;
+            // check if the desired answer is in the response of the module
+            if (strstr(response, "OK") != NULL)   
+            answer = 1;
+            
+        }
+        // Waits for the asnwer with time out
+    }
+   while((answer == 0) && ((millis() - previous) < timeout));   
+
+   return answer;
+  
+  
+}
