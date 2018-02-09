@@ -1,0 +1,105 @@
+#include <SoftwareSerial.h>
+#define RX_TO 100UL
+
+// serial input buffer
+char rxBuffer[200];
+SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
+String str="";
+String buf="";
+void updateSerial()
+{
+  delay(2000);
+  while (Serial.available()) {
+    mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+  while(mySerial.available()) {
+    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
+  }
+  
+}    
+
+void setup()
+{
+  Serial.begin(9600);   //115200
+  Serial.setTimeout(1000);
+  mySerial.begin(9600);
+  
+}
+
+void loop()
+{ 
+  
+// index in receive bufffer
+  static int index = 0;
+  // time when last character was received
+  static unsigned long lastRxTime = 0;
+ 
+  mySerial.println("AT");          //Once the handshake test is successful, it will back to OK
+  updateSerial();
+    
+
+  mySerial.println("AT+CMGF=1"); 
+  updateSerial();
+
+  //mySerial.println("AT+CNMI=1,2,0,0,0");   //received message format
+  //updateSerial();
+  
+  mySerial.println("AT+CPMS=?"); 
+  updateSerial();
+
+  mySerial.println("AT+CPMS=\"ME\",\"ME\",\"ME\"");  //save message to memory
+  updateSerial();
+
+  
+  mySerial.println("AT+CPMS=\"SM\"\r");  //read message from memory
+  updateSerial();
+
+  mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory
+  updateSerial();
+
+  mySerial.println("AT+CMGD=1,4"); // AT Command to receive a live SMS
+  updateSerial();
+  
+  mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message "AT+CMGR=35"
+  updateSerial();
+
+  mySerial.println("AT+CMGR=1");   //read all message 
+  updateSerial();
+
+  while(1)
+  {
+      while (mySerial.available())
+  {
+   
+    lastRxTime = millis();
+    if (index >= sizeof(rxBuffer))
+    {
+      Serial.println("buffer overflow; data discarded");
+      index = 0;
+      lastRxTime = 0;
+    }
+    else
+    {
+      rxBuffer[index++] = mySerial.read();
+    }
+  }
+  //Serial.print("lastRxTime=");
+  //Serial.println(lastRxTime);
+  //Serial.print("millis() - lastRxTime=");
+  //Serial.println(millis() - lastRxTime);
+
+  if (lastRxTime != 0 && millis() - lastRxTime >= 100)
+  {
+    //Serial.print("timeout, received ");
+   //Serial.print(index); 
+   Serial.print(rxBuffer);
+   // mySerial.flush();
+    //Serial.println("");
+    index = 0;
+    lastRxTime = 0;
+  }
+
+  delay(700);  //if you make this delaye above 100 ms, some of the received message will be lost
+  
+  }
+}
