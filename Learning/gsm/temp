@@ -26,50 +26,32 @@ void loop()
   mySerial.println("AT");          //Once the handshake test is successful, it will back to OK
   updateSerial();
     
-  mySerial.println("AT+CSQ");      //Signal quality test, value range is 0-31, 31 is the best
-  updateSerial();
-    
-  mySerial.println("AT+CCID");    //Read SIM information to confirm whether the SIM is plugged
-  updateSerial();
-  
-  mySerial.println("AT+CREG?");    //Check whether it has registered in the network
-  updateSerial();    
- 
-  mySerial.println("AT+SNFS=0");  //Adjust to earphone mode(AT+SNFS=1 is microphone mode) 
-  updateSerial();
-     
-  mySerial.println("AT+CRSL=2");  //Adjust volume, volume range is 0-15, maximum:15
-  updateSerial();
 
   mySerial.println("AT+CMGF=1"); 
   updateSerial();
 
-  mySerial.println("AT+CNMI=2,2,0,0,0");   //received message format
+ mySerial.println("AT+CNMI=1,2,0,0,0");   //received message format
+ updateSerial();
+  
+  mySerial.println("AT+CPMS=?"); 
   updateSerial();
 
-  //mySerial.println("AT+CMGD=1,4");  // delete message
-  //updateSerial();
-  
-  //mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory 
-  //updateSerial();
-
-  //mySerial.println("AT+CPMS=\"ME\",SM\",MT\"\r");  //read message from memory AT+CPMS="ME","SM","MT"
-  //updateSerial();
-  
-  mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message
+  mySerial.println("AT+CPMS=\"ME\",\"ME\",\"ME\"");  //save message to memory
   updateSerial();
 
-  //mySerial.println("AT+CPMS=\"MT\"\r");
-  //updateSerial();
   
-  //mySerial.println("AT+CMGS=\"+917602304567\"\r");
-  //updateSerial();
-  
-  //mySerial.println("I am SMS from GSM Module");
-  //updateSerial();
+  mySerial.println("AT+CPMS=\"SM\"\r");  //read message from memory
+  updateSerial();
 
-  //mySerial.println((char)26);// ASCII code of CTRL+Z
-  //updateSerial();
+  mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory
+  updateSerial();
+
   
+  mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message "AT+CMGR=35"
+  updateSerial();
+
+  mySerial.println("AT+CMGR=3");   //read all message 
+  updateSerial();
+
   
 }
