@@ -1,0 +1,214 @@
+//Polling method device A, Delay issue solved
+//Better to use minimum print statement
+
+//while Introducing any delay in function loop, incoming message cant be read
+//working with power failure but with serial monitor
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(9, 10);  // TX-Pin11, RX-Pin10
+String str="";
+void updateSerial()
+{
+  delay(2000);
+  while (Serial.available()) {
+  mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+  while(mySerial.available()) {
+    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
+  }
+  
+}   
+
+void setup()
+{
+  Serial.begin(9600);
+  mySerial.begin(9600);
+  modemsetup();
+}
+
+void loop()
+{ 
+ smstask();
+ lora();
+ 
+}
+
+void smstask()
+{
+while( mySerial.available() > 0) mySerial.read();   //If you dont use this line, still working
+if(mySerial.available()) 
+{
+str=mySerial.readString();
+Serial.println(str);
+int bra = str.indexOf('@');
+int ket = str.indexOf('#');
+String str1=str.substring(bra+1,ket);
+
+if(str1=="server")
+{
+int i=random(1,500);
+String str2=(String)i;
+String str3="@deviceA#"+str2;
+mySerial.println("AT+CMGF=1");    //Sets the GSM Module in Text Mode
+updateSerial();
+mySerial.println("AT+CMGS=\"+917602304567\"\r"); // Replace x with mobile number
+updateSerial();
+mySerial.println(str3);// The SMS text you want to send
+updateSerial();
+mySerial.println((char)26);// ASCII code of CTRL+Z
+updateSerial();
+mySerial.println("AT+CMGD=1,4"); // AT Command to receive a live SMS
+updateSerial();
+}
+}
+  
+  
+}
+
+void modemsetup()
+{
+  for(int i=0;i<3;i++)
+  {
+  mySerial.println("AT");          //Once the handshake test is successful, it will back to OK
+  updateSerial();
+    
+  mySerial.println("AT+CSQ");      //Signal quality test, value range is 0-31, 31 is the best
+  updateSerial();
+    
+  mySerial.println("AT+CCID");    //Read SIM information to confirm whether the SIM is plugged
+  updateSerial();
+  
+  mySerial.println("AT+CREG?");    //Check whether it has registered in the network
+  updateSerial();    
+ 
+  mySerial.println("AT+SNFS=0");  //Adjust to earphone mode(AT+SNFS=1 is microphone mode) 
+  updateSerial();
+     
+  mySerial.println("AT+CRSL=2");  //Adjust volume, volume range is 0-15, maximum:15
+  updateSerial();
+
+  mySerial.println("AT+CMGF=1"); 
+  updateSerial();
+
+  mySerial.println("AT+CMGD=1,4");
+  updateSerial();
+  }
+
+  mySerial.println("AT+CMGS=\"+917602304567\"\r");
+  updateSerial();
+  
+  mySerial.println("I am SMS from GSM Module");
+  updateSerial();
+
+  mySerial.println((char)26);// ASCII code of CTRL+Z
+  updateSerial();
+  
+}
+
+
+void wait(unsigned int timeout)   //It works for  timeout time.
+{
+uint8_t x=0;  
+unsigned long previous;
+while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
+previous = millis();
+do{
+       smstask();
+            
+  }
+    
+   while(((millis() - previous) < timeout));   
+
+}
+
+void lora()
+{
+int m,n;
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+ wait(10000);            
+ Serial.println("I am working other job");
+ for(int j=0;j<100;j++)
+ for(int k=0;k<100;k++)
+ int m=k*j;
+
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+
+ wait(10000);            
+ for(int j=0;j<100;j++)
+ for(int k=0;k<100;k++)
+  m=k*j;
+
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+ wait(10000);            
+ for(int j=0;j<100;j++)
+ for(int k=0;k<100;k++)
+ m=k*j;
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("Hi");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+Serial.println("I am working other job");
+ 
+ wait(10000);            
+ for(int j=0;j<100;j++)
+ for(int k=0;k<100;k++)
+ m=k+j;
+ 
+ 
+ Serial.println("I am working other job");
+}
