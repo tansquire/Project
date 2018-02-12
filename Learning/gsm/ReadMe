@@ -4,3 +4,7 @@ import to db.py.py         -----run continiously at server (server arduino sends
 comm_status_from_random_value.py  -------run continiously at gateway  (generates random value at gateway if comm status is ok)
 A6_polling_method_server_side.ino   ------run continiously at arduino server
 A6_polling_method_deviceA.ino         -------------run continiously at arduino at field
+
+
+Read this forum
+https://www.cooking-hacks.com/forum/viewtopic.php?f=43&t=5919
