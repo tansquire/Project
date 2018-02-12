@@ -50,7 +50,10 @@ void loop()
   //mySerial.println("AT+CMGD=1,4");  // delete message
   //updateSerial();
   
-  mySerial.println("AT+CPMS=\"ME\"\r");  //read message from memory
+  mySerial.println("AT+CPMS=\"ME\",\"ME\",\"ME\"");  //read message from memory  
+  updateSerial();
+
+  mySerial.println(" AT+CMGR=1");  //read message from memory   
   updateSerial();
   
   mySerial.println("AT+CMGL=\"ALL\"\r");   //read all message
@@ -69,4 +72,4 @@ void loop()
   //updateSerial();
   
   
- }
+}
