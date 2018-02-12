@@ -1,0 +1,175 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(9, 10);
+int8_t answer;
+int x;
+
+char SMS[200];
+uint32_t prev_sms_millis;
+uint32_t sms_interval=30000;
+uint32_t prev_dash_millis;
+int dash=1;
+void setup(){
+    Serial.println("START"); 
+   
+    Serial.begin(9600); 
+    mySerial.begin(9600); 
+    Serial.println("POWERON"); 
+    power_on();
+    delay(3000);
+    Serial.println("POWER ON DONE");
+    //sendATcommand("AT+CPIN=****", "OK", 2000);
+   
+
+
+}
+
+
+void loop(){
+ 
+    if(millis() -prev_sms_millis > sms_interval)
+   {checkSMS();
+  prev_sms_millis=millis();
+  dash=1;
+   }
+       if(millis() -prev_dash_millis > 500)
+   {if(dash==1){Serial.println("");}
+   Serial.print(".");
+   dash=0;
+  prev_dash_millis=millis();
+   }
+}
+//____________________________________________________________________________________________
+ void checkSMS(){
+   
+    Serial.println("TEXT MODE ON");
+    sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    Serial.println("TEXT MODE ON DONE");
+    Serial.println("SELECT MEMORY");
+    sendATcommand("AT+CPMS=\"SM\",\"SM\",\"SM\"", "OK", 1000);    // selects the memory
+    Serial.println("SELECT MEMORY DONE");
+   
+   
+   
+   
+    answer = sendATcommand("AT+CMGR=0", "+CMGR:", 2000);    // reads the first SMS
+    if (answer == 1)
+    {
+       
+      answer = 0;
+        while(mySerial.available() == 0);
+        // this loop reads the data of the SMS
+        do{
+            // if there are data in the UART input buffer, reads it and checks for the asnwer
+            if(mySerial.available() > 0){   
+                SMS[x] = mySerial.read();
+                x++;
+                // check if the desired answer (OK) is in the response of the module
+                if (strstr(SMS, "@server#") != NULL)   
+                {
+                    answer = 1;
+                }
+            }
+        }while(answer == 0);    // Waits for the asnwer with time out
+       
+        SMS[x] = '\0';
+       
+        mySerial.print(SMS);   
+        Serial.println(SMS);
+    }
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+    }
+   Serial.println("Read");
+   //  sendATcommand("AT+CMGL=\"REC READ\"", "OK", 1000);
+   Serial.println("Unread");
+   //  sendATcommand("AT+CMGL=\"REC UNREAD\"", "OK", 1000);
+   
+   
+   
+   
+   
+   
+   Serial.println("Delete");
+   sendATcommand("AT+CMGD=0", "OK", 1000);    // Deletes SMS
+   
+   
+   
+   delay(500);
+   
+   
+        power_on();
+   
+   
+   
+   
+   Serial.println("END OF CHECK SMS");
+ }
+ 
+ //_____________________________________________________________________________________
+
+
+int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout){
+    Serial.println("SEND AT COMMAND");
+    uint8_t x=0,  answer=0;
+    char response[100];
+    unsigned long previous;
+
+    memset(response, '\0', 100);    // Initialice the string
+
+    delay(100);
+
+    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+
+    mySerial.println(ATcommand);    // Send the AT command
+    Serial.println(ATcommand);
+
+        x = 0;
+    previous = millis();
+
+    // this loop waits for the answer
+    do{
+        // if there are data in the UART input buffer, reads it and checks for the asnwer
+        if(mySerial.available() != 0){   
+            response[x] = mySerial.read();
+            Serial.print(response[x]);
+            x++;
+            // check if the desired answer is in the response of the module
+            if (strstr(response, expected_answer) != NULL)   
+            {
+                answer = 1;
+            }
+        }
+        // Waits for the asnwer with time out
+    }
+   
+
+
+    while((answer == 0) && ((millis() - previous) < timeout));   
+
+    return answer;
+    Serial.println("END OF AT SEND");
+}
+
+//______________________________________________________________________________
+
+void power_on(){
+
+    uint8_t answer=0;
+   
+    // checks if the module is started
+    answer = sendATcommand("AT", "OK", 2000);
+    if (answer == 0)
+    {
+        // power on pulse
+       
+   
+        // waits for an answer from the module
+        while(answer == 0){     // Send AT every two seconds and wait for the answer
+            answer = sendATcommand("AT", "OK", 2000);   
+        }
+    }
+   
+}
