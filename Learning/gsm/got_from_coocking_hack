@@ -65,7 +65,7 @@ void loop(){
                 SMS[x] = mySerial.read();
                 x++;
                 // check if the desired answer (OK) is in the response of the module
-                if (strstr(SMS, "@server#") != NULL)   
+                if (strstr(SMS, "OK") != NULL)   
                 {
                     answer = 1;
                 }
