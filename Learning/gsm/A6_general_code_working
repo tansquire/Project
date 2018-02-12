@@ -12,13 +12,28 @@ void setup(){
     Serial.println("Starting...");
     power_on();
 
-    delay(3000);
+answer = sendATcommand("AT", "OK", 2000); 
+if(answer==1)
+Serial.println("ok");
 
-    
+answer = sendATcommand("AT+CSQ", "OK", 2000); 
+if(answer==1)
+Serial.println("good signal quality");
 
-    Serial.println("Connecting to the network...");
+answer = sendATcommand("AT+CCID", "OK", 2000); 
+if(answer==1)
+Serial.println("SIM is plugged");
 
-    //while( (sendATcommand("AT+CREG?", "+CREG: 0,1", 500) || sendATcommand("AT+CREG?", "+CREG: 0,5", 500)) == 0 );
+answer = sendATcommand("AT+CREG?", "OK", 2000); 
+if(answer==1)
+Serial.println("Registered to network");
+
+
+answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000); 
+if(answer==1)
+Serial.println("Received message mode set");
+
+
 
     Serial.print("Setting SMS mode...");
     sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
