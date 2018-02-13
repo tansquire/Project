@@ -3,6 +3,8 @@ SoftwareSerial mySerial(9, 10);
 int8_t answer;
 int count_sent_A=0;
 int count_sent_B=0;
+int count_rcv_A=0;
+int count_rcv_B=0;
 
 void setup()
 {
@@ -62,11 +64,11 @@ recvWithStartEndMarkers();
         answer = sendATcommand("", "OK", 20000);
         if (answer == 1)
         {
-            Serial.print("Initial SMS Sent ");    
+            Serial.println("Initial SMS Sent ");    
         }
         else
         {
-            Serial.print("Error in sending initial sms--Please check balance");
+            Serial.println("Error in sending initial sms--Please check balance");
         }
     }
     else
@@ -191,7 +193,9 @@ void recvWithStartEndMarkers()
 {
 const byte numChars = 100;
 char receivedChars[numChars];
+char message[numChars];
 boolean newData = false;
+
 
     static boolean recvInProgress = false;
     static byte ndx = 0;
@@ -234,8 +238,21 @@ if (newData == true)
     {
         
         
-        if (strstr(receivedChars, "deviceA") != NULL ||strstr(receivedChars, "deviceB") != NULL)
+        if (strstr(receivedChars, "deviceA") != NULL)
         {
+        count_rcv_A++;
+        Serial.print("SMS No--");
+        Serial.print(count_rcv_A);
+        Serial.print("---");
+        Serial.println(receivedChars); 
+        newData = false;
+        }
+        else if (strstr(receivedChars, "deviceB") != NULL)
+        {
+        count_rcv_B++;
+        Serial.print("SMS No--");
+        Serial.print(count_rcv_B);
+        Serial.print("---");
         Serial.println(receivedChars); 
         newData = false;
         }
@@ -302,3 +319,4 @@ void power_on()
     Serial.println("modem ready");
 
 }
+
