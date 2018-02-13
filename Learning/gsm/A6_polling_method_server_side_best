@@ -6,7 +6,7 @@ int count_sent_B=0;
 int count_rcv_A=0;
 int count_rcv_B=0;
 uint32_t prev_delete_millis;
-uint32_t delete_interval=30000;
+uint32_t delete_interval=3000000;
 
 void setup()
 {
@@ -15,29 +15,42 @@ mySerial.begin(9600);
 Serial.println("Starting...");
 power_on();
 
+delay(500);
+
 answer = sendATcommand("AT", "OK", 2000); 
 if(answer==1)
 Serial.println("ok");
+
+delay(500);
 
 answer = sendATcommand("AT+CSQ", "OK", 2000); 
 if(answer==1)
 Serial.println("good signal quality");
 
+delay(500);
+
 answer = sendATcommand("AT+CCID", "OK", 2000); 
 if(answer==1)
 Serial.println("SIM is plugged");
 
+delay(500);
+
 answer = sendATcommand("AT+CREG?", "OK", 2000); 
 if(answer==1)
 Serial.println("Registered to network");
+
+delay(500);
 
 
 answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000); 
 if(answer==1)
 Serial.println("Received message mode set");
 
+delay(500);
+
 SendMessage();
-SendMessageB();
+delay(500);
+//SendMessageB();
     
 }
 
