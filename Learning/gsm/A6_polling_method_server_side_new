@@ -113,12 +113,6 @@ void SendMessageA()
     }
 }
 
-
-
-
-
-
-
  void SendMessageB()
 {
   
@@ -153,11 +147,6 @@ void SendMessageA()
     }
 }
 
-
-
-
-
-
 void recvOneChar() 
 {
 char receivedChar;
@@ -186,7 +175,6 @@ boolean newData = false;
       }
     }
 }
-
 
 
 void recvWithStartEndMarkers() 
