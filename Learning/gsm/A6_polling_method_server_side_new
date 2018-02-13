@@ -1,0 +1,304 @@
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(9, 10);
+int8_t answer;
+int count_sent_A=0;
+int count_sent_B=0;
+
+void setup()
+{
+Serial.begin(9600); 
+mySerial.begin(9600);    
+Serial.println("Starting...");
+power_on();
+
+answer = sendATcommand("AT", "OK", 2000); 
+if(answer==1)
+Serial.println("ok");
+
+answer = sendATcommand("AT+CSQ", "OK", 2000); 
+if(answer==1)
+Serial.println("good signal quality");
+
+answer = sendATcommand("AT+CCID", "OK", 2000); 
+if(answer==1)
+Serial.println("SIM is plugged");
+
+answer = sendATcommand("AT+CREG?", "OK", 2000); 
+if(answer==1)
+Serial.println("Registered to network");
+
+
+answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000); 
+if(answer==1)
+Serial.println("Received message mode set");
+
+SendMessage();
+    
+}
+
+
+void loop()
+{
+recvOneChar();
+recvWithStartEndMarkers();
+}
+
+
+
+ void SendMessage()
+{
+  Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    Serial.println("Error setting SMS mode");
+    Serial.println("Sending SMS");
+    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 2000);    // send the SMS number
+    if (answer == 1)
+    {
+        mySerial.println("Test sms-Sketch is ready to run");
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 20000);
+        if (answer == 1)
+        {
+            Serial.print("Initial SMS Sent ");    
+        }
+        else
+        {
+            Serial.print("Error in sending initial sms--Please check balance");
+        }
+    }
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+    }
+}
+
+
+void SendMessageA()
+{
+    
+    Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    Serial.println("Error setting SMS mode");
+    Serial.println("Sending SMS to device A");
+    answer = sendATcommand("AT+CMGS=\"+917358699052\"\r", ">", 2000);    // send the SMS number
+    if (answer == 1)
+    {
+        mySerial.println("@start#");
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 20000);
+        if (answer == 1)
+        {  
+            count_sent_A++;
+            Serial.print("Nos of SMS Sent to deviceA = ");
+            Serial.println(count_sent_A);    
+        }
+        else
+        {
+            Serial.println("Error in sending SMS to deviceA--Please check balance");
+        }
+    }
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+    }
+}
+
+
+
+
+
+
+
+ void SendMessageB()
+{
+  
+  Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    Serial.println("Error setting SMS mode");
+    Serial.println("Sending SMS");
+    answer = sendATcommand("AT+CMGS=\"+919080404532\"\r", ">", 2000);    // send the SMS number
+    if (answer == 1)
+    {
+        mySerial.println("@start#");
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 20000);
+        if (answer == 1)
+        {
+            count_sent_B++;
+            Serial.print("Nos of SMS Sent to deviceB = ");
+            Serial.println(count_sent_B);    
+        }
+        else
+        {
+            Serial.print("Error in sending SMS to deviceB--Please check balance");
+        }
+    }
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+    }
+}
+
+
+
+
+
+
+void recvOneChar() 
+{
+char receivedChar;
+boolean newData = false;
+    if (Serial.available() > 0) 
+    {
+        receivedChar = Serial.read();
+        newData = true;
+    }
+     if (newData == true) 
+    {
+      if(receivedChar=='a')
+      {
+      SendMessageA();
+      newData = false;
+      }
+      else if(receivedChar=='b')
+      {
+      SendMessageB();
+      newData = false;
+      }
+      else
+      {
+      newData = false;
+      return;
+      }
+    }
+}
+
+
+
+void recvWithStartEndMarkers() 
+{
+const byte numChars = 100;
+char receivedChars[numChars];
+boolean newData = false;
+
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '@';
+    char endMarker = '#';
+    char rc;
+ 
+    while (mySerial.available() > 0 && newData == false) 
+    {
+        rc = mySerial.read();
+
+        if (recvInProgress == true) 
+        {
+            if (rc != endMarker) 
+            {
+                receivedChars[ndx] = rc;
+                ndx++;
+                if (ndx >= numChars) 
+                {
+                    ndx = numChars - 1;
+                }
+            }
+            else 
+            {
+                receivedChars[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) 
+        {
+            recvInProgress = true;
+        }
+    }
+
+
+if (newData == true) 
+    {
+        
+        
+        if (strstr(receivedChars, "deviceA") != NULL ||strstr(receivedChars, "deviceB") != NULL)
+        {
+        Serial.println(receivedChars); 
+        newData = false;
+        }
+
+        else
+        {
+        newData = false;
+        return;
+        }
+    }
+
+}
+
+
+int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout)
+{
+
+    uint8_t x=0,  answer=0;
+    char response[100];
+    unsigned long previous;
+
+    memset(response, '\0', 100);    // Initialice the string
+
+    delay(100);
+
+    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+
+    mySerial.println(ATcommand);    // Send the AT command 
+
+
+    x = 0;
+    previous = millis();
+
+    // this loop waits for the answer
+    do{
+        if(mySerial.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
+            response[x] = mySerial.read();
+            x++;
+            if (strstr(response, expected_answer) != NULL)    // check if the desired answer is in the response of the module
+            {
+                answer = 1;
+            }
+        }
+    }while((answer == 0) && ((millis() - previous) < timeout));    // Waits for the asnwer with time out
+
+    return answer;
+}
+
+
+void power_on()
+{
+
+    uint8_t answer=0;
+
+    // checks if the module is started
+    answer = sendATcommand("AT", "OK", 2000);
+    if (answer == 0)
+    {
+        
+        while(answer == 0){     // Send AT every two seconds and wait for the answer
+            answer = sendATcommand("AT", "OK", 2000);    
+        }
+    }
+    Serial.println("modem ready");
+
+}
