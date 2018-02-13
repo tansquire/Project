@@ -5,6 +5,8 @@ int count_sent_A=0;
 int count_sent_B=0;
 int count_rcv_A=0;
 int count_rcv_B=0;
+uint32_t prev_delete_millis;
+uint32_t delete_interval=30000;
 
 void setup()
 {
@@ -35,6 +37,7 @@ if(answer==1)
 Serial.println("Received message mode set");
 
 SendMessage();
+SendMessageB();
     
 }
 
@@ -43,6 +46,15 @@ void loop()
 {
 recvOneChar();
 recvWithStartEndMarkers();
+if(millis() -prev_delete_millis > delete_interval)
+{
+answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
+if(answer==1)
+Serial.println("All message deleted");
+else
+Serial.println("Cant delete");
+prev_delete_millis=millis();
+}
 }
 
 
@@ -113,6 +125,12 @@ void SendMessageA()
     }
 }
 
+
+
+
+
+
+
  void SendMessageB()
 {
   
@@ -147,6 +165,11 @@ void SendMessageA()
     }
 }
 
+
+
+
+
+
 void recvOneChar() 
 {
 char receivedChar;
@@ -175,6 +198,7 @@ boolean newData = false;
       }
     }
 }
+
 
 
 void recvWithStartEndMarkers() 
