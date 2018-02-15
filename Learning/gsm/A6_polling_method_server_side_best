@@ -5,8 +5,8 @@ int count_sent_A=0;
 int count_sent_B=0;
 int count_rcv_A=0;
 int count_rcv_B=0;
-uint32_t prev_delete_millis;
-uint32_t delete_interval=3000000;
+//uint32_t prev_delete_millis;
+//uint32_t delete_interval=3000000;
 
 void setup()
 {
@@ -59,15 +59,15 @@ void loop()
 {
 recvOneChar();
 recvWithStartEndMarkers();
-if(millis() -prev_delete_millis > delete_interval)
-{
-answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
-if(answer==1)
-Serial.println("All message deleted");
-else
-Serial.println("Cant delete");
-prev_delete_millis=millis();
-}
+//if(millis() -prev_delete_millis > delete_interval)
+//{
+//answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
+//if(answer==1)
+//Serial.println("All message deleted");
+//else
+//Serial.println("Cant delete");
+//prev_delete_millis=millis();
+//}
 }
 
 
@@ -196,11 +196,13 @@ boolean newData = false;
     {
       if(receivedChar=='a')
       {
+      delete_sms();
       SendMessageA();
       newData = false;
       }
       else if(receivedChar=='b')
       {
+      delete_sms() ; 
       SendMessageB();
       newData = false;
       }
@@ -345,3 +347,14 @@ void power_on()
 
 }
 
+void delete_sms()
+
+{
+answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
+if(answer==1)
+Serial.println("All message deleted");
+else
+Serial.println("Cant delete");
+}
+
+ 
