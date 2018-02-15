@@ -51,14 +51,14 @@ delay(500);
 void loop()
 { 
  sms_task();
- lora();
+ //lora();
 
 
-if(millis() -prev_power_millis > power_interval)
-{
-power_on();
-prev_power_millis=millis();
-}
+//if(millis() -prev_power_millis > power_interval)
+//{
+//power_on();
+//prev_power_millis=millis();
+//}
  
 }
 
@@ -115,52 +115,52 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
 
 
-void wait(unsigned int timeout)   //It works for  timeout time.
-{
-uint8_t x=0;  
-unsigned long previous;
-while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
-previous = millis();
-do{
-       sms_task();
-            
-  }
-    
-   while(((millis() - previous) < timeout));   
+//void wait(unsigned int timeout)   //It works for  timeout time.
+//{
+//uint8_t x=0;  
+//unsigned long previous;
+//while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
+//previous = millis();
+//do{
+//       sms_task();
+//            
+//  }
+//    
+//   while(((millis() - previous) < timeout));   
+//
+//}
 
-}
-
-void lora()
-{
-int m,n;
-
- wait(10000);            
- Serial.println("I am working other job");
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- int m=k*j;
-
-
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
-  m=k*j;
-
-
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- m=k*j;
-
- 
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- m=k+j;
- 
- 
- Serial.println("I am working other job");
-}
+//void lora()
+//{
+//int m,n;
+//
+// wait(10000);            
+// Serial.println("I am working other job");
+// for(int j=0;j<100;j++)
+// for(int k=0;k<100;k++)
+// int m=k*j;
+//
+//
+// wait(10000);            
+// for(int j=0;j<100;j++)
+// for(int k=0;k<100;k++)
+//  m=k*j;
+//
+//
+// wait(10000);            
+// for(int j=0;j<100;j++)
+// for(int k=0;k<100;k++)
+// m=k*j;
+//
+// 
+// wait(10000);            
+// for(int j=0;j<100;j++)
+// for(int k=0;k<100;k++)
+// m=k+j;
+// 
+// 
+// Serial.println("I am working other job");
+//}
 
 
 
@@ -291,7 +291,7 @@ if (newData == true)
         {
         Serial.println(receivedChars);
         SendMessageA();
-        delay(1000);
+        //delay(1000);
         delete_sms();
         newData = false;
         }
