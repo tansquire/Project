@@ -1,9 +1,10 @@
 #include <SoftwareSerial.h>
+#include <avr/wdt.h>
 SoftwareSerial mySerial(9, 10);
 int8_t answer;
 int count_sent_A=0;
-uint32_t prev_delete_millis;
-uint32_t delete_interval=30000000;
+uint32_t prev_display_millis;
+uint32_t display_interval=2000;
 uint32_t prev_power_millis;
 uint32_t power_interval=3558000; 
 
@@ -16,28 +17,28 @@ Serial.println("Starting...");
 power_on();
 delay(500);
 
-answer = sendATcommand("AT", "OK", 2000); 
+answer = sendATcommand("AT", "OK", 3000); 
 if(answer==1)
 Serial.println("ok");
 delay(500);
 
-answer = sendATcommand("AT+CSQ", "OK", 2000); 
+answer = sendATcommand("AT+CSQ", "OK", 3000); 
 if(answer==1)
 Serial.println("good signal quality");
 delay(500);
 
-answer = sendATcommand("AT+CCID", "OK", 2000); 
+answer = sendATcommand("AT+CCID", "OK", 3000); 
 if(answer==1)
 Serial.println("SIM is plugged");
 delay(500);
 
-answer = sendATcommand("AT+CREG?", "OK", 2000); 
+answer = sendATcommand("AT+CREG?", "OK", 3000); 
 if(answer==1)
 Serial.println("Registered to network");
 delay(500);
 
 
-answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000); 
+answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 3000); 
 if(answer==1)
 Serial.println("Received message mode set");
 delay(500);
@@ -50,15 +51,20 @@ delay(500);
 
 void loop()
 { 
+  
  sms_task();
  //lora();
 
 
-//if(millis() -prev_power_millis > power_interval)
-//{
-//power_on();
-//prev_power_millis=millis();
-//}
+if(millis() -prev_display_millis > display_interval)
+{
+  Serial.print("Serial size");
+  Serial.println(Serial.available());
+  Serial.print("MySerial size");
+  Serial.println(mySerial.available());
+  prev_display_millis=millis();
+  
+  }
  
 }
 
@@ -68,12 +74,12 @@ void power_on()
     uint8_t answer=0;
 
     // checks if the module is started
-    answer = sendATcommand("AT", "OK", 2000);
+    answer = sendATcommand("AT", "OK", 3000);
     if (answer == 0)
     {
         
         while(answer == 0){     // Send AT every two seconds and wait for the answer
-            answer = sendATcommand("AT", "OK", 2000);    
+            answer = sendATcommand("AT", "OK", 3000);    
         }
     }
     Serial.println("modem ready");
@@ -91,6 +97,7 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
     delay(100);
 
     while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+    delay(1000);
 
     mySerial.println(ATcommand);    // Send the AT command 
 
@@ -130,59 +137,23 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 //
 //}
 
-//void lora()
-//{
-//int m,n;
-//
-// wait(10000);            
-// Serial.println("I am working other job");
-// for(int j=0;j<100;j++)
-// for(int k=0;k<100;k++)
-// int m=k*j;
-//
-//
-// wait(10000);            
-// for(int j=0;j<100;j++)
-// for(int k=0;k<100;k++)
-//  m=k*j;
-//
-//
-// wait(10000);            
-// for(int j=0;j<100;j++)
-// for(int k=0;k<100;k++)
-// m=k*j;
-//
-// 
-// wait(10000);            
-// for(int j=0;j<100;j++)
-// for(int k=0;k<100;k++)
-// m=k+j;
-// 
-// 
-// Serial.println("I am working other job");
-//}
-
-
-
-
-
 
 
 void SendMessage()
 {
   Serial.print("Setting SMS mode...");
-    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
     Serial.println("SMS mode set");
     else
     Serial.println("Error setting SMS mode");
     Serial.println("Sending SMS");
-    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 2000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
         mySerial.println("Test sms-Sketch is ready to run");
         mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
+        answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
             Serial.println("Initial SMS Sent ");    
@@ -203,9 +174,9 @@ void SendMessage()
 void SendMessageA()
 {
     char message[100];
-    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     Serial.println("Sending SMS to device A");
-    answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 2000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {   int i=random(1,5000);
         //float f=i/1000;
@@ -213,7 +184,7 @@ void SendMessageA()
         sprintf(message,"@%s|%d|<%d>#","deviceA",i,count_sent_A);
         mySerial.println(message);
         mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
+        answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
             Serial.println("sent");    
@@ -251,6 +222,7 @@ boolean newData = false;
     char startMarker = '@';
     char endMarker = '#';
     char rc;
+    int c;
  
     while (mySerial.available() > 0 && newData == false) 
     {
@@ -262,6 +234,7 @@ boolean newData = false;
             {
                 receivedChars[ndx] = rc;
                 ndx++;
+               
                 if (ndx >= numChars) 
                 {
                     ndx = numChars - 1;
@@ -270,6 +243,7 @@ boolean newData = false;
             else 
             {
                 receivedChars[ndx] = '\0'; // terminate the string
+                c=ndx;
                 recvInProgress = false;
                 ndx = 0;
                 newData = true;
@@ -285,11 +259,16 @@ boolean newData = false;
 
 if (newData == true) 
     {
-        
-        
-        if(strstr(receivedChars, "start") != NULL)
+       
+        //Serial.print(c);
+        if(strstr(receivedChars, "start") != NULL && c==5)
         {
         Serial.println(receivedChars);
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
+        Serial.print("MySerial size");
+        Serial.println(mySerial.available());
+        //delay(1000);
         SendMessageA();
         //delay(1000);
         delete_sms();
@@ -298,8 +277,9 @@ if (newData == true)
 
         else
         {
-        newData = false;
-        return;
+          Serial.println("Non-sense data found, I am restarting");
+          softwareReset( WDTO_60MS);
+        
         }
     }
 
@@ -308,10 +288,17 @@ if (newData == true)
 void delete_sms()
 
 {
-answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
+answer = sendATcommand("AT+CMGD=1,4", "OK", 3000); 
 if(answer==1)
 Serial.println("All message deleted");
 else
 Serial.println("Cant delete");
 }
 
+void softwareReset( uint8_t prescaller) 
+{
+
+  wdt_enable( prescaller);
+  
+  while(1) {}
+}
