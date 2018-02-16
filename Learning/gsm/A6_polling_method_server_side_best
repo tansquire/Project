@@ -278,7 +278,7 @@ boolean newData = false;
 if (newData == true) 
     {
         Serial.print(c);
-        if (c==16 && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "|") !=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        if ((c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         count_rcv_A++;
         Serial.print("SMS No--");
@@ -289,7 +289,7 @@ if (newData == true)
         newData = false;
         }
 
-        else if (c==16 && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "|") != NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        else if ((c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         Serial.print("Serial1 size");
         Serial.println(Serial1.available());
@@ -388,7 +388,6 @@ void softwareReset( uint8_t prescaller)
   
   while(1) {}
 }
-
 
 
 
