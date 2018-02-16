@@ -194,7 +194,7 @@ void SendMessageA()
     {   int i=random(1,5000);
         //float f=i/1000;
         count_sent_A++;
-        sprintf(message,"@%s<%d>/%d\#","deviceA",i,count_sent_A);
+        sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_A);
         mySerial.println(message);
         mySerial.write(0x1A);
         answer = sendATcommand("", "OK", 30000);
