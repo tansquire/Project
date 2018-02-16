@@ -277,7 +277,7 @@ boolean newData = false;
 
 if (newData == true) 
     {
-        //Serial.print(c);
+        Serial.print(c);
         if (c==16 && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "|") !=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         count_rcv_A++;
