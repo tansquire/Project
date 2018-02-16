@@ -1,17 +1,18 @@
-#include <SoftwareSerial.h>
-SoftwareSerial mySerial(9, 10);
+//#include <SoftwareSerial.h>
+//SoftwareSerial Serial1(9, 10);
+#include <avr/wdt.h>
 int8_t answer;
 int count_sent_A=0;
 int count_sent_B=0;
 int count_rcv_A=0;
 int count_rcv_B=0;
-//uint32_t prev_delete_millis;
-//uint32_t delete_interval=3000000;
+uint32_t prev_display_millis;
+uint32_t display_interval=2000;
 
 void setup()
 {
 Serial.begin(9600); 
-mySerial.begin(9600);    
+Serial1.begin(9600);    
 Serial.println("Starting...");
 power_on();
 
@@ -46,9 +47,9 @@ answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000);
 if(answer==1)
 Serial.println("Received message mode set");
 
-delay(500);
+delay(5000);
 
-SendMessage();
+//SendMessage();
 delay(500);
 //SendMessageB();
     
@@ -57,8 +58,11 @@ delay(500);
 
 void loop()
 {
+
 recvOneChar();
+
 recvWithStartEndMarkers();
+
 //if(millis() -prev_delete_millis > delete_interval)
 //{
 //answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
@@ -68,25 +72,33 @@ recvWithStartEndMarkers();
 //Serial.println("Cant delete");
 //prev_delete_millis=millis();
 //}
+
+if(millis() -prev_display_millis > display_interval)
+{
+Serial.print("Serial1 size");
+Serial.println(Serial1.available());
+Serial.print("Serial size");
+Serial.println(Serial.available());
+prev_display_millis=millis();
 }
 
+}
 
-
- void SendMessage()
+void SendMessage()
 {
   Serial.print("Setting SMS mode...");
-    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
     Serial.println("SMS mode set");
     else
     Serial.println("Error setting SMS mode");
     Serial.println("Sending SMS");
-    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 2000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
-        mySerial.println("Test sms-Sketch is ready to run");
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
+        Serial1.println("Test sms-Sketch is ready to run");
+        Serial1.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
             Serial.println("Initial SMS Sent ");    
@@ -108,18 +120,18 @@ void SendMessageA()
 {
     
     Serial.print("Setting SMS mode...");
-    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
     Serial.println("SMS mode set");
     else
     Serial.println("Error setting SMS mode");
     Serial.println("Sending SMS to device A");
-    answer = sendATcommand("AT+CMGS=\"+917358699052\"\r", ">", 2000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+917358699052\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
-        mySerial.println("@start#");
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
+        Serial1.println("@start#");
+        Serial1.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {  
             count_sent_A++;
@@ -138,28 +150,22 @@ void SendMessageA()
     }
 }
 
-
-
-
-
-
-
- void SendMessageB()
+void SendMessageB()
 {
   
   Serial.print("Setting SMS mode...");
-    answer=sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
     Serial.println("SMS mode set");
     else
     Serial.println("Error setting SMS mode");
     Serial.println("Sending SMS");
-    answer = sendATcommand("AT+CMGS=\"+919080404532\"\r", ">", 2000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+919080404532\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
-        mySerial.println("@start#");
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
+        Serial1.println("@start#");
+        Serial1.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
             count_sent_B++;
@@ -177,11 +183,6 @@ void SendMessageA()
         Serial.println(answer, DEC);
     }
 }
-
-
-
-
-
 
 void recvOneChar() 
 {
@@ -214,8 +215,6 @@ boolean newData = false;
     }
 }
 
-
-
 void recvWithStartEndMarkers() 
 {
 const byte numChars = 100;
@@ -230,9 +229,9 @@ boolean newData = false;
     char endMarker = '#';
     char rc;
  
-    while (mySerial.available() > 0 && newData == false) 
+    while (Serial1.available() > 0 && newData == false) 
     {
-        rc = mySerial.read();
+        rc = Serial1.read();
 
         if (recvInProgress == true) 
         {
@@ -263,19 +262,24 @@ boolean newData = false;
 
 if (newData == true) 
     {
-        
-        
-        if (strstr(receivedChars, "deviceA") != NULL)
+
+        if (strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "|") !=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         count_rcv_A++;
         Serial.print("SMS No--");
         Serial.print(count_rcv_A);
         Serial.print("---");
         Serial.println(receivedChars); 
+        
         newData = false;
         }
-        else if (strstr(receivedChars, "deviceB") != NULL)
+
+        else if (strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "|") != NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
         count_rcv_B++;
         Serial.print("SMS No--");
         Serial.print(count_rcv_B);
@@ -286,13 +290,13 @@ if (newData == true)
 
         else
         {
-        newData = false;
-        return;
+        Serial.println("Non-sense data found, I am restarting");
+        softwareReset( WDTO_60MS);
         }
-    }
+      
+      }
 
 }
-
 
 int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout)
 {
@@ -305,9 +309,10 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
     delay(100);
 
-    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+    while( Serial1.available() > 0) Serial1.read();    // Clean the input buffer
+    delay(1000);
 
-    mySerial.println(ATcommand);    // Send the AT command 
+    Serial1.println(ATcommand);    // Send the AT command 
 
 
     x = 0;
@@ -315,8 +320,8 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
     // this loop waits for the answer
     do{
-        if(mySerial.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
-            response[x] = mySerial.read();
+        if(Serial1.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
+            response[x] = Serial1.read();
             x++;
             if (strstr(response, expected_answer) != NULL)    // check if the desired answer is in the response of the module
             {
@@ -335,12 +340,12 @@ void power_on()
     uint8_t answer=0;
 
     // checks if the module is started
-    answer = sendATcommand("AT", "OK", 2000);
+    answer = sendATcommand("AT", "OK", 3000);
     if (answer == 0)
     {
         
         while(answer == 0){     // Send AT every two seconds and wait for the answer
-            answer = sendATcommand("AT", "OK", 2000);    
+            answer = sendATcommand("AT", "OK", 3000);    
         }
     }
     Serial.println("modem ready");
@@ -350,11 +355,23 @@ void power_on()
 void delete_sms()
 
 {
-answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
+answer = sendATcommand("AT+CMGD=1,4", "OK", 3000); 
 if(answer==1)
 Serial.println("All message deleted");
 else
 Serial.println("Cant delete");
 }
 
- 
+
+void softwareReset( uint8_t prescaller) 
+{
+
+  wdt_enable( prescaller);
+  
+  while(1) {}
+}
+
+
+
+
+
