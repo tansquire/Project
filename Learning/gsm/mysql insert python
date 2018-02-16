@@ -1,0 +1,17 @@
+#!/usr/bin/python
+from datetime import datetime
+import mysql.connector
+import time
+now = datetime.now()
+print now
+while(1):
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ x = ("insert into gsm_test (id, name,value) values ('%d', '%s', '%s')" % (4, 'ty','jh'))
+ mycursor.execute(x)
+ conn.commit()
+ conn.close()
+ mycursor.close() 
+ print 'done'
+ time.sleep(1)
+
