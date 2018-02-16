@@ -141,12 +141,15 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
 void SendMessage()
 {
-  Serial.print("Setting SMS mode...");
+    Serial.print("Setting SMS mode...");
     answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
     Serial.println("SMS mode set");
     else
+    {
     Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
     Serial.println("Sending SMS");
     answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
@@ -167,6 +170,7 @@ void SendMessage()
     {
         Serial.print("error ");
         Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
     }
 }
 
@@ -174,7 +178,16 @@ void SendMessage()
 void SendMessageA()
 {
     char message[100];
+    Serial.print("Setting SMS mode...");
     answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    {
+    Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
+    
     Serial.println("Sending SMS to device A");
     answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
@@ -200,6 +213,7 @@ void SendMessageA()
     {
         Serial.print("error ");
         Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
     }
     
     
@@ -292,7 +306,10 @@ answer = sendATcommand("AT+CMGD=1,4", "OK", 3000);
 if(answer==1)
 Serial.println("All message deleted");
 else
+{
 Serial.println("Cant delete");
+softwareReset( WDTO_60MS);
+}
 }
 
 void softwareReset( uint8_t prescaller) 
