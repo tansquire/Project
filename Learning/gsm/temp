@@ -4,7 +4,7 @@ import time
 import mysql.connector
 from time import gmtime, strftime
 from datetime import datetime
-ser = serial.Serial('/dev/ttyACM0', baudrate = 9600)
+ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
 time.sleep(1)
 start = time.time()
 
@@ -12,30 +12,18 @@ count_server_restart=0
 while(1):
  conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
  mycursor=conn.cursor()
- mycursor.execute("select * FROM DI where id=3") 
+ mycursor.execute("select * FROM DI") 
  list=mycursor.fetchall()
- lake_well_lora_status=(list[0][2])
- mycursor.execute("select * FROM DI where id=4") 
- list=mycursor.fetchall()
- childrenpark_lora_status=(list[0][2])
- mycursor.execute("select * FROM DI where id=5") 
- list=mycursor.fetchall()
- stuff_club_lora_status=(list[0][2])
+ lake_well_lora_status=(list[2][2])
+ childrenpark_lora_status=(list[3][2])
+ stuff_club_lora_status=(list[4][2])
  mycursor.execute("select * FROM GSMAI") 
  list=mycursor.fetchall()
- count_rcvd_from_A=(list[0][2]
- mycursor.execute("select * FROM GSMAI where id=6") 
- list=mycursor.fetchall()
- count_rcvd_from_B=(list[0][2]
- mycursor.execute("select * FROM GSMAI where id=7") 
- list=mycursor.fetchall()
- count_rcvd_non_sense=(list[0][2]
- mycursor.execute("select * FROM GSMAI where id=10") 
- list=mycursor.fetchall()
- count_sent_by_server=(list[0][2]
- mycursor.execute("select * FROM GSMAI where id=13") 
- list=mycursor.fetchall()
- count_server_restart=(list[0][2]
+ count_rcvd_from_A=int (list[4][2])
+ count_rcvd_from_B=int (list[5][2])
+ count_rcvd_non_sense=int (list[6][2])
+ count_sent_by_server=int (list[9][2])
+ count_server_restart=int (list[12][2])
  
  
 
