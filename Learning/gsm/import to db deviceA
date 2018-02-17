@@ -1,0 +1,54 @@
+#!/usr/bin/python
+import serial
+import time
+import mysql.connector
+from time import gmtime, strftime
+from datetime import datetime
+ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
+time.sleep(1)
+start = time.time()
+
+while(1):
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ mycursor.execute("select * FROM GSMAI") 
+ list=mycursor.fetchall()
+ count_rcvd_from_server=int (list[13][2])
+ count_sent=int (list[7][2])
+ count_restart=int (list[10][2])
+ conn.close()
+ mycursor.close()
+ end = time.time()
+ if(end - start>300):
+  print datetime.now()
+  time.sleep(.1)
+  start=end;
+
+ 
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ if(ser.inWaiting()>0):
+  data=ser.readline().decode().split('\r\n')
+  print(data[0])
+ 
+  if('Serial' not in data[0]):   
+   mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))  
+  
+   if('start' in data[0]): 
+    count_rcvd_from_server=count_rcvd_from_server+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_server, 14))  
+    
+   
+   if('sent to server' in data[0]):   
+    count_sent=count_sent+1 
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_sent, 8))  
+
+   if('Starting' in data[0]): 
+    count_restart=count_restart+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_restart, 11))
+   
+   
+ conn.commit()
+ conn.close()
+ mycursor.close() 
+ 
