@@ -122,20 +122,20 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
 
 
-//void wait(unsigned int timeout)   //It works for  timeout time.
-//{
-//uint8_t x=0;  
-//unsigned long previous;
-//while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
-//previous = millis();
-//do{
-//       sms_task();
-//            
-//  }
-//    
-//   while(((millis() - previous) < timeout));   
-//
-//}
+void wait(unsigned int timeout)   //It works for  timeout time.
+{
+uint8_t x=0;  
+unsigned long previous;
+while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
+previous = millis();
+do{
+       while( mySerial.available() > 0) mySerial.read();
+            
+  }
+    
+   while(((millis() - previous) < timeout));   
+
+}
 
 
 
@@ -220,7 +220,49 @@ void SendMessageA()
 }
 
 
+void SendMessageB()
+{
+    char message[100];
+    Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    {
+    Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
+    
+    Serial.println("Sending SMS to mobile");
+    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
+    if (answer == 1)
+    {   int i=random(1,5000);
+        //float f=i/1000;
+        count_sent_A++;
+        sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_A);
+        mySerial.println(message);
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
+        if (answer == 1)
+        {
+            Serial.println("sent");    
+        }
+        else
+        {
+            Serial.println("Error in sending initial sms--Please check balance");
+        }
+        
+    }
 
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
+    }
+    
+    
+}
 
 
 
@@ -282,12 +324,26 @@ if (newData == true)
         Serial.println(Serial.available());
         Serial.print("MySerial size");
         Serial.println(mySerial.available());
-        //delay(1000);
+        wait(30000);
         SendMessageA();
         //delay(1000);
         delete_sms();
         newData = false;
         }
+else if(strstr(receivedChars, "mobile") != NULL && c==6)
+        {
+        Serial.println(receivedChars);
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
+        Serial.print("MySerial size");
+        Serial.println(mySerial.available());
+        //wait(30000);
+        SendMessageB();
+        //delay(1000);
+        delete_sms();
+        newData = false;
+        }
+        
 
         else
         {
