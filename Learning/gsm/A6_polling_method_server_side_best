@@ -108,7 +108,7 @@ void SendMessage()
         }
         else
         {
-            Serial.println("Error in sending initial sms--Please check balance");
+            Serial.println("Please check balance");
         }
     }
     else
@@ -148,7 +148,7 @@ void SendMessageA()
         }
         else
         {
-            Serial.println("Error in sending SMS to deviceA--Please check balance");
+            Serial.println("Please check balance");
         }
     }
     else
@@ -186,7 +186,7 @@ void SendMessageB()
         }
         else
         {
-            Serial.print("Error in sending SMS to deviceB--Please check balance");
+            Serial.print("Please check balance");
         }
     }
     else
@@ -278,7 +278,7 @@ boolean newData = false;
 if (newData == true) 
     {
         Serial.print(c);
-        if ((c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         count_rcv_A++;
         Serial.print("SMS No--");
@@ -289,7 +289,7 @@ if (newData == true)
         newData = false;
         }
 
-        else if ((c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
         {
         Serial.print("Serial1 size");
         Serial.println(Serial1.available());
