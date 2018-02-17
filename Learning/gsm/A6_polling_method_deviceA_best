@@ -44,8 +44,8 @@ if(answer==1)
 Serial.println("Received message mode set");
 delay(500);
 
-SendMessage();
-delay(500);
+//SendMessage();
+//delay(500);
 
 }
 
@@ -195,7 +195,7 @@ void SendMessageServer()
     Serial.print("Sending");
     Serial.print(message);
     Serial.println(" to server");
-    answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 3000);    // send the SMS number
+    answer = sendATcommand("AT+CMGS=\"+919952987526\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {   
         mySerial.println(message);
