@@ -11,15 +11,21 @@ start = time.time()
 while(1):
  conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
  mycursor=conn.cursor()
- mycursor.execute("select * FROM DI where id=3") 
+ mycursor.execute("select * FROM DI") 
  list=mycursor.fetchall()
- lake_well_lora_status=(list[0][2])
- mycursor.execute("select * FROM DI where id=4") 
+ lake_well_lora_status=(list[2][2])
+ childrenpark_lora_status=(list[3][2])
+ stuff_club_lora_status=(list[4][2])
+ mycursor.execute("select * FROM GSMAI") 
  list=mycursor.fetchall()
- childrenpark_lora_status=(list[0][2])
- mycursor.execute("select * FROM DI where id=5") 
- list=mycursor.fetchall()
- stuff_club_lora_status=(list[0][2])
+ count_rcvd_from_A=int (list[4][2])
+ count_rcvd_from_B=int (list[5][2])
+ count_rcvd_non_sense=int (list[6][2])
+ count_sent_by_server=int (list[9][2])
+ count_server_restart=int (list[12][2])
+ 
+ 
+
  #print"lakewell, children, and stuff_club comm availabilities respectively are=%s, %s and %s"%(lake_well_lora_status,childrenpark_lora_status,stuff_club_lora_status)
  conn.close()
  mycursor.close()
@@ -47,20 +53,42 @@ while(1):
    #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 2))
    #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
 
-  if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):   
-   mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
+  #if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
    
-  if('Non-sense' in data[0]):   
-   mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
+  #if('Non-sense' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
    
-  if('modem' in data[0]):   
-   mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0])) 
+  #if('modem' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0])) 
 
-  if('Sending' in data[0]):   
+  if('Serial' not in data[0]):   
    mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))  
-   
   
+   if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]): 
+    count_rcvd_from_A=count_rcvd_from_A+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_A, 5))  
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceA=%d"%(valid_countA)))
 
+   if('deviceB' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]): 
+    count_rcvd_from_B=count_rcvd_from_B+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_B, 6))  
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceB=%d"%(valid_countB)))
+
+   if('Non-sense' in data[0]):   
+    count_rcvd_non_sense=count_rcvd_non_sense+1 
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_non_sense, 7))   
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Total Nos of non-sense found=%d"%(valid_count_non_sense)))
+   
+   if('Nos of SMS Sent to' in data[0]):   
+    count_sent_by_server=count_sent_by_server+1 
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_sent_by_server, 10))  
+
+   if('Starting' in data[0]): 
+    count_server_restart=count_server_restart+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_server_restart, 13))
+   
+   
 
    #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 1))
    #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
