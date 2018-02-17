@@ -47,7 +47,7 @@ answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000);
 if(answer==1)
 Serial.println("Received message mode set");
 
-delay(5000);
+//delay(5000);
 
 //SendMessage();
 delay(500);
