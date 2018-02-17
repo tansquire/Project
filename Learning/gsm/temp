@@ -1,323 +1,121 @@
-//Try to change String class by cstring
-#include <SoftwareSerial.h>
-SoftwareSerial mySerial(9, 10);
-int8_t answer;
+#!/usr/bin/python
+import serial
+import time
+import mysql.connector
+from time import gmtime, strftime
+from datetime import datetime
+ser = serial.Serial('/dev/ttyACM0', baudrate = 9600)
+time.sleep(1)
+start = time.time()
 
-void setup(){
-
-    
-    Serial.begin(9600); 
-    mySerial.begin(9600);    
-
-    Serial.println("Starting...");
-    power_on();
-
-answer = sendATcommand("AT", "OK", 2000); 
-if(answer==1)
-Serial.println("ok");
-
-answer = sendATcommand("AT+CSQ", "OK", 2000); 
-if(answer==1)
-Serial.println("good signal quality");
-
-answer = sendATcommand("AT+CCID", "OK", 2000); 
-if(answer==1)
-Serial.println("SIM is plugged");
-
-answer = sendATcommand("AT+CREG?", "OK", 2000); 
-if(answer==1)
-Serial.println("Registered to network");
-
-
-answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 2000); 
-if(answer==1)
-Serial.println("Received message mode set");
-
-
-
-    Serial.print("Setting SMS mode...");
-    sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
-    Serial.println("Sending SMS");
-
-    //mySerial.println("AT+CMGS=\"+917602304567\"\r");
-    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 2000);    // send the SMS number
-    if (answer == 1)
-    {
-        mySerial.println("Test-Arduino-Hello World");
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
-        if (answer == 1)
-        {
-            Serial.print("Sent ");    
-        }
-        else
-        {
-            Serial.print("error ");
-        }
-    }
-    else
-    {
-        Serial.print("error ");
-        Serial.println(answer, DEC);
-    }
-
-}
-
-
-void loop()
-{ 
- sms_task1();
- lora();
+count_server_restart=0
+while(1):
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ mycursor.execute("select * FROM DI where id=3") 
+ list=mycursor.fetchall()
+ lake_well_lora_status=(list[0][2])
+ mycursor.execute("select * FROM DI where id=4") 
+ list=mycursor.fetchall()
+ childrenpark_lora_status=(list[0][2])
+ mycursor.execute("select * FROM DI where id=5") 
+ list=mycursor.fetchall()
+ stuff_club_lora_status=(list[0][2])
+ mycursor.execute("select * FROM GSMAI") 
+ list=mycursor.fetchall()
+ count_rcvd_from_A=(list[0][2]
+ mycursor.execute("select * FROM GSMAI where id=6") 
+ list=mycursor.fetchall()
+ count_rcvd_from_B=(list[0][2]
+ mycursor.execute("select * FROM GSMAI where id=7") 
+ list=mycursor.fetchall()
+ count_rcvd_non_sense=(list[0][2]
+ mycursor.execute("select * FROM GSMAI where id=10") 
+ list=mycursor.fetchall()
+ count_sent_by_server=(list[0][2]
+ mycursor.execute("select * FROM GSMAI where id=13") 
+ list=mycursor.fetchall()
+ count_server_restart=(list[0][2]
  
-}
+ 
 
-void power_on(){
+ #print"lakewell, children, and stuff_club comm availabilities respectively are=%s, %s and %s"%(lake_well_lora_status,childrenpark_lora_status,stuff_club_lora_status)
+ conn.close()
+ mycursor.close()
+ end = time.time()
+ if(end - start>300 and lake_well_lora_status=='0'):
+  print datetime.now()
+  time.sleep(.1)
+  ser.write(b'a')
+  start=end;
 
-    uint8_t answer=0;
+ #if(lake_well_lora_status=='0'):
+  #ser.write(b'a')
+  #print ("lake well lora fail, command given to lake well")
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ if(ser.inWaiting()>0):
+  data=ser.readline().decode().split('\r\n')
+  #data=ser.readline();
+  print(data[0])
+  #print(data)
+  #if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):   
+   #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 1))
+   #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
+  #if('deviceB' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):
+   #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 2))
+   #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
 
-    // checks if the module is started
-    answer = sendATcommand("AT", "OK", 2000);
-    if (answer == 0)
-    {
-        
-        while(answer == 0){     // Send AT every two seconds and wait for the answer
-            answer = sendATcommand("AT", "OK", 2000);    
-        }
-    }
-    Serial.println("modem ready");
+  #if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
+   
+  #if('Non-sense' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))
+   
+  #if('modem' in data[0]):   
+   #mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0])) 
 
-}
-
-int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout){
-
-    uint8_t x=0,  answer=0;
-    char response[100];
-    unsigned long previous;
-
-    memset(response, '\0', 100);    // Initialice the string
-
-    delay(100);
-
-    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
-
-    mySerial.println(ATcommand);    // Send the AT command 
-
-
-    x = 0;
-    previous = millis();
-
-    // this loop waits for the answer
-    do{
-        if(mySerial.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
-            response[x] = mySerial.read();
-            x++;
-            if (strstr(response, expected_answer) != NULL)    // check if the desired answer is in the response of the module
-            {
-                answer = 1;
-            }
-        }
-    }while((answer == 0) && ((millis() - previous) < timeout));    // Waits for the asnwer with time out
-
-    return answer;
-}
-
-void smstask()
-{
-  String str="";
-while( mySerial.available() > 0) mySerial.read();   //If you dont use this line, still working
-if(mySerial.available()) 
-{
-str=mySerial.readString();
-Serial.println(str);
-int bra = str.indexOf('@');
-int ket = str.indexOf('#');
-String str1=str.substring(bra+1,ket);
-
-if(str1=="server")
-{
-int i=random(1,500);
-String str2=(String)i;
-String str3="@deviceA#"+str2;
-
-
-    sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
-    
-    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 2000);    // send the SMS number
-    if (answer == 1)
-    {
-        mySerial.println(str3);
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
-        if (answer == 1)
-        {
-            Serial.println("Sent ");    
-        }
-        else
-        {
-            Serial.print("message sending error ");
-        }
-    }
-
-
-answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
-if(answer==1)
-Serial.println("deleted");
-}
-}
+  if('Serial' not in data[0]):   
+   mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),data[0]))  
   
-  
-}
+   if('deviceA' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]): 
+    count_rcvd_from_A=count_rcvd_from_A+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_A, 5))  
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceA=%d"%(valid_countA)))
 
-void wait(unsigned int timeout)   //It works for  timeout time.
-{
-uint8_t x=0;  
-unsigned long previous;
-while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
-previous = millis();
-do{
-       sms_task1();
-            
-  }
-    
-   while(((millis() - previous) < timeout));   
+   if('deviceB' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]): 
+    count_rcvd_from_B=count_rcvd_from_B+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_B, 6))  
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceB=%d"%(valid_countB)))
 
-}
+   if('Non-sense' in data[0]):   
+    count_rcvd_non_sense=count_rcvd_non_sense+1 
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_non_sense, 7))   
+    #mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Total Nos of non-sense found=%d"%(valid_count_non_sense)))
+   
+   if('Nos of SMS Sent to' in data[0]):   
+    count_sent_by_server=count_sent_by_server+1 
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_sent_by_server, 10))  
 
-void lora()
-{
-int m,n;
+   if('Starting' in data[0]): 
+    count_server_restart=count_server_restart+1
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_server_restart, 13))
+   
+   
 
- wait(10000);            
- Serial.println("I am working other job");
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- int m=k*j;
+   #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 1))
+   #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
+  #if('deviceB' in data[0] and 'p' in data[0] and 'q' in data[0] and '<' in data[0] and '>' in data[0]):
+   #mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (data[0][data[0].find('<')+1:data[0].find('>')], 2))
+   #print"lakewell data=%s"%(data[0][data[0].find('<')+1:data[0].find('>')])
 
+ conn.commit()
+ conn.close()
+ mycursor.close() 
+ #time.sleep(300)
 
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
-  m=k*j;
-
-
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- m=k*j;
-
- 
- wait(10000);            
- for(int j=0;j<100;j++)
- for(int k=0;k<100;k++)
- m=k+j;
- 
- 
- Serial.println("I am working other job");
-}
-
-
-
-
-
-void sms_task1()
-{
-int y;
-const byte numChars = 100;
-char receivedChars[numChars]; // an array to store the received data
-boolean newData = false;
-char message[50];
-
- static byte ndx = 0;
- char endMarker = '#';
- char rc;
- 
-//if (mySerial.available() > 0) 
-//{
-while (mySerial.available() > 0 && newData == false) 
-{
- rc = mySerial.read();
-
- if (rc != endMarker) 
- {
- receivedChars[ndx] = rc;
- ndx++;
- if (ndx >= numChars)
- {
- ndx = numChars - 1;
- }
- }
- else 
- {
- receivedChars[ndx] = '\0'; // terminate the string
- ndx = 0;
- newData = true;
- }
- }
-//}
-
-
- if (newData == true) 
- {
- Serial.println(receivedChars);
- newData = false;
- if (strstr(receivedChars, "partha") != NULL)   
- {
-
-{
-int i=random(1,500);
-y=sprintf(message,"%s#%d","@deviceA",i);
-
-
-    sendATcommand("AT+CMGF=1", "OK", 1000);    // sets the SMS mode to text
-    
-    answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 2000);    // send the SMS number
-    if (answer == 1)
-    {
-        mySerial.println(message);
-        mySerial.write(0x1A);
-        answer = sendATcommand("", "OK", 20000);
-        if (answer == 1)
-        {
-            Serial.println("Sent ");    
-        }
-        else
-        {
-            Serial.print("message sending error ");
-        }
-    }
-
-
-answer = sendATcommand("AT+CMGD=1,4", "OK", 2000); 
-if(answer==1)
-Serial.println("deleted");
-}
-
-
-
-  
-                    
- }
- 
- }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ #if(childrenpark_lora_status=='0'):
+  #ser.write(b'b')
+  #print ("children park lora fail, command given to children park")
+  #do()
+#time.sleep(60)
