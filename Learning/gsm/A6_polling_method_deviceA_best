@@ -2,7 +2,8 @@
 #include <avr/wdt.h>
 SoftwareSerial mySerial(9, 10);
 int8_t answer;
-int count_sent_A=0;
+int count_sent_server=0;
+int count_sent_mobile=0;
 uint32_t prev_display_millis;
 uint32_t display_interval=2000;
 uint32_t prev_power_millis;
@@ -154,7 +155,7 @@ void SendMessage()
     answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
-        mySerial.println("Test sms-Sketch is ready to run");
+        mySerial.println("NodeA restarted");
         mySerial.write(0x1A);
         answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
@@ -163,7 +164,7 @@ void SendMessage()
         }
         else
         {
-            Serial.println("Error in sending initial sms--Please check balance");
+            Serial.println("Please check balance");
         }
     }
     else
@@ -175,7 +176,7 @@ void SendMessage()
 }
 
 
-void SendMessageA()
+void SendMessageServer()
 {
     char message[100];
     Serial.print("Setting SMS mode...");
@@ -187,24 +188,26 @@ void SendMessageA()
     Serial.println("Error setting SMS mode");
     softwareReset( WDTO_60MS);
     }
-    
-    Serial.println("Sending SMS to device A");
+    int i=random(1,5000);
+    //float f=i/1000;
+    count_sent_server++;
+    sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_server);
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to server");
     answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
-    {   int i=random(1,5000);
-        //float f=i/1000;
-        count_sent_A++;
-        sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_A);
+    {   
         mySerial.println(message);
         mySerial.write(0x1A);
         answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
-            Serial.println("sent");    
+            Serial.println("sent to server");    
         }
         else
         {
-            Serial.println("Error in sending initial sms--Please check balance");
+            Serial.println("Please check balance");
         }
         
     }
@@ -220,7 +223,7 @@ void SendMessageA()
 }
 
 
-void SendMessageB()
+void SendMessageMobile()
 {
     char message[100];
     Serial.print("Setting SMS mode...");
@@ -232,24 +235,26 @@ void SendMessageB()
     Serial.println("Error setting SMS mode");
     softwareReset( WDTO_60MS);
     }
-    
-    Serial.println("Sending SMS to mobile");
+    int i=random(1,5000);
+    //float f=i/1000;
+    count_sent_mobile++;
+    sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_mobile);
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to mobile");
     answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
-    {   int i=random(1,5000);
-        //float f=i/1000;
-        count_sent_A++;
-        sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_A);
+    {   
         mySerial.println(message);
         mySerial.write(0x1A);
         answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
-            Serial.println("sent");    
+            Serial.println("sent to mobile");    
         }
         else
         {
-            Serial.println("Error in sending initial sms--Please check balance");
+            Serial.println("Please check balance");
         }
         
     }
@@ -325,7 +330,7 @@ if (newData == true)
         Serial.print("MySerial size");
         Serial.println(mySerial.available());
         wait(30000);
-        SendMessageA();
+        SendMessageServer();
         //delay(1000);
         delete_sms();
         newData = false;
@@ -338,7 +343,7 @@ else if(strstr(receivedChars, "mobile") != NULL && c==6)
         Serial.print("MySerial size");
         Serial.println(mySerial.available());
         //wait(30000);
-        SendMessageB();
+        SendMessageMobile();
         //delay(1000);
         delete_sms();
         newData = false;
