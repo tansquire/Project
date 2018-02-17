@@ -1,1 +1,6 @@
+***********************************Remote access of mysql database from ubuntu terminal*******************************************
 
+mysql -h 10.21.160.201 -u root -p
+mysql -h 10.21.160.201 -u root -p scada (to access perticular db)
+SELECT * FROM scada.gsm_test;
+SELECT * FROM gsm_test;
