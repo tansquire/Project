@@ -178,7 +178,15 @@ void SendMessage()
 
 void SendMessageServer()
 {
-    char message[100];
+   
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int n;
+    unsigned int n1;
+    bool isNeg;
+    
     Serial.print("Setting SMS mode...");
     answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
@@ -188,10 +196,36 @@ void SendMessageServer()
     Serial.println("Error setting SMS mode");
     softwareReset( WDTO_60MS);
     }
-    int i=random(1,5000);
-    //float f=i/1000;
+
+//convert analog value into string     
+   n=rand();
+   isNeg = n<0;
+   n1 = isNeg ? -n : n;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(n == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
     count_sent_server++;
-    sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_server);
+    sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_server);
     Serial.print("Sending");
     Serial.print(message);
     Serial.println(" to server");
@@ -225,7 +259,14 @@ void SendMessageServer()
 
 void SendMessageMobile()
 {
-    char message[100];
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int n;
+    unsigned int n1;
+    bool isNeg;
+    
     Serial.print("Setting SMS mode...");
     answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
     if(answer==1)
@@ -235,10 +276,36 @@ void SendMessageMobile()
     Serial.println("Error setting SMS mode");
     softwareReset( WDTO_60MS);
     }
-    int i=random(1,5000);
-    //float f=i/1000;
+
+//convert analog value into string     
+   n=rand();
+   isNeg = n<0;
+   n1 = isNeg ? -n : n;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(n == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
     count_sent_mobile++;
-    sprintf(message,"@%s<%d>p%dq#","deviceA",i,count_sent_mobile);
+    sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_mobile);
     Serial.print("Sending");
     Serial.print(message);
     Serial.println(" to mobile");
@@ -380,3 +447,4 @@ void softwareReset( uint8_t prescaller)
   
   while(1) {}
 }
+
