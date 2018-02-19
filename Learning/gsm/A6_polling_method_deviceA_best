@@ -13,7 +13,7 @@ uint32_t power_interval=3558000;
 void setup()
 {
 Serial.begin(9600); 
-mySerial.begin(9600);    
+mySerial.begin(2400);    //can try with 9600 also
 Serial.println("Starting...");
 power_on();
 delay(500);
@@ -226,9 +226,17 @@ if(n == 0)
 
     count_sent_server++;
     sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_server);
+    if(strstr(message, "deviceA") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
+    {
     Serial.print("Sending");
     Serial.print(message);
     Serial.println(" to server");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
     answer = sendATcommand("AT+CMGS=\"+919952987526\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {   
@@ -306,9 +314,17 @@ if(n == 0)
 
     count_sent_mobile++;
     sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_mobile);
+    if(strstr(message, "deviceA") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
+    {
     Serial.print("Sending");
     Serial.print(message);
     Serial.println(" to mobile");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
     answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {   
