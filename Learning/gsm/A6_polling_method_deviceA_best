@@ -13,7 +13,7 @@ uint32_t power_interval=3558000;
 void setup()
 {
 Serial.begin(9600); 
-mySerial.begin(2400);    //can try with 9600 also
+mySerial.begin(9600);    //use 2400 for SIM 900
 Serial.println("Starting...");
 power_on();
 delay(500);
