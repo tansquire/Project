@@ -1,0 +1,495 @@
+http://www.scadabr.com.br/index.php/2017/06/06/scadabr-1-1-com-ubuntu-java8-tomcat8-e-mariadb/
+
+http://forum.scadabr.com.br/t/scadabr-install-guide-for-a-fresh-install-of-ubuntu-64bit-server-headless-version-16-04-3-using-mariadb-mysql-as-the-database-also-works-on-raspberry-pi-3/1543
+
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-16-04
+
+
+The open supervisory (SCADABR) has been developed at the
+Federal University of Santa Catarina for a broad range of uses.
+
+https://sourceforge.net/p/scadabr/wiki/Manual%20ScadaBR%20English%200%20Summary/ ....english manual
+
+Partugese forum
+http://forum.scadabr.com.br/top/all
+
+English forum
+http://forum.scadabr.com.br/c/in-english(talk to people here for training)
+
+http://www.electronhacks.com/2014/05/x10-control-using-arduino-modbus-and-scadabr/ ...scadabr DO
+
+user name: tansquire
+pass:0*****0******
+
+COURSE CONTENT
+
+PART 1. DEVELOPMENT ENVIRONMENT
+Eclipse + Tomcat
+JVisualVM
+JMX
+
+Docker compose for ScadaBR applications
+SCADABR ARCHITECTURE IN DETAIL
+ScadaBR
+Tom Cat
+JVM
+THE
+BD
+
+PART 3. SCADABR JAVA ARCHITECTURE
+Real Time Engine
+You and DAOs
+Protocols
+Views and Components
+Data base
+
+PART 4. SCRIPTS
+Java through the Scripts
+Integrating other libraries with Server Scripts and HTML
+PART 5. APIS
+REST
+SOAP
+Understanding APIs
+
+PART 6. MAINTENANCE AND OPTIMIZATION
+Reading the Logs
+Correcting the Database
+Database Optimization
+Automated Backups
+
+PART 7. HTTPS
+Tomcat to use port 8443 and HTTPS protocol
+Nginx as reverse proxy HTTPS
+PART 8. SEGREGATION OF SERVICES
+Why Segment Services on Different Servers / VMs
+Segregating the Application by Services or Areas of Application
+Monoblock - What to do to get performance from large systems
+
+PART 9. DEPLOY IN NÚVEM
+ScadaBR on Linode
+ScadaBR at AWS
+ScadaBR + Docker
+Docker Compose for ScadaBR Applications
+
+https://docslide.us/documents/scadabr-developers-certi-scadabr2.html ....manual
+For windows-7 scadabr
+scadabr 1.1, and jdk 1.6
+Mysql installer 5.5.27.3 from https://downloads.mysql.com/archives/installer/ (mysql workbench will be installed automatically)
+mysql administrator 1.0.10.
+
+scadabr for ubuntu 16
+http://forum.scadabr.com.br/t/scadabr-install-guide-for-a-fresh-install-of-ubuntu-64bit-server-headless-version-16-04-3-using-mariadb-mysql-as-the-database-also-works-on-raspberry-pi-3/1543
+
+another link
+
+http://www.scadabr.com.br/index.php/2017/06/06/scadabr-1-1-com-ubuntu-java8-tomcat8-e-mariadb/
+
+Send message to all member in this page regarding english manual, and training
+https://sourceforge.net/p/scadabr/wiki/Home/
+
+https://sites.google.com/a/certi.org.br/certi_scadabr/home ....scadabr materials
+
+
+
+#############################################################
+
+https://github.com/SCADA-LTS/Scada-LTS/wiki/Install-Scada-LTS-on-linux
+
+For removing java and tomcat
+
+sudo apt-get remove tomcat8
+sudo apt-get remove --auto-remove tomcat8
+sudo apt-get purge tomcat8
+sudo apt-get purge --auto-remove tomcat8
+sudo apt-get remove oracle-java8-installer
+sudo apt-get purge oracle-java8-installer
+sudo apt-get autoremove
+
+
+WAR file deployment
+
+https://www.youtube.com/watch?v=TsEHa6fXw10
+sudo-apt-get update
+sudo apt-get install default-jre
+sudo apt-get install default-jdk
+sudo update-alternatives --config java
+you will get like .../usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+sudo nano /etc/environment
+add the following lines
+JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" (before jre)
+add /usr/lib/jvm/java-8-openjdk-amd64/bin into path after a :
+source /etc/environment (reload)
+echo $JAVA_HOME (to see java home)
+
+go to https://tomcat.apache.org/download-80.cgi, download zip file under binary distribution core
+Take the downloaded zip file on the desktop, and go to the desktop from terminal
+unzip apache-tomcat-8.5.24.zip
+
+create any folder(say apache) inside usr, and move the unzipped folder there
+Go to /usr from terminal, and sudo mkdir apache
+Go to Desktop, and sudo mv apache-tomcat-8.5.24 /usr/apache/
+So, now apache-tomcat-8.5.24 folder is there inside apache, and
+/usr/apache/apache-tomcat-8.5.24 will be the tomcat home(called CATALINA HOME)
+
+sudo nano /etc/profile
+
+export CATALINA_HOME=/usr/apache/apache-tomcat-8.5.24
+export PATH=${PATH}:${CATALINA_HOME}/bin
+
+source /etc/profile
+
+
+Now Go to /usr/apache/apache-tomcat-8.5.24/bin, and give execute command for all.
+see by ls
+sudo chmod +x *
+again see by ls
+
+Now Got to /usr/apache/apache-tomcat-8.5.24/bin, and then ./startup.sh(as startup.sh is in this directory or bash startup.sh)
+
+
+Now open localhost:8080, you will get. But stillyou are unable to access manager aap. You have to configure username and password.
+Go to /usr/apache/apache-tomcat-8.5.24, and ls. Ther is a file tomcat-users.xml
+
+nano tomcat-users.xml, and paste following before </tomcat-users>
+<role rolename="manager-gui"/>
+<user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+Now Got to /usr/apache/apache-tomcat-8.5.24/bin, and run ./shutdown.sh and then ./startup.sh
+
+(Whenever start, or stop tomcat server, you have to go to /usr/apache/apache-tomcat-8.5.24/bin, as this is CATALINA HOME)
+
+############################################################
+
+INSTALLATION PROCESS
+UBUNTU-16.04
+
+This also works on any linux server running mariaDB(mysql) tomcat8 and java8. This also works on raspberry pi 3.
+
+Add the java repository.
+
+sudo add-apt-repository ppa:webupd8team/java
+
+Update the repository list.
+
+sudo apt-get update
+
+Install mariadb server. (A database server for mysql)
+
+sudo apt-get install mariadb-server
+
+Open the database.
+
+sudo mysql -p
+
+Enter your admin/root password of your server.
+
+Create a sql database for ScadaBR.
+
+create database scadabr;
+
+Create username and password for ScadaBR database.
+
+CREATE USER 'scadabr' IDENTIFIED BY 'scadabr';
+
+Give username admin rights to database.
+
+GRANT ALL PRIVILEGES ON scadabr. * TO scadabr;
+
+Exit mariadb.
+
+quit;
+
+Install java8.
+
+sudo apt-get install oracle-java8-installer
+
+
+Install tomcat8.
+
+sudo apt-get install tomcat8
+
+Install Lib rxtx for java.
+
+sudo apt-get install librxtx-java
+
+Stop tomcat8 service.
+
+sudo service tomcat8 stop
+
+Change to the Webapps folder in tomcat8.
+
+cd /var/lib/tomcat8/webapps
+
+Download the ScadaBR.war file from ScadaBR sourceforge curent version im using for install is ScadaBR 0.9.1 to the tomcat8 webapps folder.
+
+sudo wget https://sourceforge.net/projects/scadabr/files/Software/WAR/ScadaBR%200.9.1/ScadaBR.war
+
+Start tomcat8 to deploy war file.
+
+sudo service tomcat8 start
+
+Stop tomcat8 to edit ScadaBR files.
+
+sudo service tomcat8 stop
+
+Delete ScadaBR war file
+
+sudo rm /var/lib/tomcat8/webapps/ScadaBR.war
+
+Create a bin folder in tomcat8.
+
+sudo mkdir /var/lib/tomcat8/bin
+
+Change the owner of tomcat8 folder from root to tomcat8.
+
+sudo chown -R tomcat8.tomcat8 /var/lib/tomcat8/
+sudo chown -R tomcat8.tomcat8 /var/lib/tomcat8/bin
+
+Change user tomcat8 to dialout group.
+
+sudo gpasswd -a tomcat8 dialout
+
+Edit the env.properties file to point to your database.
+
+sudo nano /var/lib/tomcat8/webapps/ScadaBR/WEB-INF/classes/env.properties
+
+Uncomment the db.mysql section by removeing the # and adding your database username and password we created at start.
+
+Change this
+#db.type=mysql
+#db.url=jdbc:mysql://localhost/scadabr
+#db.username=root
+#db.password=
+#db.pool.maxActive=10
+#db.pool.maxIdle=10
+To This
+db.type=mysql
+db.url=jdbc:mysql://localhost/scadabr
+db.username=scadabr
+db.password=scadabr
+db.pool.maxActive=10
+db.pool.maxIdle=10
+
+Comment the db.derby and the convert.db out by adding # in the front.
+
+Change this
+db.type=derby
+db.url=~/../../bin/scadabrDB
+db.username=
+db.password=
+convert.db.type=
+convert.db.url=
+convert.db.username=
+convert.db.password=
+To This
+#db.type=derby
+#db.url=~/../../bin/scadabrDB
+#db.username=
+#db.password=
+#convert.db.type=
+#convert.db.url=
+#convert.db.username=
+#convert.db.password=
+
+Save the file.
+
+Ctrl + o then press enter
+
+Exit nano.
+
+Ctrl + x
+
+Update your sql table creater file syntax type=InnoDB; to the new mysql syntax engine=InnoDB; in file createTables-mysql.sql
+
+sudo nano /var/lib/tomcat8/webapps/ScadaBR/WEB-INF/db/createTables-mysql.sql
+
+Replace type=InnoDB; to engine=InnoDB;
+
+Ctrl + \
+
+Type what you want to replace. This is case sensitive.
+
+type=InnoDB;
+
+Type what you want to replace it with. This is also case sensitive.
+
+engine=InnoDB;
+
+It will ask you how many times select all.
+
+a
+
+Save file
+
+Ctrl + o then press enter
+
+Exit nano.
+
+Ctrl + x
+
+Start tomcat8.
+
+sudo service tomcat8 start
+
+in your web browser type your ip and port 8080 the tomcat8 server is on. In my case its on a local network so i will use this.
+
+http://yourlocal or public ip here:8080/ScadaBR
+
+If you left default loging you will log in using admin as username and password.
+
+###########################################################
+
+UBUNTU-14.04
+
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install mysql-server
+sudo mysql -p
+create database scadabr;
+CREATE USER 'scadabr' IDENTIFIED BY 'scadabr';
+GRANT ALL PRIVILEGES ON scadabr. * TO scadabr;
+quit
+sudo apt-get install oracle-java8-installer
+sudo apt-get install tomcat6
+tomcat will not start. So Do the following.
+check java home
+sudo update-alternatives --config java
+you will get like .../usr/lib/jvm/java-8-oracle/jre/bin/java
+then java home is /usr/lib/jvm/java-8-oracle
+
+
+sudo nano /etc/environment
+add the following lines
+JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" (before jre)
+add /usr/lib/jvm/java-8-openjdk-amd64/bin into path after a :
+source /etc/environment (reload)
+echo $JAVA_HOME (to see java home)
+
+sudo nano ~/.bashrc
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle (same java path before) Here the path may vary depending upon your installation. Open /usr/lib/jvm and check for the folder name and replace accordingly. It is java-7-oracle in my case. This is nothing but setting up environmental path for java.
+source ~/.bashrc
+
+
+sudo nano /etc/default/tomcat6
+
+Search for the word something similar to this JAVA_HOME=/usr/lib/jvm/java-7-oracle. If this line is commented, uncomment it and give the same path which you have given previously in .bashrc file. Otherwise add java path here also
+Save the file and try to start the server again. It works!
+
+source /etc/default/tomcat6
+
+
+sudo apt-get install librxtx-java
+
+
+
+sudo service tomcat6 stop
+
+
+cd /var/lib/tomcat6/webapps
+
+sudo wget https://sourceforge.net/projects/scadabr/files/Software/WAR/ScadaBR%200.9.1/ScadaBR.war
+
+
+sudo service tomcat6 start
+
+sudo service tomcat6 stop
+
+sudo rm /var/lib/tomcat6/webapps/ScadaBR.war
+
+sudo mkdir /var/lib/tomcat6/bin
+
+
+sudo chown -R tomcat6.tomcat6 /var/lib/tomcat6/
+sudo chown -R tomcat6.tomcat6 /var/lib/tomcat6/bin
+sudo gpasswd -a tomcat6 dialout
+sudo service tomcat6 start
+
+Now ScadaBR will open
+
+
+Change into mysql
+
+sudo service tomcat6 stop
+
+
+sudo nano /var/lib/tomcat6/webapps/ScadaBR/WEB-INF/classes/env.properties
+
+Uncomment the db.mysql section by removeing the # and adding your database username and password we created at start.
+
+Change this
+#db.type=mysql
+#db.url=jdbc:mysql://localhost/scadabr
+#db.username=root
+#db.password=
+#db.pool.maxActive=10
+#db.pool.maxIdle=10
+To This
+db.type=mysql
+db.url=jdbc:mysql://localhost/scadabr
+db.username=scadabr
+db.password=scadabr
+db.pool.maxActive=10
+db.pool.maxIdle=10
+
+Comment the db.derby and the convert.db out by adding # in the front.
+
+Change this
+db.type=derby
+db.url=~/../../bin/scadabrDB
+db.username=
+db.password=
+convert.db.type=
+convert.db.url=
+convert.db.username=
+convert.db.password=
+To This
+#db.type=derby
+#db.url=~/../../bin/scadabrDB
+#db.username=
+#db.password=
+#convert.db.type=
+#convert.db.url=
+#convert.db.username=
+#convert.db.password=
+
+Save the file.
+
+Ctrl + o then press enter
+
+Exit nano.
+
+Ctrl + x
+
+Update your sql table creater file syntax type=InnoDB; to the new mysql syntax engine=InnoDB; in file createTables-mysql.sql
+
+sudo nano /var/lib/tomcat6/webapps/ScadaBR/WEB-INF/db/createTables-mysql.sql
+
+Replace type=InnoDB; to engine=InnoDB;
+
+Ctrl + \
+
+Type what you want to replace. This is case sensitive.
+
+type=InnoDB;
+
+Type what you want to replace it with. This is also case sensitive.
+
+engine=InnoDB;
+
+It will ask you how many times select all.
+
+a
+
+Save file
+
+Ctrl + o then press enter
+
+Exit nano.
+
+Ctrl + x
+
+Start tomcat6.
+
+mysql is active now
+
+sudo service tomcat6 start
