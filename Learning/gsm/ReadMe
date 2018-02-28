@@ -1,10 +1,9 @@
 value_change_detector.py   -----run continiously at server (if random value is changing it tells that coom is ok, and import to db)
-level_data_redundancy.py   -----run continiously at server (final bd value =sms data or lora data)
 import to db.py.py         -----run continiously at server (server arduino sends sms to node, get areply,decode that, and import to db)
 comm_status_from_random_value.py  -------run continiously at gateway  (generates random value at gateway if comm status is ok)
 A6_polling_method_server_side.ino   ------run continiously at arduino server
 A6_polling_method_deviceA.ino         -------------run continiously at arduino at field
-
+level_data_redundancy.py   -----run continiously at server (final bd value =sms data or lora data)
 
 Read this forum
 https://www.cooking-hacks.com/forum/viewtopic.php?f=43&t=5919
