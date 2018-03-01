@@ -64,6 +64,7 @@ if(millis() -prev_display_millis > display_interval)
   Serial.println(Serial.available());
   Serial.print("MySerial size");
   Serial.println(mySerial.available());
+  Serial.println(analogRead(analogPin));
   prev_display_millis=millis();
   
   }
@@ -226,8 +227,8 @@ if(n == 0)
 }   
 
     count_sent_server++;
-    sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_server);
-    if(strstr(message, "deviceA") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
+    sprintf(message,"@deviceD<%s>p%dq#",value,count_sent_server);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
     {
     Serial.print("Sending");
     Serial.print(message);
@@ -314,8 +315,8 @@ if(n == 0)
 }   
 
     count_sent_mobile++;
-    sprintf(message,"@deviceA<%s>p%dq#",value,count_sent_mobile);
-    if(strstr(message, "deviceA") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
+    sprintf(message,"@deviceD<%s>p%dq#",value,count_sent_mobile);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "<") != NULL && strstr(message, ">") != NULL)
     {
     Serial.print("Sending");
     Serial.print(message);
