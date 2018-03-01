@@ -11,3 +11,5 @@ Learning: This folder has been created while understanding various other aspect 
 
 
 Test: This is a test folder created to understand github.
+http://10.21.160.201/Login2.php
+http://10.21.161.216:8080/ScadaBR
