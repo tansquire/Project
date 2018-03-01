@@ -1,5 +1,5 @@
 All these documents have been periodically created as part of my Mtech project on Design of Scada supporting redundant communication.
-I am Partha Paul, and  doing my Mtech on Electrical Engineering at IIT Madras, and doing project under Prof. Sridharakumar Narasimhan.
+I am Partha Paul, and  doing my Mtech on Electrical Engineering at IIT Madras, and doing project under Prof. Sridharakumar Narasimhan. My co-guide is prof Ramkrishna Pasumarthy in Electrical Engineering Dept.
 
 Folders contain the following
 
