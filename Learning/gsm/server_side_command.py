@@ -30,6 +30,10 @@ while(1):
  list=mycursor.fetchall()
  open_command=(list[2][2])
  close_command=(list[3][2])
+ lake_well_command=(list[4][2])
+ children_park_command=(list[5][2])
+ stuff_club_command=(list[6][2])
+ RR_sump_command=(list[7][2])
  
 
  print"lakewell, children, and stuff_club, RR sump, and actuator comm availabilities respectively are=%s, %s, %s, %s and %s"%(lake_well_lora_status,childrenpark_lora_status,stuff_club_lora_status,RR_sump_lora_status, actuator_lora_status )
@@ -105,7 +109,39 @@ while(1):
   mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 4))
   print('open command given to actuator through primary link')
   mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'open command given to actuator through primary link')) 
+
+ if(time.time() - any_command_prev>13 and lake_well_command=='1'):
+  print datetime.now()
+  ser.write(b'l')
+  print('manual data request to lake well')
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 5))
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'manual data request to lake well'))  
+  any_command_prev=time.time()
+
+ if(time.time() - any_command_prev>13 and children_park_command=='1'):
+  print datetime.now()
+  ser.write(b'c')
+  print('manual data request to children park')
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 6))
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'manual data request to lchildren park'))  
+  any_command_prev=time.time()
  
+ if(time.time() - any_command_prev>13 and stuff_club_command=='1'):
+  print datetime.now()
+  ser.write(b's')
+  print('manual data request to stuf club')
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 7))
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'manual data request to stuf club'))  
+  any_command_prev=time.time()
+
+ if(time.time() - any_command_prev>13 and RR_sump_command=='1'):
+  print datetime.now()
+  ser.write(b'r')
+  print('manual data request to RR sump')
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 8))
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'manual data request to RR sump'))  
+  any_command_prev=time.time()
+
  conn.commit()
  conn.close()
  mycursor.close() 
