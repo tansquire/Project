@@ -1,0 +1,6 @@
+import nidaqmx
+with nidaqmx.Task() as task:
+    task.ai_channels.add_ai_current_chan("cDAQ1Mod2/ai0:7")
+    data=task.read(number_of_samples_per_channel=1)
+    for i in range(0,7):
+        print round(100*((data[i][0]*1000)/16-0.25),2)
