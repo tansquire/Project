@@ -1,0 +1,17 @@
+import nidaqmx
+import time
+import mysql.connector
+while(1):
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='scada')
+ mycursor=conn.cursor()
+ with nidaqmx.Task() as task:
+     task.ai_channels.add_ai_current_chan("cDAQ1Mod2/ai0:7")
+     data=task.read(number_of_samples_per_channel=1)
+     for i in range(0,8):
+         print round(100*((data[i][0]*1000)/16-0.25),2)
+         mycursor.execute("UPDATE labview_AI SET value='%s'WHERE id='%s'" % (round(100*((data[i][0]*1000)/16-0.25),2), i+1))
+         conn.commit()
+         time.sleep(1)
+ conn.close()
+ mycursor.close()
+ time.sleep(2)
