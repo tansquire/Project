@@ -1,8 +1,8 @@
-Server_side_read.ino  
+Server_side_read_modified.ino  
 Server_side_command.ino 
 A6_polling_method_deviceA_best.ino         -------------run continiously at arduino at field
 actuator.ino
-server_side.read.py
+server_side.read1.py
 server_side_command.py
 value_change_detector.py   -----run continiously at server (if random value is changing it tells that coom is ok, and import to db)
 gateway1.py  -------run continiously at gateway  (near actuator--generates random value at gateway if comm status is ok)
