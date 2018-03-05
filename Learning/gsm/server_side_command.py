@@ -4,7 +4,7 @@ import time
 import mysql.connector
 from time import gmtime, strftime
 from datetime import datetime
-ser = serial.Serial('/dev/ttyACM0', baudrate = 9600)
+ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
 time.sleep(1)
 lake_well_command_prev = time.time()
 children_park_command_prev=time.time()
@@ -36,7 +36,7 @@ while(1):
  RR_sump_command=(list[7][2])
  
 
- print"lakewell, children, and stuff_club, RR sump, and actuator comm availabilities respectively are=%s, %s, %s, %s and %s"%(lake_well_lora_status,childrenpark_lora_status,stuff_club_lora_status,RR_sump_lora_status, actuator_lora_status )
+ #print"lakewell, children, and stuff_club, RR sump, and actuator comm availabilities respectively are=%s, %s, %s, %s and %s"%(lake_well_lora_status,childrenpark_lora_status,stuff_club_lora_status,RR_sump_lora_status, actuator_lora_status )
 
  if(ser.inWaiting()>0):
   data=ser.readline()
@@ -45,7 +45,7 @@ while(1):
    count=count+1
    print(count)
  
- if(time.time() - lake_well_command_prev>120 and time.time() - any_command_prev>10 and lake_well_lora_status=='0'):
+ if(time.time() - lake_well_command_prev>900 and time.time() - any_command_prev>15 and lake_well_lora_status=='0'):
   print datetime.now()
   ser.write(b'l')
   print('data request to lake well')
@@ -53,7 +53,7 @@ while(1):
   lake_well_command_prev=time.time()
   any_command_prev=time.time()
  
- if(time.time() - children_park_command_prev>120 and time.time() - any_command_prev>13 and childrenpark_lora_status=='0'):
+ if(time.time() - children_park_command_prev>900 and time.time() - any_command_prev>15 and childrenpark_lora_status=='0'):
   print datetime.now()
   ser.write(b'c')
   print('data request to children park')
@@ -61,7 +61,7 @@ while(1):
   children_park_command_prev=time.time()
   any_command_prev=time.time()
 
- if(time.time() - stuff_club_command_prev>120 and time.time() - any_command_prev>13 and stuff_club_lora_status=='0'):
+ if(time.time() - stuff_club_command_prev>900 and time.time() - any_command_prev>15 and stuff_club_lora_status=='0'):
   print datetime.now()
   ser.write(b's')
   print('data request to stuff club')
@@ -69,7 +69,7 @@ while(1):
   stuff_club_command_prev=time.time()
   any_command_prev=time.time()
 
- if(time.time() - RR_sump_command_prev>120 and time.time() - any_command_prev>13 and RR_sump_lora_status=='0'):
+ if(time.time() - RR_sump_command_prev>900 and time.time() - any_command_prev>15 and RR_sump_lora_status=='0'):
   print datetime.now()
   ser.write(b'r')
   print('data request to RR sump')
@@ -77,7 +77,7 @@ while(1):
   RR_sump_command_prev=time.time()
   any_command_prev=time.time()
 
- if(time.time() - actuator_open_command_prev>120 and time.time() - any_command_prev>13 and actuator_lora_status=='0' and open_command=='1'):
+ if(time.time() - actuator_open_command_prev>15 and time.time() - any_command_prev>10 and actuator_lora_status=='0' and open_command=='1'):
   print datetime.now()
   ser.write(b'x')
   print('open command given to actuator')
@@ -86,7 +86,7 @@ while(1):
   actuator_open_command_prev=time.time()
   any_command_prev=time.time()
 
- if(time.time() - actuator_close_command_prev>120 and time.time() - any_command_prev>13 and actuator_lora_status=='0' and close_command=='1'):
+ if(time.time() - actuator_close_command_prev>15 and time.time() - any_command_prev>10 and actuator_lora_status=='0' and close_command=='1'):
   print datetime.now()
   ser.write(b'y')
   print('close command given to actuator')
