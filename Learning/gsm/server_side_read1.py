@@ -14,7 +14,7 @@ def scada():
  mycursor=conn.cursor()
  mycursor.execute("select * FROM command") 
  list=mycursor.fetchall()
- print list
+ #print list
  remote=int(list[2][2])
  opd=int(list[3][2])
  cld=int(list[4][2])
@@ -56,7 +56,7 @@ while(1):
  if(ser.inWaiting()>0):
   data=ser.readline()
   print(data)
-  if('@' in data and '#' in data):
+  if('SMS No' in data and 'device' in data and '<' in data and '>' in data):
    data1=data.decode().split('\r\n')
    print(data1[0])
    
@@ -73,7 +73,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from actuator=%d"%(count_rcvd_from_Actuator)))
    
    if('deviceA' in data1[0]):
-    deviceA_data=data[0][data[0].find('<')+1:data[0].find('>')]
+    deviceA_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
     print(deviceA_data)
     print"lakewell data=%s"%(deviceA_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceA_data, 1))
@@ -82,7 +82,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceA=%d"%(count_rcvd_from_A)))
 
    if('deviceB' in data1[0]):
-    deviceB_data=data[0][data[0].find('<')+1:data[0].find('>')]
+    deviceB_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
     print(deviceB_data)
     print"children park data=%s"%(deviceB_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceB_data, 2))
@@ -91,22 +91,22 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceB=%d"%(count_rcvd_from_B)))
    
    if('deviceC' in data1[0]):
-    deviceC_data=data[0][data[0].find('<')+1:data[0].find('>')]
+    deviceC_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
     print(deviceC_data)
-    print"children park data=%s"%(deviceC_data)
-    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceC_data, 2))
+    print"stuff club data=%s"%(deviceC_data)
+    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceC_data, 3))
     count_rcvd_from_C=count_rcvd_from_C+1
-    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_C, 6))  
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_C, 16))  
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceC=%d"%(count_rcvd_from_C)))
    
    if('deviceD' in data1[0]):
-    deviceD_data=data[0][data[0].find('<')+1:data[0].find('>')]
+    deviceD_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
     print(deviceD_data)
-    print"children park data=%s"%(deviceD_data)
-    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_data, 2))
+    print"RR sump data=%s"%(deviceD_data)
+    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_data, 4))
     count_rcvd_from_D=count_rcvd_from_D+1
-    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_D, 6))  
-    mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceB=%d"%(count_rcvd_from_D)))
+    mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_D, 17))  
+    mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceD=%d"%(count_rcvd_from_D)))
  
  conn.commit()
  conn.close()
