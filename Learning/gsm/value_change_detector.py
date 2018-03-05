@@ -62,5 +62,5 @@ while(1):
  conn.commit()
  conn.close()
  mycursor.close()
- time.sleep(3)   
+ time.sleep(8)   
 #this time must be greater than gate random update time(so gateway freq must be known)
