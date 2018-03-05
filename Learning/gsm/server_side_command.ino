@@ -80,7 +80,7 @@ boolean newData = false;
       }
       else if(receivedChar=='r')
       {
-      if (sms.SendSMS("+917602304567", "Arduino SMS"))
+      if (sms.SendSMS("+917358699052", "@start#"))
       Serial.println("\nSMS sent to RR sump");
       sms.DeleteSMS(1);
       newData = false;
