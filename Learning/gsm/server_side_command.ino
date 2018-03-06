@@ -7,6 +7,8 @@ int count_sent_B=0;
 int count_sent_C=0;
 int count_sent_D=0;
 int count_sent_Actuator=0;
+uint32_t prev_restart_millis;
+uint32_t restart_interval=86400000;
 
 SMSGSM sms;
 int numdata;
@@ -41,6 +43,13 @@ void loop()
        recvOneChar();
        
      }
+
+ if(millis() -prev_restart_millis > restart_interval)
+{
+  softwareReset( WDTO_60MS);
+  prev_restart_millis=millis();
+  
+}
 }
 
 
@@ -105,4 +114,12 @@ boolean newData = false;
       return;
       }
     }
+}
+
+void softwareReset( uint8_t prescaller) 
+{
+
+  wdt_enable( prescaller);
+  
+  while(1) {}
 }
