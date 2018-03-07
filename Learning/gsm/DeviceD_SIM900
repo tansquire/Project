@@ -1,0 +1,180 @@
+#include "SIM900.h"
+#include <SoftwareSerial.h>
+#include <avr/wdt.h>
+#include "sms.h"
+SMSGSM sms;
+int numdata;
+boolean started=false;
+char smsbuffer[160];
+char n[20];
+int analogPin = 3; 
+int count_sent_server=0;
+int count_sent_mobile=0;
+uint32_t prev_power_millis;
+uint32_t power_interval=3558000;
+int data = 0; 
+
+void setup()  
+{
+    
+     Serial.begin(9600);
+     Serial.println("GSM Shield testing.");
+     if (gsm.begin(9600)) 
+     {
+          Serial.println("\nstatus=READY");
+          started=true;
+     } else Serial.println("\nstatus=IDLE");
+
+     if(started) 
+     {
+         
+          if (sms.SendSMS("+917602304567", "Arduino SMS"))
+          Serial.println("\nSMS sent OK");
+     }
+
+}
+
+void loop()
+{
+     if(started)
+     {
+         
+        
+        gsm.readSMS(smsbuffer, 160, n, 20);
+        if(strstr(smsbuffer,"@start#")!=NULL)
+        {
+        *smsbuffer='\0';
+        Serial.println("got expected");
+        SendMessageServer();
+        sms.DeleteSMS(1);
+        }
+          
+        if(strstr(smsbuffer,"@mobile#")!=NULL)
+        {
+        *smsbuffer='\0';
+        Serial.println("got expected");
+        SendMessageMobile();
+        sms.DeleteSMS(1);
+        }
+       
+     }
+}
+
+
+void SendMessageServer()
+{
+   
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int data;
+    unsigned int n1;
+    bool isNeg;
+    
+   data=analogRead(analogPin); 
+   isNeg = data<0;
+   n1 = isNeg ? -data : data;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(data == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
+    count_sent_server++;
+    sprintf(message,"@deviceDa%dbp%sq#",count_sent_server,value);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "a") != NULL && strstr(message, "b") != NULL)
+    {
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to server");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
+    if (sms.SendSMS("+917602304567", message))
+       Serial.println("sent to server");  
+    
+    
+}
+ 
+void SendMessageMobile()
+{
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int data;
+    unsigned int n1;
+    bool isNeg;
+ 
+   data=analogRead(analogPin); 
+   isNeg = data<0;
+   n1 = isNeg ? -data : data;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(data == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
+    count_sent_mobile++;
+    sprintf(message,"@deviceDa%dbp%sq#",count_sent_mobile,value);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL && strstr(message, "a") != NULL && strstr(message, "b") != NULL)
+    {
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to mobile");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
+    if (sms.SendSMS(n, message))
+    Serial.println("sent to mobile");
+    
+}
+
+void softwareReset( uint8_t prescaller) 
+{
+
+  wdt_enable( prescaller);
+  
+  while(1) {}
+}
