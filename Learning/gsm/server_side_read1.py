@@ -4,7 +4,7 @@ import time
 import mysql.connector
 from time import gmtime, strftime
 from datetime import datetime
-ser = serial.Serial('/dev/ttyACM0', baudrate = 9600)
+ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
 time.sleep(1)
 start = time.time()
 
@@ -56,7 +56,7 @@ while(1):
  if(ser.inWaiting()>0):
   data=ser.readline()
   print(data)
-  if('SMS No' in data and 'device' in data and '<' in data and '>' in data):
+  if('SMS No' in data and 'device' in data and 'p' in data and 'q' in data):
    data1=data.decode().split('\r\n')
    print(data1[0])
    
@@ -73,7 +73,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from actuator=%d"%(count_rcvd_from_Actuator)))
    
    if('deviceA' in data1[0]):
-    deviceA_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
+    deviceA_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceA_data)
     print"lakewell data=%s"%(deviceA_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceA_data, 1))
@@ -82,7 +82,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceA=%d"%(count_rcvd_from_A)))
 
    if('deviceB' in data1[0]):
-    deviceB_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
+    deviceB_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceB_data)
     print"children park data=%s"%(deviceB_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceB_data, 2))
@@ -91,7 +91,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceB=%d"%(count_rcvd_from_B)))
    
    if('deviceC' in data1[0]):
-    deviceC_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
+    deviceC_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceC_data)
     print"stuff club data=%s"%(deviceC_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceC_data, 3))
@@ -100,7 +100,7 @@ while(1):
     mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceC=%d"%(count_rcvd_from_C)))
    
    if('deviceD' in data1[0]):
-    deviceD_data=data1[0][data1[0].find('<')+1:data1[0].find('>')]
+    deviceD_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceD_data)
     print"RR sump data=%s"%(deviceD_data)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_data, 4))
