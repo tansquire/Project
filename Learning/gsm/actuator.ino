@@ -19,6 +19,7 @@ int closed = 5;
 int x;
 char data[5];
 char message[30];
+char del;
 
 void setup()
 {
@@ -29,7 +30,7 @@ void setup()
      pinMode(closed, INPUT);
      Serial.begin(9600);
      Serial.println("GSM Shield testing.");
-     if (gsm.begin(9600)) 
+     if (gsm.begin(2400)) 
      {
           Serial.println("\nstatus=READY");
           started=true;
@@ -40,6 +41,10 @@ void setup()
          
          // if (sms.SendSMS("+917602304567", "Modem is ready"))
          // Serial.println("\nSMS sent OK");
+         
+          del=sms.DeleteSMS(1);
+        if(del==1)
+        Serial.println("All sms deleted");
           Serial.println("now i will be inside loop");
      }
 
@@ -80,10 +85,20 @@ void loop()
         {
         *smsbuffer='\0';
         Serial.println("got expected");
-        if(sms.SendSMS("+917602304567", message))
+        if(sms.SendSMS(n, message))
         Serial.println("\nSMS sent OK");
         sms.DeleteSMS(1);
         }
+
+        if(strstr(smsbuffer,"@delete#")!=NULL)
+        {
+        
+        del=sms.DeleteSMS(1);
+        if(del==1)
+        Serial.println("All sms deleted");
+        *smsbuffer='\0';
+        }
+        
 
         if(strstr(smsbuffer,"@open#")!=NULL)
         {
