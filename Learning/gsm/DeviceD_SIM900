@@ -19,7 +19,7 @@ void setup()
     
      Serial.begin(9600);
      Serial.println("GSM Shield testing.");
-     if (gsm.begin(9600)) 
+     if (gsm.begin(2400)) 
      {
           Serial.println("\nstatus=READY");
           started=true;
@@ -56,6 +56,7 @@ void loop()
         SendMessageMobile();
         sms.DeleteSMS(1);
         }
+        *smsbuffer='\0';
        
      }
 }
