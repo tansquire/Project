@@ -71,7 +71,7 @@ void loop()
 
         Serial.print("data= ");
         Serial.println(data);
-        sprintf(message,"@actuator<%s>#",data);
+        sprintf(message,"@actuatorp%sq#",data);
         Serial.print("message= ");
         Serial.println(message);
         
@@ -114,7 +114,7 @@ void loop()
         prev_command_millis=millis();
         }
 
-
+        *smsbuffer='\0';
 
  if(!digitalRead(opened) && digitalRead(remote))
   {
