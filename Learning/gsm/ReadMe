@@ -17,3 +17,6 @@ https://arduino.stackexchange.com/questions/33214/is-the-a6-module-broken
 https://www.youtube.com/watch?v=6snnAE3Pp9U
 SIM900 library.....
 https://github.com/MarcoMartines/GSM-GPRS-GPS-Shield
+
+remote delete feature in level sensor
+sms buffer null outside the loop in sensor also
