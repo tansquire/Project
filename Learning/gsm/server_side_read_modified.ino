@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial(9, 10);
+SoftwareSerial mySerial(2, 3);
 #include <avr/wdt.h>
 int8_t answer;
 int count_rcv_A=0;
@@ -14,7 +14,7 @@ uint32_t delete_interval=86400000;
 void setup()
 {
 Serial.begin(9600); 
-mySerial.begin(9600);    
+mySerial.begin(2400);    
 Serial.println("Starting...");
 power_on();
 
@@ -167,7 +167,7 @@ boolean newData = false;
 if (newData == true) 
     {
         Serial.print(c);
-        if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
         Serial.print("mySerial size");
         Serial.println(mySerial.available());
@@ -182,7 +182,7 @@ if (newData == true)
         newData = false;
         }
 
-        else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
         Serial.print("mySerial size");
         Serial.println(mySerial.available());
@@ -195,7 +195,7 @@ if (newData == true)
         Serial.println(receivedChars); 
         newData = false;
         }
-        else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceC") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+        else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceC") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
         Serial.print("mySerial size");
         Serial.println(mySerial.available());
@@ -208,7 +208,7 @@ if (newData == true)
         Serial.println(receivedChars); 
         newData = false;
         }
-         else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceD") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "<") != NULL && strstr(receivedChars, ">") != NULL)
+         else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceD") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
         Serial.print("mySerial size");
         Serial.println(mySerial.available());
