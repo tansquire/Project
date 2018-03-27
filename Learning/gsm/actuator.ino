@@ -30,7 +30,7 @@ void setup()
      pinMode(closed, INPUT);
      Serial.begin(9600);
      Serial.println("GSM Shield testing.");
-     if (gsm.begin(2400)) 
+     if (gsm.begin(9600)) 
      {
           Serial.println("\nstatus=READY");
           started=true;
@@ -85,7 +85,7 @@ void loop()
         {
         *smsbuffer='\0';
         Serial.println("got expected");
-        if(sms.SendSMS(n, message))
+        if(sms.SendSMS("+919940323276", message))
         Serial.println("\nSMS sent OK");
         sms.DeleteSMS(1);
         }
@@ -123,7 +123,7 @@ void loop()
         
         if(start_sending && millis() -prev_command_millis > command_interval)
         {
-        if(sms.SendSMS("+917602304567", message))
+        if(sms.SendSMS("+919940323276", message))
         Serial.println("\nSMS sent OK");
         sms.DeleteSMS(1);
         prev_command_millis=millis();
