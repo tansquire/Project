@@ -21,7 +21,7 @@ void setup()
     
      Serial.begin(9600);
      Serial.println("GSM Shield testing.");
-     if (gsm.begin(2400)) 
+     if (gsm.begin(9600)) 
      {
           Serial.println("\nstatus=READY");
           started=true;
@@ -96,14 +96,14 @@ boolean newData = false;
       }
       else if(receivedChar=='x')
       {
-      if (sms.SendSMS("+917602304567", "Arduino SMS"))
+      if (sms.SendSMS("+919952987526", "@open#"))
       Serial.println("\nSMS sent for actuator open");
       sms.DeleteSMS(1);
       newData = false;
       }
       else if(receivedChar=='y')
       {
-      if (sms.SendSMS("+917602304567", "Arduino SMS"))
+      if (sms.SendSMS("+919952987526", "@close#"))
       Serial.println("\nSMS sent for actuator close");
       sms.DeleteSMS(1);
       newData = false;
