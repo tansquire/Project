@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial mySerial(2, 3);
+//SoftwareSerial Serial1(2, 3);
 #include <avr/wdt.h>
 int8_t answer;
 int count_rcv_A=0;
@@ -14,7 +14,7 @@ uint32_t delete_interval=86400000;
 void setup()
 {
 Serial.begin(9600); 
-mySerial.begin(2400);    
+Serial1.begin(2400);    
 Serial.println("Starting...");
 power_on();
 
@@ -72,8 +72,8 @@ prev_delete_millis=millis();
 
 if(millis() -prev_display_millis > display_interval)
 {
-Serial.print("mySerial size");
-Serial.println(mySerial.available());
+Serial.print("Serial1 size");
+Serial.println(Serial1.available());
 Serial.print("Serial size");
 Serial.println(Serial.available());
 prev_display_millis=millis();
@@ -96,8 +96,8 @@ void SendMessage()
     answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
     if (answer == 1)
     {
-        mySerial.println("Test sms-Sketch is ready to run");
-        mySerial.write(0x1A);
+        Serial1.println("Test sms-Sketch is ready to run");
+        Serial1.write(0x1A);
         answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
@@ -132,9 +132,9 @@ boolean newData = false;
     char rc;
     int c;
  
-    while (mySerial.available() > 0 && newData == false) 
+    while (Serial1.available() > 0 && newData == false) 
     {
-        rc = mySerial.read();
+        rc = Serial1.read();
 
         if (recvInProgress == true) 
         {
@@ -169,8 +169,8 @@ if (newData == true)
         Serial.print(c);
         if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceA") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!=NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
-        Serial.print("mySerial size");
-        Serial.println(mySerial.available());
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
         Serial.print("Serial size");
         Serial.println(Serial.available());
         count_rcv_A++;
@@ -184,8 +184,8 @@ if (newData == true)
 
         else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceB") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
-        Serial.print("mySerial size");
-        Serial.println(mySerial.available());
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
         Serial.print("Serial size");
         Serial.println(Serial.available());
         count_rcv_B++;
@@ -197,8 +197,8 @@ if (newData == true)
         }
         else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceC") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
-        Serial.print("mySerial size");
-        Serial.println(mySerial.available());
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
         Serial.print("Serial size");
         Serial.println(Serial.available());
         count_rcv_C++;
@@ -210,13 +210,25 @@ if (newData == true)
         }
          else if ((c==18||c==17||c==16||c==15||c==14||c==13) && strstr(receivedChars, "deviceD") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL && strstr(receivedChars, "a") != NULL && strstr(receivedChars, "b") != NULL)
         {
-        Serial.print("mySerial size");
-        Serial.println(mySerial.available());
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
         Serial.print("Serial size");
         Serial.println(Serial.available());
         count_rcv_D++;
         Serial.print("SMS No--");
         Serial.print(count_rcv_D);
+        Serial.print("---");
+        Serial.println(receivedChars); 
+        newData = false;
+        }
+
+         else if (c==13 && strstr(receivedChars, "actuator") != NULL && strstr(receivedChars, "p") != NULL && strstr(receivedChars, "q")!= NULL)
+        {
+        Serial.print("Serial1 size");
+        Serial.println(Serial1.available());
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
+        Serial.print("SMS No--");
         Serial.print("---");
         Serial.println(receivedChars); 
         newData = false;
@@ -243,10 +255,10 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
     delay(100);
 
-    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+    while( Serial1.available() > 0) Serial1.read();    // Clean the input buffer
     delay(1000);
 
-    mySerial.println(ATcommand);    // Send the AT command 
+    Serial1.println(ATcommand);    // Send the AT command 
 
 
     x = 0;
@@ -254,8 +266,8 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
     // this loop waits for the answer
     do{
-        if(mySerial.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
-            response[x] = mySerial.read();
+        if(Serial1.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
+            response[x] = Serial1.read();
             x++;
             if (strstr(response, expected_answer) != NULL)    // check if the desired answer is in the response of the module
             {
