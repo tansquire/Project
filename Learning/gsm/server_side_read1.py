@@ -4,7 +4,7 @@ import time
 import mysql.connector
 from time import gmtime, strftime
 from datetime import datetime
-ser = serial.Serial('/dev/ttyUSB0', baudrate = 9600)
+ser = serial.Serial('/dev/ttyACM0', baudrate = 9600)
 time.sleep(1)
 start = time.time()
 
@@ -37,7 +37,7 @@ def scada():
  conn.commit()
  conn.close()
  mycursor.close()
- time.sleep(1)
+ time.sleep(.1)
  return
 
 while(1):
@@ -56,14 +56,15 @@ while(1):
  if(ser.inWaiting()>0):
   data=ser.readline()
   print(data)
-  if('SMS No' in data and 'device' in data and 'p' in data and 'q' in data):
+  if('SMS No' in data and ('device' in data or 'actuator' in data) and 'p' in data and 'q' in data):
    data1=data.decode().split('\r\n')
    print(data1[0])
    
    if('actuator' in data1[0]):
-    remote=int(data1[0][19])-6
-    opd=int(data1[0][20])-6
-    cld=int(data1[0][21])-6
+    actuator_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
+    remote=int(actuator_data[0])-6
+    opd=int(actuator_data[1])-6
+    cld=int(actuator_data[2])-6
     mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % (remote, 3))
     mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % (opd, 4))
     mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % (cld, 5))
@@ -102,14 +103,16 @@ while(1):
    if('deviceD' in data1[0]):
     deviceD_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceD_data)
-    print"RR sump data=%s"%(deviceD_data)
-    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_data, 4))
+    deviceD_value=abs(20-(0.03*float(deviceD_data)))
+    print"RR sump data=%s"%(deviceD_value)
+    mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_value, 4))
     count_rcvd_from_D=count_rcvd_from_D+1
     mycursor.execute("UPDATE GSMAI SET value='%s'WHERE id='%s'" % (count_rcvd_from_D, 17))  
-    mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"Nos of valid message found from deviceD=%d"%(count_rcvd_from_D)))
+    mycursor.execute("insert into gsm_test (id, name, value) values (%d, '%s', '%s')" % (1, datetime.now(),"RR sump data=%s"%(deviceD_value)))
  
  conn.commit()
  conn.close()
  mycursor.close() 
  time.sleep(.1)
  
+
