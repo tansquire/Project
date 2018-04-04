@@ -1,5 +1,5 @@
 Server_side_read_modified.ino  
-Server_side_command.ino 
+Server_side_command_modified.ino 
 A6_polling_method_deviceA_best.ino         -------------run continiously at arduino at field
 actuator.ino
 server_side.read1.py
