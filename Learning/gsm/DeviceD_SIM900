@@ -10,8 +10,6 @@ char n[20];
 int analogPin = 3; 
 int count_sent_server=0;
 int count_sent_mobile=0;
-uint32_t prev_power_millis;
-uint32_t power_interval=3558000;
 int data = 0; 
 char del;
 
