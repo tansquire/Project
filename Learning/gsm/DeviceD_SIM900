@@ -13,6 +13,7 @@ int count_sent_mobile=0;
 uint32_t prev_power_millis;
 uint32_t power_interval=3558000;
 int data = 0; 
+char del;
 
 void setup()  
 {
@@ -27,7 +28,10 @@ void setup()
 
      if(started) 
      {
-          sms.DeleteSMS(1);
+         // del=sms.DeleteSMS(1);
+         // if(del==1)
+          if(gsm.SendATCmdWaitResp(F("AT+CMGD=1,4"), 1000, 1000, "OK", 10)==1)
+          Serial.println("All sms deleted");
           if (sms.SendSMS("+917602304567", "Arduino SMS"))
           Serial.println("\nSMS sent OK");
      }
@@ -41,20 +45,30 @@ void loop()
          
         
         gsm.readSMS(smsbuffer, 160, n, 20);
+
+        if(strstr(smsbuffer,"@delete#")!=NULL)
+        {
+        
+        if(gsm.SendATCmdWaitResp(F("AT+CMGD=1,4"), 1000, 1000, "OK", 10)==1)
+          Serial.println("All sms deleted");
+        *smsbuffer='\0';
+        }
+        
         if(strstr(smsbuffer,"@start#")!=NULL)
         {
         *smsbuffer='\0';
         Serial.println("got expected");
         SendMessageServer();
-        sms.DeleteSMS(1);
-        }
+        if(gsm.SendATCmdWaitResp(F("AT+CMGD=1,4"), 1000, 1000, "OK", 10)==1)
+          Serial.println("All sms deleted");     }
           
         if(strstr(smsbuffer,"@mobile#")!=NULL)
         {
         *smsbuffer='\0';
         Serial.println("got expected");
         SendMessageMobile();
-        sms.DeleteSMS(1);
+        if(gsm.SendATCmdWaitResp(F("AT+CMGD=1,4"), 1000, 1000, "OK", 10)==1)
+          Serial.println("All sms deleted");
         }
         *smsbuffer='\0';
        
