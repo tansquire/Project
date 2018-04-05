@@ -19,7 +19,7 @@ void setup()
     
      Serial.begin(9600);
      Serial.println("GSM Shield testing.");
-     if (gsm.begin(2400)) 
+     if (gsm.begin(9600)) 
      {
           Serial.println("\nstatus=READY");
           started=true;
@@ -27,7 +27,7 @@ void setup()
 
      if(started) 
      {
-         
+          sms.DeleteSMS(1);
           if (sms.SendSMS("+917602304567", "Arduino SMS"))
           Serial.println("\nSMS sent OK");
      }
@@ -112,7 +112,7 @@ if(data == 0)
     Serial.println("Error in forming message");
     softwareReset( WDTO_60MS);
     }
-    if (sms.SendSMS("+917602304567", message))
+    if (sms.SendSMS("+919940323276", message))
        Serial.println("sent to server");  
     
     
