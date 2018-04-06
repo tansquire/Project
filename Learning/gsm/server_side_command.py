@@ -45,31 +45,8 @@ while(1):
    count=count+1
    print(count)
  
- if(time.time() - lake_well_command_prev>900 and time.time() - any_command_prev>20 and lake_well_lora_status=='0'):
-  print datetime.now()
-  ser.write(b'l')
-  print('data request to lake well')
-  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'data request to lake well'))  
-  lake_well_command_prev=time.time()
-  any_command_prev=time.time()
- 
- if(time.time() - children_park_command_prev>900 and time.time() - any_command_prev>20 and childrenpark_lora_status=='0'):
-  print datetime.now()
-  ser.write(b'c')
-  print('data request to children park')
-  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'data request to children park'))  
-  children_park_command_prev=time.time()
-  any_command_prev=time.time()
 
- if(time.time() - stuff_club_command_prev>900 and time.time() - any_command_prev>20 and stuff_club_lora_status=='0'):
-  print datetime.now()
-  ser.write(b's')
-  print('data request to stuff club')
-  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'data request to stuff club'))  
-  stuff_club_command_prev=time.time()
-  any_command_prev=time.time()
-
- if(time.time() - RR_sump_command_prev>900 and time.time() - any_command_prev>20 and RR_sump_lora_status=='0'):
+ if(time.time() - RR_sump_command_prev>1200 and time.time() - any_command_prev>20 and RR_sump_lora_status=='0'):
   print datetime.now()
   ser.write(b'r')
   print('data request to RR sump')
@@ -98,17 +75,19 @@ while(1):
 
  if(actuator_lora_status=='1' and open_command=='1'):
   print datetime.now()
-  mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % ('1', 1))
   mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 3))
+  #mycursor.execute("UPDATE command SET value='%s' WHERE id='%s'" % ('1', 1))
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('1', 9))
   print('open command given to actuator through primary link')
-  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'open command given to actuator through primary link'))  
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'open command given with lora'))  
 
  if(actuator_lora_status=='1' and close_command=='1'):
   print datetime.now()
-  mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % ('1', 2))
-  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('0', 4))
-  print('open command given to actuator through primary link')
-  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'open command given to actuator through primary link')) 
+  #mycursor.execute("UPDATE command SET value='%s'WHERE id='%s'" % ('1', 2))
+  mycursor.execute("UPDATE DO SET value='%s' WHERE id='%s'" % ('0', 4))
+  mycursor.execute("UPDATE DO SET value='%s'WHERE id='%s'" % ('1', 10))
+  print('close command given to actuator through primary link')
+  mycursor.execute("insert into gsm_test (id, name,value) values (%d, '%s', '%s')" % (1, datetime.now(),'close command given with lora')) 
 
  if(time.time() - any_command_prev>13 and lake_well_command=='1'):
   print datetime.now()
