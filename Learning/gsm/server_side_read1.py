@@ -103,7 +103,7 @@ while(1):
    if('deviceD' in data1[0]):
     deviceD_data=data1[0][data1[0].find('p')+1:data1[0].find('q')]
     print(deviceD_data)
-    deviceD_value=abs(20-(0.03*float(deviceD_data)))
+    deviceD_value=abs(18.2-(float(deviceD_data))/30.48)
     print"RR sump data=%s"%(deviceD_value)
     mycursor.execute("UPDATE AI SET value='%s'WHERE id='%s'" % (deviceD_value, 4))
     count_rcvd_from_D=count_rcvd_from_D+1
