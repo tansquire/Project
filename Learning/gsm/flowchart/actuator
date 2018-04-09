@@ -1,0 +1,113 @@
+START;
+
+  {  
+     if (is gsm modem ready to communicate to arduino?) 
+     {
+          print modem is ready;
+          started=true;
+     } else print modem is IDLE;
+  }
+  
+  
+  while(true)
+
+{
+     if(started=true?) 
+     {
+          Send delete command to modem to delete all sms;
+        if(Got deleted response from modem?)
+        Print all sms deleted;
+        
+     }
+
+
+     if(started=true?)
+     {
+  if(Is actuator in remote mode?)
+  data[0]='true';
+  else 
+  data[0]='false';
+
+
+  if(Is actuator fully opened?)
+  data[1]='true';
+  else 
+  data[1]='false';
+
+  if(Is actuator fully closed?)
+  data[2]='true';
+  else 
+  data[2]='fasle';
+
+  concatinate data[0],data[1] and data[2]
+  into data;  
+   make a sms containing concatinated data and actuator address, say sms1;
+        
+        
+        read received sms if any;
+        if(does the received sms contain keyword @mobile# and is it from server?)
+        {
+        send sms1 to the server;
+        if(sms sending success?)
+        print success;
+        Send delete command to modem to delete all sms;
+        if(Got deleted response from modem?)
+        Print all sms deleted;
+        }
+
+       
+        if(does the received sms contain keyword @open# and is it from server?)
+        {
+         open=true;
+         Send delete command to modem to delete all sms;
+        if(Got deleted response from modem?)
+        Print all sms deleted;
+        start sending status to server at an interval of 30 sec for 90 sec;
+      
+        }
+
+        if(does the received sms contain keyword @close# and is it from server?)
+        {
+        close=true;
+        Send delete command to modem to delete all sms;
+        if(Got deleted response from modem?)
+        Print all sms deleted;
+        start sending status to server at an interval of 30 sec for 90 sec;
+        }
+        
+ 
+
+ if(Is actuator not fully opened and in remote?)
+  {
+  if(Is open=true?)
+ {
+  cut close command if any;
+  delay for 5 msec;
+  start openning actuator;
+  make open=false;
+
+}
+  }
+
+do not open actuator;
+
+
+
+ 
+ if(Is actuator is not closed and in remote?)
+  {
+  if(Is close=true?)
+ {
+  cut open command if any;
+  delay for 5 msec;
+  start closing actuator;
+  make close=false;
+
+}
+  }
+
+do not close actuator;
+
+}
+
+

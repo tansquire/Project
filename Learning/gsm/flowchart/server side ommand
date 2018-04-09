@@ -1,0 +1,76 @@
+START;
+started=false;
+
+     
+     if (Is GSM modm ready?) 
+     {
+          status=READY;
+          started=true;
+     } else Serial.println nstatus=IDLE;
+
+
+while(true)
+{
+     if(started=true?)
+     {
+      
+    IsCharacter received= false;
+    if (character available on serial port?) 
+    {
+        read the character;
+        IsCharacter received= true;
+    }
+     if (IsCharacter received= true) 
+    {
+      if(received character=='l'?)
+      {
+        
+      Send data request to lakewell;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='c'?)
+      {
+        
+      Send data request to children Park;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='s'?)
+      {
+        
+      Send data request to stuff club;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='r'?)
+      {
+        
+      Send data request to rr sump;
+      IsCharacter received= false;
+     
+      }
+      else if(receivedChar=='x')
+      {
+      Send start command to the actuator;
+      IsCharacter received= false;
+     
+      }
+      else if(receivedChar=='y')
+      {
+      Send stop command to the actuator;
+      IsCharacter received= false;
+      }
+      else
+      {
+      IsCharacter received= false;
+      }
+    }
+       
+     }
+
+ STOP;
+}
+
+
+

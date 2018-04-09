@@ -1,0 +1,133 @@
+START;
+start serial communication with arduino with 9600 bits per second;
+total_nos_of_message_sent_count=0;
+
+while(true)
+{
+ read loRA communication status of all level sensor and actuator with their gateways from database;
+ 
+ read actuator open and close command field from database;
+ read all data request field for all level sensor and actuator from the database;
+ 
+ if(incoming serial message available from arduino?)
+ {
+  read the message;
+  if(is the message a "sms sent" response from GSM modem?)
+   increament increament total_nos_of_message_sent_count;;
+ } 
+ if(Lake well loRA is not available?)
+ if(last sms sent to lake well before more than 15 min)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'l' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+  
+ }
+ 
+ if(Children park loRA is not available?)
+ if(last sms sent to children park before more than 15 min)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'c' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ }
+ 
+  if(stuff club loRA is not available?)
+ if(last sms sent to stuff club before more than 15 min)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'c' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ }
+  
+  if(rr sump loRA is not available?)
+ if(last sms sent to rr sump before more than 15 min)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'r' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ }
+ 
+  if(Actuator loRA is not available?)
+  if(last open/close command sent to actuator before more than 5 sec)
+  if(any sms sent to any sensor before more than 5 sec?)
+  {
+  {
+    if(open field=true?)
+    {
+      write 'x' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+  set open field=false;
+  
+ 
+    }
+    if(close field=true?)
+    {
+      write 'y' to the serial port;
+  insert a new row into the database mentioning the present time and close command details;
+  set close field=false;
+ 
+  
+    }
+  }
+  }
+  
+ if(Actuator loRA available?) 
+ if( open field=true?)
+ {
+update l_open field=true in the database;
+update open field=0 in the database;
+ insert a new row into the database mentioning the present time and open command details details;
+ }
+ 
+ if(Actuator loRA available?) 
+ if(close field=true?)
+ {
+update l_close field=true in the database;
+update close field=0 in the database;
+ insert a new row into the database mentioning the present time and close command details details;
+ } 
+
+
+
+
+
+if(lake_well_mannual_data_request field =true?)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'l' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ 
+  
+ }
+
+if(children_park_mannual_data_request field =true?)
+ if(any sms sent to any sensor before more than 5 sec?)
+ {
+  write 'c' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+  
+ 
+ }
+ 
+ if(stuff_club_mannual_data_request field =true?)
+  if(any sms sent to any sensor before more than 5 sec?) 
+ {
+  write 's' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ 
+ 
+ }
+
+if(and RR_sump_mannual_data_request field =true?)
+  if(any sms sent to any sensor before more than 5 sec?) 
+ {
+  write 'r' to the serial port;
+  insert a new row into the database mentioning the present time and data request details;
+ 
+ 
+ }
+
+ close database connection;
+ delay 100ms;
+}

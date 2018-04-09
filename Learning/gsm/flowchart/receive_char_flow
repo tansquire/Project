@@ -1,0 +1,48 @@
+
+START;
+Incoming_string_read_completed = false;
+
+while(true) 
+{
+    recvInProgress = false;
+   
+    char startMarker = '@';
+    char endMarker = '#';
+  
+ 
+    while (Character available in Serial port and Incoming_string_read_completed = false?) 
+    {
+       read current character;
+
+        if (recvInProgress == true?) 
+        {
+            if (current character is not end marker?) 
+            {
+                concatinate current character with a string;
+                if (String size>=serial buffer size?) 
+                {
+                    discard additional characters;
+                }
+            }
+            else {
+                terminate the string;
+                recvInProgress = false;
+                
+                Incoming_string_read_completed = true;
+            }
+        }
+
+        else if (current character=start marker?) 
+        {
+            recvInProgress = true;
+        }
+    }
+    END;
+   
+}
+
+
+
+
+
+

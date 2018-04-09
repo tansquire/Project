@@ -1,0 +1,32 @@
+
+{
+   START;
+    Send AT command to set the modem in text mode;
+    
+    if(Got valid response?)
+    SMS mode set;
+    else
+    {
+   Display "Error setting SMS mode";
+   
+    }
+
+read rensor reading value as a count value;
+Convert this value into string  ;   
+   Concatinate this string into a new string containing device address and nos of sms sent earlier. So new string is inthe format of @deviceD998p%dq# where 998 is the count value, 5 is the sms no to be sent, and deviceD is the address of the sensor;
+    
+    Send AT command to send the new string as SMS to the server or to mobile;
+    if (Got valid response from GSM modem?)
+    {   
+        message sent;
+        else
+        {
+            Some issue is there;
+        }
+        
+    }
+
+   END; 
+}
+
+

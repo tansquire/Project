@@ -1,0 +1,153 @@
+START;
+
+while(true)
+{
+  connect to database;
+ read opened, closed and remote status from database;
+ if(is actuator opened status true and closed status false?)
+ update status field as "OPENED" in dB;
+else
+{
+if(is actuator closed status true and opened status false?)
+ update status field as "CLOSED" in dB;
+
+ else
+ {
+   if(is actuator closed status false and opened status false?)
+ update status field as "INTERMEDIATE" in dB;
+ 
+ else
+ update status field as "PROBLEM" in dB;
+}
+}
+ if(is actuator in remote mode?)
+  update mode field as "REMOTE" in dB;
+ else
+ {
+  update mode field as "LOCAL" in dB;
+ close database connection;
+ }
+delay 100 ms;
+ connect to database;
+ 
+
+ if(Is incoming serial data from arduino available?)
+ {
+  read the data;
+  if(is the serial data a sms received from GSM modems?)
+  {
+   split the data;
+   if(Is the data received from actuator?)
+   {
+parse the data and extract remote opened and closed status;
+   update remote, local, and closed status into the database;
+    insert a new row into the database mentioning the timestamp and the data received from actuator;
+   }
+   if(Is the sms received from lake well?)
+   {
+    extract the data from the sms;
+    update the data into database;
+    insert a new row into the database mentioning the timestamp and the data received from lakewell;
+   }
+
+  if(Is the sms received from children Park?)
+  {
+    extract the data from the sms;
+    update the data into database;
+    insert a new row into the database mentioning the timestamp and the data received from children Park;
+  }
+
+    if(Is the sms received from stuff club?)
+    {
+    extract the data from the sms;
+    update the data into database;
+    insert a new row into the database mentioning the timestamp and the data received from stuff club;
+    }
+      if(Is the sms received from RR sump?)
+      {
+    extract the data from the sms;
+    update the data into database;
+    insert a new row into the database mentioning the timestamp and the data received from RR sump;
+      }
+  }
+ }
+ close database connection;
+delay 100 ms;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

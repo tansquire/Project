@@ -1,0 +1,66 @@
+START;
+
+{
+Get AT response from GSM modem;
+    if (no response?)
+    {
+        
+        while( no response)
+        {    
+            Get AT response from GSM modem;
+        }
+    }
+    modem is ready now;
+
+delay(500);
+
+Sent AT command to GSM modem to check whether
+SIM is plugged or not; 
+if(got response 'OK'?)
+SIM is plugged;
+delay(500);
+
+Sent AT command to GSM modem to check whether
+signal strength is good or not; 
+if(got response 'OK'?)
+good signal;
+delay(500);
+
+Sent AT command to GSM modem to check whether
+SIM is registered to network or not; 
+if(got response 'OK'?)
+SIM registered to network;
+delay(500);
+
+
+}
+
+while(true)
+{
+if(any sms received?)
+newdata=true;
+
+if (newData == true?) 
+    {
+       
+       
+        if(Does the string contain @start#?)
+        {
+        
+        Send level data to the server;
+        Delete all sms:
+        newData = false;
+        }
+if(Does the string contain @mobile#?)
+        {
+        Send level data to the mobile;
+        Delete all sms;
+        newData = false;
+        }
+        
+    }
+END;
+}
+
+
+
