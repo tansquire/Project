@@ -1,0 +1,99 @@
+START;
+
+   
+     if (is gsm modem ready for operation?) 
+     {
+          
+          started=true;
+     } 
+   if (started=true?) 
+     {
+          Send delete command to modem to delete all sms;
+        if(Got "OK" response from modem?)
+         all sms deleted;
+        
+     }
+
+
+     while(started=true?)
+     {
+  if(Is actuator in remote mode?)
+  data[0]='1';
+  else 
+  data[0]='0';
+
+
+  if(Is actuator fully opened?)
+  data[1]='1';
+  else 
+  data[1]='0';
+
+  if(Is actuator fully closed?)
+  data[2]='1';
+  else 
+  data[2]='0';
+
+  make a sms (let sms1) like
+  sms1=@actuator-pdata[0]data[1]data[2]q#
+        read received sms if any;
+        if(does the received sms contain keyword "mobile" and is it from server?)
+        {
+        send sms1 to the server;
+        if(sms sending success?)
+        sms send success;
+        Send delete command to modem to delete all sms;
+        if(Got "OK" response from modem?)
+        all sms deleted;
+        }
+
+       
+        if(does the received sms contain keyword "open" and is it from server?)
+        {
+         open=true;
+         Send delete command to modem to delete all sms;
+        if(Got "OK" response from modem?)
+        all sms deleted;
+        start sending status to server at an interval of 30 sec for 90 sec;
+      
+        }
+
+        if(does the received sms contain keyword "close" and is it from server?)
+        {
+        close=true;
+        Send delete command to modem to delete all sms;
+        if(Got "OK" response from modem?)
+        all sms deleted;
+        start sending status to server at an interval of 30 sec for 90 sec;
+        }
+        
+ 
+
+ if(Is actuator not fully opened and in remote?)
+  {
+  if(Is open=true?)
+ {
+  cut close command if any;
+  delay for 5 msec;
+  open actuator until it is fully opened;
+  make open=false;
+
+}
+  }
+
+ if(Is actuator  not fully closed and in remote?)
+  {
+  if(Is close=true?)
+ {
+  cut open command if any;
+  delay for 5 msec;
+  close actuator untill itis fully closed;
+  make close=false;
+
+}
+  }
+
+
+}
+modem issue;
+END;
+

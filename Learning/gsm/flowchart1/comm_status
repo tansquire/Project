@@ -1,0 +1,41 @@
+START;
+rr_sump_prev_time = current time;
+actuator_prev_time = current time;
+while(true)
+{
+ if(current time - rr_sump_prev_time>40 sec?)
+ {
+  connect to database;
+  select rr_sump_random_field from db;
+  Assign it to new_random_value;
+  if (new_random_value not equal to old_random_value?)
+  {
+   sensor comm status=true;
+   old_random_value = new_random_value;
+  }
+  else
+   sensor comm status=false;
+   
+  update comm status in db;
+  close database connection;
+  rr_sump_prev_time=current time;
+ }
+ 
+if(current time - actuator_prev_time>10 sec?)
+ {
+  connect to database;
+  select actuator_random_field from db;
+  Assign it to new_random_value1;
+  if (new_random_value1 not equal to old_random_value1?)
+  {
+   actuator comm status=true;
+   old_random_value1 = new_random_value1;
+  }
+  else
+   actuator comm status=false;
+   
+  update comm status in db;
+  close database connection;
+  actuator_prev_time=current time;
+ }
+}

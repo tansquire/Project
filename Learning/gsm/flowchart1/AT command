@@ -1,0 +1,32 @@
+{
+START;
+  response=0;
+    
+    while( Any character available in serial port?) clean serial port;
+    delay(1000);
+
+   Send the AT command through serial port;
+
+
+  
+    time=t1;
+
+    
+    do{
+        if(response string received from GSM modem?)
+        {    
+            if (Is received string=our desired string?)   
+            {
+                response = 1;
+            }
+        }
+    }while(Is response == 0 && present time - t1 < 2 sec?);   
+
+    if(is response=1?)
+    AT responsr is valid;
+    else
+    2 sec is over. GSM modem not responding properly;
+    END;
+    
+}
+

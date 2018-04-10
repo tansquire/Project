@@ -1,0 +1,47 @@
+
+START;
+newData = false;
+
+
+
+recvInProgress = false;
+index = 0;
+startMarker = '@';
+endMarker = '#';
+
+ 
+ 
+    while (Any character available in serial port, and newdata=false?) 
+    {
+        read that character, let x;
+        rc = x;
+
+        if (recvInProgress == true?) 
+        {
+            if (rc not equal to endMarker?) 
+            {
+                String[index] = rc;
+                increament ndx;
+                if (index >= Serial buffer size?) 
+                {
+                    ndx = Serial buffer size - 1;
+                }
+            }
+            else
+            {
+                String[ndx] = '\0'; // terminate the string
+                recvInProgress = false;
+                index = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker?) 
+        {
+            recvInProgress = true;
+        }
+    }
+    END;
+
+
+

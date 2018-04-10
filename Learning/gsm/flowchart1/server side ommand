@@ -1,0 +1,94 @@
+START;
+started=false;
+define serial port-1=comm port for modem;
+define serial port-2=comm port for server;
+
+     
+     if (Is GSM modm ready for operation?) 
+     {
+          
+          started=true;
+     } 
+
+
+     while(started=true?)
+     {
+      
+    IsCharacter received= false;
+    if (character available on serial port-2?) 
+    {
+        read the character;
+        IsCharacter received= true;
+    }
+     if (IsCharacter received= true?) 
+    {
+      if(received character=='l'?)
+      {
+      Send AT command to modem through Serial port-1 to   
+      send sms(@start#) to lakewell;
+     if(response="OK"?)
+     place the string-"sms sent to lake well"  on Serial port-2;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='c'?)
+      {
+        
+      Send AT command to modem through Serial port-1 to   
+      send sms(@start#) to children park;
+     if(response="OK"?)
+     place the string-"sms sent to children park"  on Serial port-2;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='s'?)
+      {
+        
+      Send AT command to modem through Serial port-1 to   
+      send sms(@start#) to stuff club;
+     if(response="OK"?)
+     place the string-"sms sent to stuff club"  on Serial port-2;
+      IsCharacter received= false;
+     
+      }
+     if(received character=='r'?)
+      {
+        
+      Send AT command to modem through Serial port-1 to   
+      send sms(@start#) to RR sump;
+     if(response="OK"?)
+     place the string-"sms sent to RR sump"  on Serial port-2;
+      IsCharacter received= false;
+     
+      }
+      else if(receivedChar=='x')
+      {
+      Send AT command to modem through Serial port-1 to   
+      send sms(@open#) to actuator;
+     if(response="OK"?)
+     place the string-"open command sent to actuator"  on Serial port-2;
+      IsCharacter received= false;
+      }
+      else if(receivedChar=='y')
+      {
+      Send AT command to modem through Serial port-1 to   
+      send sms(@close#) to actuator;
+     if(response="OK"?)
+     place the string-"close command sent to actuator"  on Serial port-2;
+      IsCharacter received= false;
+      }
+      else
+      {
+      IsCharacter received= false;
+      }
+    }
+       
+     }
+     modem issue;
+     END;
+
+
+
+
+
+

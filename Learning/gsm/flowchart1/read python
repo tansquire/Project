@@ -1,0 +1,135 @@
+START;
+
+while(true)
+{
+  START;
+ connect to database;
+ 
+
+ if(Is incoming serial data from arduino available?)
+ {
+  read the data;
+  if(is the serial data a sms ?)
+  {
+   split the data;
+   if(Is the data received from actuator?)
+   {
+collect data between 'p' and 'q';
+remote status=data[0];
+opened status=data[1];
+closed ststus=data[2];
+   update remote, local, and closed status into the database;
+    insert a new row into the database mentioning the timestamp and the data received from actuator;
+   }
+   if(Is the sms received from lake well?)
+   {
+    collect data between 'p' and 'q'. let x;
+    lake_well_level=20-32.8(x/820-0.2488) ft;
+    update lake_well_level into database;
+    insert a new row into the database mentioning the timestamp and the data received from lakewell;
+   }
+
+  if(Is the sms received from children Park?)
+  {
+    collect data between 'p' and 'q'. let x;
+    children_park_level=20-32.8(x/820-0.2488) ft;
+    update children_park_level into database;
+    insert a new row into the database mentioning the timestamp and the data received from children Park;
+  }
+
+    if(Is the sms received from stuff club?)
+    {
+    collect data between 'p' and 'q'. let x;
+    stuff_club_level=20-32.8(x/820-0.2488) ft;
+    update stuff_club_level into database;
+    insert a new row into the database mentioning the timestamp and the data received from stuff club;
+    }
+      if(Is the sms received from RR sump?)
+      {
+    collect data between 'p' and 'q'. let x;
+    RR_sump_level=20-32.8(x/820-0.2488) ft;
+    update RR_sump_level into database;
+    insert a new row into the database mentioning the timestamp and the data received from RR sump;
+      }
+  }
+ }
+ close database connection;
+delay 100 ms;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,132 @@
+START;
+
+while(true)
+{
+ read loRA communication status of all level sensor and actuator with their gateways from database;
+ 
+ read actuator open and close command field from database;
+ read all data request field for all level sensor and actuator from the database;
+ 
+ 
+ if(Lake well loRA is not available?)
+ if(last sms sent to lake well before 15 min or more?)
+
+ {
+  write 'l' to the serial port;
+  if(response= "sms sent to lakewell"?)
+  insert "sms sent to lakewell through GSM" into database;
+  
+ }
+ 
+ if(children Park loRA is not available?)
+ if(last sms sent to children Park before 15 min or more?)
+
+ {
+  write 'c' to the serial port;
+  if(response= "sms sent to children Park"?)
+  insert "sms sent to children Park through GSM" into database;
+  
+ }
+ 
+ if(stuff club loRA is not available?)
+ if(last sms sent to stuff club before 15 min or more?)
+
+ {
+  write 's' to the serial port;
+  if(response= "sms sent to stuff club"?)
+  insert "sms sent to stuff club through GSM" into database;
+  
+ }
+ 
+  if(RR sump loRA is not available?)
+ if(last sms sent to RR sump before 15 min or more?)
+
+ {
+  write 'r' to the serial port;
+  if(response= "sms sent to RR sump"?)
+  insert "sms sent to RR sump through GSM" into database;
+  
+ }
+ 
+  if(Actuator loRA is not available?)
+ 
+  
+  {
+  {
+    if(open field=true?)
+    {
+      
+      write 'x' to the serial port;
+  if(response= "open commend sent to actuator"?)
+  insert "open commend sent to actuator through GSM" into database;
+  update open field=false;
+  
+ 
+    }
+    if(close field=true?)
+    {
+      write 'y' to the serial port;
+  if(response= "close commend sent to actuator"?)
+  insert "close commend sent to actuator through GSM" into database;
+  update close field=false;
+  
+ 
+  
+    }
+  }
+  }
+  
+ if(Actuator loRA available?) 
+ if( open field=true?)
+ {
+update l_open field=true in the database;
+update open field=false in the database;
+ insert "open commend sent to actuator through lora" into database;
+ }
+ 
+ if(Actuator loRA available?) 
+ if(close field=true?)
+ {
+update l_close field=true in the database;
+update close field=false in the database;
+ insert "close commend sent to actuator through lora" into database;
+ } 
+
+if(lake_well_mannual_data_request field =true?)
+
+ {
+  write 'l' to the serial port;
+  if(response= "sms sent to lakewell"?)
+  insert "sms sent to lakewell through GSM in mannual mode" into database;
+  
+ }
+
+if(children_park_mannual_data_request field =true?)
+
+ {
+  write 'c' to the serial port;
+  if(response= "sms sent to children park"?)
+  insert "sms sent to children park through GSM in mannual mode" into database;
+  
+ }
+ 
+ if(stuff_club_mannual_data_request field =true?)
+
+ {
+  write 's' to the serial port;
+  if(response= "sms sent to stuff club"?)
+  insert "sms sent to stuff club through GSM in mannual mode" into database;
+  
+ }
+if(rr_sump_mannual_data_request field =true?)
+
+ {
+  write 'r' to the serial port;
+  if(response= "sms sent to RR sump"?)
+  insert "sms sent to RR sump through GSM in mannual mode" into database;
+  
+ }
+
+ close database connection;
+ delay 100ms;
+}

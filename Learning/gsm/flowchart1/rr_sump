@@ -1,0 +1,11 @@
+START;
+while(true)
+{
+ if (data received from LoRA?)
+ {
+  connect to database;
+  put a random value in rr_sump_random_field;
+  close database connection;
+ }
+}
+

@@ -1,0 +1,30 @@
+
+{
+    
+     START;
+     define serial port-1=comm port for modem;
+     define serial port-2=comm port for server;
+     if (Is GSM modem ready?) 
+     {
+        send "modem is ready" to serial port-2;
+        started=true;
+     } 
+    
+}
+
+while(true)
+{
+     if(started=true?)
+     {
+  
+        read incoming sms and number;
+        if(Is the SMS from selected numbers?)
+        if(does the SMS contain '@' and '#'?)
+        {
+        receive the sms from serial port-1;
+        place the sms to  serial port-2;
+        }
+      
+     }
+     
+}

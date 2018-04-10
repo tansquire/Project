@@ -1,0 +1,43 @@
+
+{
+  START;
+  answer=0;
+  send AT command to modem;
+  if(got response?)
+  answer=1;
+       
+        while(answer = 0?)
+        {   
+            send AT command to modem;
+  if(got response?)
+  answer=1;   
+        }
+ modem is ready to accept all commands;
+
+
+Send AT command to GSM modem to check whether
+SIM is plugged or not; 
+if(got response 'OK'?)
+{
+SIM is plugged;
+delay(500 ms);
+
+Sent AT command to GSM modem to check whether
+signal strength is available or not; 
+if(got response 'OK'?)
+{
+ good signal available;
+delay(500 ms);
+
+Sent AT command to GSM modem to check whether
+SIM is registered to network or not; 
+if(got response 'OK'?)
+{
+ SIM registered to network;
+ modem is ready for operation;
+}
+}
+}
+
+END;
+}

@@ -1,0 +1,41 @@
+START;
+
+     if (is gsm modem ready for operation?) 
+     {
+          
+          started=true;
+     } 
+
+
+while(started=true?)
+{
+if(any sms received?)
+newdata=true;
+
+if (newData == true?) 
+    {
+        if(Is the sms from server, and Does the string contain "start"?)
+        {
+        Read count value corresponding to level data;
+        convert this count value into string(say str);
+        Make sms1 like sms1=@deviceDpstrq#
+        Send sms1 to the server;
+        Delete all sms;
+        newData = false;
+        }
+if(Does the string contain "mobile"?)
+        {
+        Read count value corresponding to level data;
+        convert this count value into string(say str);
+        Make sms1 like sms1=@deviceDpstrq#
+        Send sms1 to the mobile;
+        Delete all sms;
+        newData = false;
+        }
+}
+}
+modem issue;
+END;
+
+
+

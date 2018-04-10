@@ -1,0 +1,28 @@
+START;
+while(true)
+{
+ data-1=data received from loRA;
+ if (length of data-1 is not zero)
+ {
+  connect to database;
+  if(data[1]=4)
+  put a random value in stuff_club_random_field;
+  if(data[1]=3)
+  {
+  put a random value in stuff_club_random_field;
+  put a random value in children_park_random_field;
+  }
+  if(data[1]=2)
+  {
+  put a random value in stuff_club_random_field;
+  put a random value in children_park_random_field;
+  put a random value in lake_well_random_field;
+  }
+  if(data[1]=5)
+  {
+  put a random value in actuator_random_field;
+  }
+  close database connection;
+ }
+}
+

@@ -1,0 +1,26 @@
+connect to database;
+ read opened, closed and remote status from database;
+ if(is actuator opened status true and closed status false?)
+ update status field as "OPENED" in dB;
+else
+{
+if(is actuator closed status true and opened status false?)
+ update status field as "CLOSED" in dB;
+
+ else
+ {
+   if(is actuator closed status false and opened status false?)
+ update status field as "INTERMEDIATE" in dB;
+ 
+ else
+ update status field as "PROBLEM" in dB;
+}
+}
+ if(is actuator in remote mode?)
+  update mode field as "REMOTE" in dB;
+ else
+ {
+  update mode field as "LOCAL" in dB;
+ close database connection;
+ }
+delay 100 ms;

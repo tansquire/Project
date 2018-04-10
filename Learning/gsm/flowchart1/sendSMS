@@ -1,0 +1,28 @@
+   START;
+    Send AT command to set the modem in text mode;
+    
+    if(Got response "OK"?)
+    {
+     "text mode set";
+    make a message, and assign it to sms1;
+    assign any number to number1;
+    Send AT command to the modem for sending sms1 to number1;
+    if (Got response "OK"?)
+    {   
+        "sms sent" ;
+    }
+    else 
+     "sms send failure" ;
+}
+
+
+    else
+    {
+    "Error setting text mode" ;
+   
+    }
+
+    
+   END; 
+
+
