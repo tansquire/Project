@@ -1,0 +1,4 @@
+Guest machine-ubuntu. Host machine-windows-7. We will access host folder from gueat machine
+Virtialbox->Settings->shared folders->machine folder->brors folder->share
+Go th the folder manually. Go to properties and share this folder.
+Now go to guest machine. Go to network, and then vboxsvr. Shared folder will be there
