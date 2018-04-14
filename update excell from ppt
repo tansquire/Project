@@ -1,0 +1,40 @@
+//This ppt macro open an excell file update a cell and close excell again.
+
+Sub Run_Excel_Macro_From_PPT()
+
+Dim oXL
+Dim oWB
+Dim sPName
+On Error GoTo Err_PPXL
+
+Set oXL = CreateObject("Excel.Application")
+Set oWB = oXL.Workbooks.Open("C:\Users\partha\Desktop\Book1.xlsm")
+oXL.Visible = True
+sPName = ActivePresentation.Name
+
+' Run the Macro without Argument
+'oXL.Application.Run "'Book1.xlsm'!StartTimer"
+'oXL.Run "OnTime"
+oWB.sheets(1).Range("F8").Value = "Hello"
+
+' Save and Close the Workbook
+oWB.Save
+oWB.Close (True)
+
+
+' Quit the Excel
+oXL.Quit
+
+
+' Release Objects - Good Practive
+If Not oWB Is Nothing Then Set oWB = Nothing
+If Not oXL Is Nothing Then Set oXL = Nothing
+
+
+Err_PPXL:
+If Err <> 0 Then
+MsgBox Err.Description
+Err.Clear
+End If
+End Sub
+
