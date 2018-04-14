@@ -1,0 +1,29 @@
+//this VBA codes updates A1 continiously on StartTimer macro, stops updation on click of StoptTimer macro
+Public RunWhen As Double
+Public Const cRunIntervalSeconds = 1 ' 120=two minutes
+Public Const cRunWhat = "OnTime"  ' the name of the procedure to run
+Sub StartTimer()
+    RunWhen = Now + TimeSerial(0, 0, cRunIntervalSeconds)
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, _
+    Schedule:=True
+End Sub
+
+Sub OnTime()
+    ''''''''''''''''''''''''
+    ' Your code here
+    ''''''''''''''''''''''''
+    Worksheets("Sheet1").Range("A1").Value = Int((200 - 150 + 1) * Rnd + 150)
+    StartTimer  ' Reschedule the procedure
+    
+    On Error Resume Next
+    
+        
+    
+End Sub
+
+Sub StopTimer()
+    On Error Resume Next
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, _
+        Schedule:=False
+End Sub
+
