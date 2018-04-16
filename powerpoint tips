@@ -1,0 +1,14 @@
+
+http request response animation is possible only with custom show
+Whole page run simultaneously in custom page. You cant run a portion with one button click, 
+and another portion with another button click.
+To do so you have to mak to separate custom page.
+custom slide cant be linked with any shape. It can be linked with action button only.
+
+To run a custom page in loop, do following in powerpoint 2016
+a> Slide show tab->setup slide show-> Loop continiously until escape
+b>Click on the custom show page-> go to transition tab->under advanced slide portion, check after 00:00:00
+c>Do not set until end of the slide in timing window of any animation
+d>Hide de the custom slide
+e> TAke an actin button on any other page, and link the custom show with that button (check return)
+
