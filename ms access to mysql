@@ -1,0 +1,66 @@
+Do the followings.
+1. Install the followings in a windows xp machine as per the following sequence.
+a. Microsoft dot net framework-4
+b. Mysql-connector-odbc-3.51.30-win32
+c. Microsoft Visual C++ 2015 Redistributable 
+d. python-2.7
+e. mysql-connector-python-8.0.11-py2.7-windows-x86-32bit
+2. Create a access table with fields---id, name, value
+
+3. Install Mysql server in another machine ( in the same network -linux or windows 7)
+
+4. Create a mysql database "scada"
+5. Create a table  with table name "access" and column---- id, name, value in the the table
+
+6. Go to windows xp machine and create a odbc driver for mysql  as per the following
+control panel->administrative tool->data source(odbc)->click add in user DSN tab->add->Mysql odbc driver->finish->a new window will come. Fill it up as belows..
+data source name=mysql.
+description mysql database.
+TCP/IP server=ip address of the machine where mysql is installed.
+user=mysql user name
+password=mysql password
+database=scada
+Then click ok, and ok
+
+7. Open the acsess file and do the following.
+external data tab->more->odbc database->select link to the data->ok->a new window will come->machine datasource tab->select mysql->ok
+
+Till now, you have linked a bidirectional communication between access and mysql. If data is updated in anyone, it will get reflected to the other one.
+
+8. Copy the code of the attached file to create a python program(change only user, password, and host as per configuration done in mysql database)
+9. Run the python program(It will run always, dont close it)
+10. Insert a row in access database like(id=1, name=ram, value=50), and save the file.
+You will see that a text file(ram.txt) has been generated in "C:\Python27" directory with some file contents(row1=ram, row2=50).
+11. Insert a row in access database like(id=1, name=shyam, value=51), and save the file.
+You will see that a text file(shyam.txt) has been generated in "C:\Python27" directory with some file contents(row1=shyam, row2=51).
+
+You have to save the access file after each entry.
+Each time you insert a row , a new text file will be generated. Please note that, id field should be unique in each row. It may be date-time in your case.
+If all values are not entered, text file will not be generated. 
+Exception handling is included with try catch method, so program will not crash until it is stopped.
+####################################################################################################
+                                                PYTHON PROGRAM
+#!/usr/bin/python
+import mysql.connector
+import time
+pid=0
+while(1):
+ conn=mysql.connector.connect(user='root',password='gowsalya',host='10.21.160.201',database='test')
+ mycursor=conn.cursor()
+ mycursor.execute('select * FROM access')
+ list=mycursor.fetchall()
+ lastid=list[-1][0]
+ try:
+    if((lastid-pid)!=0 and len(list[-1][1])!=0 and len(list[-1][2])!=0):
+        f = open('%s.txt' %(list[-1][1]), 'w+')
+        print "text file generated"
+        for i in range(2):
+         f.write("%s\r\n" % (list[-1][i+1]))
+        f.close()
+        pid=lastid
+ except:
+     print("all values are not entered")
+ time.sleep(1)
+ conn.close()
+ mycursor.close()
+##########################################################################################################
