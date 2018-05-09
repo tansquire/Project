@@ -64,3 +64,16 @@ while(1):
  conn.close()
  mycursor.close()
 ##########################################################################################################
+MYSQL FOR WINDOWS XP
+
+
+download mysql from here for windows xp
+https://dev.mysql.com/downloads/file/?id=477165
+
+after install,  START->program->mysql->mysql server 5.5->commandline
+show databases;
+use test;
+CREATE TABLE Persons (id int,name varchar(255),value varchar(255));
+show tables;
+INSERT INTO `access`(id,name,value) VALUES (1,'ram','10');
+select * from access;
