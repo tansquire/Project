@@ -11,6 +11,8 @@ create a php file in C:\xampp\htdocs
 #####################################################################
                                                     PHP file 
 
+<!DOCTYPE html>
+<html>
 <meta http-equiv="refresh" content="2" >
 <body>
 
