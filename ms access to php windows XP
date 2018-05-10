@@ -5,7 +5,7 @@ install xampp
 Go to odbc connection
 Select microsoft access
 brows the required access file
-Remember data source name (DSN)----It is required in php
+Remember data source name (DSN)----It is required in php (In this example DSN name is php)
 create a php file in C:\xampp\htdocs
 
 #####################################################################
