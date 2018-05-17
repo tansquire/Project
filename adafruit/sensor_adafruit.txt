@@ -1,0 +1,467 @@
+#include <SoftwareSerial.h>
+#include <avr/wdt.h>
+SoftwareSerial mySerial(8, 9);
+int8_t answer;
+int count_sent_server=0;
+int count_sent_mobile=0;
+uint32_t prev_display_millis;
+uint32_t display_interval=2000;
+uint32_t prev_power_millis;
+uint32_t power_interval=3558000; 
+int analogPin = 3;     
+int n = 0; 
+
+void setup()
+{
+Serial.begin(9600); 
+mySerial.begin(2400);    //use 2400 for SIM 900
+Serial.println("Starting...");
+power_on();
+delay(500);
+
+answer = sendATcommand("AT", "OK", 3000); 
+if(answer==1)
+Serial.println("ok");
+delay(500);
+
+answer = sendATcommand("AT+CSQ", "OK", 3000); 
+if(answer==1)
+Serial.println("good signal quality");
+delay(500);
+
+answer = sendATcommand("AT+CCID", "OK", 3000); 
+if(answer==1)
+Serial.println("SIM is plugged");
+delay(500);
+
+answer = sendATcommand("AT+CREG?", "OK", 3000); 
+if(answer==1)
+Serial.println("Registered to network");
+delay(500);
+
+
+answer = sendATcommand("AT+CNMI=2,2,0,0,0", "OK", 3000); 
+if(answer==1)
+Serial.println("Received message mode set");
+delay(500);
+
+SendMessage();
+//delay(500);
+
+}
+
+
+void loop()
+{ 
+  
+ sms_task();
+ //lora();
+
+
+//if(millis() -prev_display_millis > display_interval)
+//{
+//  Serial.print("Serial size");
+//  Serial.println(Serial.available());
+//  Serial.print("MySerial size");
+//  Serial.println(mySerial.available());
+//  Serial.println(analogRead(analogPin));
+//  prev_display_millis=millis();
+//  
+//  }
+ 
+}
+
+void power_on()
+{
+
+    uint8_t answer=0;
+
+    // checks if the module is started
+    answer = sendATcommand("AT", "OK", 3000);
+    if (answer == 0)
+    {
+        
+        while(answer == 0){     // Send AT every two seconds and wait for the answer
+            answer = sendATcommand("AT", "OK", 3000);    
+        }
+    }
+    Serial.println("modem ready");
+
+}
+
+int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout){
+
+    uint8_t x=0,  answer=0;
+    char response[100];
+    unsigned long previous;
+
+    memset(response, '\0', 100);    // Initialice the string
+
+    delay(100);
+
+    while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer
+    delay(1000);
+
+    mySerial.println(ATcommand);    // Send the AT command 
+
+
+    x = 0;
+    previous = millis();
+
+    // this loop waits for the answer
+    do{
+        if(mySerial.available() != 0){    // if there are data in the UART input buffer, reads it and checks for the asnwer
+            response[x] = mySerial.read();
+            x++;
+            if (strstr(response, expected_answer) != NULL)    // check if the desired answer is in the response of the module
+            {
+                answer = 1;
+            }
+        }
+    }while((answer == 0) && ((millis() - previous) < timeout));    // Waits for the asnwer with time out
+
+    return answer;
+}
+
+
+
+void wait(unsigned int timeout)   //It works for  timeout time.
+{
+uint8_t x=0;  
+unsigned long previous;
+while( mySerial.available() > 0) mySerial.read();    // Clean the input buffer//If you dont use this line, still working
+previous = millis();
+do{
+       while( mySerial.available() > 0) mySerial.read();
+            
+  }
+    
+   while(((millis() - previous) < timeout));   
+
+}
+
+
+
+void SendMessage()
+{
+    Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    {
+    Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
+    Serial.println("Sending SMS");
+    answer = sendATcommand("AT+CMGS=\"+918089595514\"\r", ">", 3000);    // send the SMS number
+    if (answer == 1)
+    {
+        mySerial.println("NodeA restarted");
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
+        if (answer == 1)
+        {
+            Serial.println("Initial SMS Sent ");    
+        }
+        else
+        {
+            Serial.println("Please check balance");
+        }
+    }
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
+    }
+}
+
+
+void SendMessageServer()
+{
+   
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int n;
+    unsigned int n1;
+    bool isNeg;
+    
+    Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    {
+    Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
+
+//convert analog value into string     
+   n=analogRead(analogPin); 
+   isNeg = n<0;
+   n1 = isNeg ? -n : n;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(n == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
+    count_sent_server++;
+    sprintf(message,"@deviceDp%dq#",value);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL)
+    {
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to server");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
+    answer = sendATcommand("AT+CMGS=\"+919940323276\"\r", ">", 3000);    // send the SMS number
+    if (answer == 1)
+    {   
+        mySerial.println(message);
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
+        if (answer == 1)
+        {
+            Serial.println("sent to server");    
+        }
+        else
+        {
+            Serial.println("Please check balance");
+        }
+        
+    }
+
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
+    }
+    
+    
+}
+
+
+void SendMessageMobile()
+{
+    char message[50];
+    char value[10];
+    char count[5];
+    int i = 0;
+    int n;
+    unsigned int n1;
+    bool isNeg;
+    
+    Serial.print("Setting SMS mode...");
+    answer=sendATcommand("AT+CMGF=1", "OK", 3000);    // sets the SMS mode to text
+    if(answer==1)
+    Serial.println("SMS mode set");
+    else
+    {
+    Serial.println("Error setting SMS mode");
+    softwareReset( WDTO_60MS);
+    }
+
+//convert analog value into string     
+   n=analogRead(analogPin); 
+   isNeg = n<0;
+   n1 = isNeg ? -n : n;
+   while(n1!=0)
+   {
+    value[i++] = n1%10+'0';
+    n1=n1/10;
+    }
+
+    if(isNeg)
+    value[i++] = '-';
+    value[i] = '\0';
+
+   for(int t = 0; t < i/2; t++)
+  {
+    value[t] ^= value[i-t-1];
+    value[i-t-1] ^= value[t];
+    value[t] ^= value[i-t-1];
+  }
+
+if(n == 0)
+{
+    value[0] = '0';
+    value[1] = '\0';
+}   
+
+    count_sent_mobile++;
+    sprintf(message,"@deviceDp%dq#",value);
+    if(strstr(message, "deviceD") != NULL && strstr(message, "p") != NULL && strstr(message, "q")!=NULL)
+    {
+    Serial.print("Sending");
+    Serial.print(message);
+    Serial.println(" to mobile");
+    }
+    else
+    {
+    Serial.println("Error in forming message");
+    softwareReset( WDTO_60MS);
+    }
+    answer = sendATcommand("AT+CMGS=\"+917602304567\"\r", ">", 3000);    // send the SMS number
+    if (answer == 1)
+    {   
+        mySerial.println(message);
+        mySerial.write(0x1A);
+        answer = sendATcommand("", "OK", 30000);
+        if (answer == 1)
+        {
+            Serial.println("sent to mobile");    
+        }
+        else
+        {
+            Serial.println("Please check balance");
+        }
+        
+    }
+
+    else
+    {
+        Serial.print("error ");
+        Serial.println(answer, DEC);
+        softwareReset( WDTO_60MS);
+    }
+    
+    
+}
+
+
+
+void sms_task() 
+{
+const byte numChars = 100;
+char receivedChars[numChars];
+boolean newData = false;
+
+
+    static boolean recvInProgress = false;
+    static byte ndx = 0;
+    char startMarker = '@';
+    char endMarker = '#';
+    char rc;
+    int c;
+ 
+    while (mySerial.available() > 0 && newData == false) 
+    {
+        rc = mySerial.read();
+
+        if (recvInProgress == true) 
+        {
+            if (rc != endMarker) 
+            {
+                receivedChars[ndx] = rc;
+                ndx++;
+               
+                if (ndx >= numChars) 
+                {
+                    ndx = numChars - 1;
+                }
+            }
+            else 
+            {
+                receivedChars[ndx] = '\0'; // terminate the string
+                c=ndx;
+                recvInProgress = false;
+                ndx = 0;
+                newData = true;
+            }
+        }
+
+        else if (rc == startMarker) 
+        {
+            recvInProgress = true;
+        }
+    }
+
+
+if (newData == true) 
+    {
+       
+        //Serial.print(c);
+        if(strstr(receivedChars, "start") != NULL && c==5)
+        {
+        Serial.println(receivedChars);
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
+        Serial.print("MySerial size");
+        Serial.println(mySerial.available());
+        wait(30000);
+        SendMessageServer();
+        //delay(1000);
+        delete_sms();
+        newData = false;
+        }
+else if(strstr(receivedChars, "mobile") != NULL && c==6)
+        {
+        Serial.println(receivedChars);
+        Serial.print("Serial size");
+        Serial.println(Serial.available());
+        Serial.print("MySerial size");
+        Serial.println(mySerial.available());
+        //wait(30000);
+        SendMessageMobile();
+        //delay(1000);
+        delete_sms();
+        newData = false;
+        }
+        
+
+        else
+        {
+          Serial.println("Non-sense data found, I am restarting");
+          softwareReset( WDTO_60MS);
+        
+        }
+    }
+
+}
+
+void delete_sms()
+
+{
+answer = sendATcommand("AT+CMGD=1,4", "OK", 3000); 
+if(answer==1)
+Serial.println("All message deleted");
+else
+{
+Serial.println("Cant delete");
+softwareReset( WDTO_60MS);
+}
+}
+
+void softwareReset( uint8_t prescaller) 
+{
+
+  wdt_enable( prescaller);
+  
+  while(1) {}
+}
