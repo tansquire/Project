@@ -272,7 +272,7 @@ void SendMessageMobile()
     {
     Serial.print("Sending");
     Serial.print(message);
-    Serial.println(" to server");
+    Serial.println(" to mobile");
     }
     else
     {
@@ -287,7 +287,7 @@ void SendMessageMobile()
         answer = sendATcommand("", "OK", 30000);
         if (answer == 1)
         {
-            Serial.println("sent to server");    
+            Serial.println("sent to mobile");    
         }
         else
         {
@@ -359,11 +359,21 @@ boolean newData = false;
 if (newData == true) 
 
     {       
-        if(strstr(receivedChars, "mobile")!=NULL && start_sending==false)
+        if(strstr(receivedChars, "server")!=NULL && start_sending==false)
         { 
         Serial.print(c);         
         Serial.println(receivedChars);
         SendMessageServer();
+        delete_sms();
+        newData = false;
+        
+        }
+
+        else if(strstr(receivedChars, "mobile")!=NULL && start_sending==false)
+        { 
+        Serial.print(c);         
+        Serial.println(receivedChars);
+        SendMessageMobile();
         delete_sms();
         newData = false;
         
