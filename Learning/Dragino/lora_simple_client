@@ -1,0 +1,126 @@
+#include <SPI.h>
+#include <RH_RF95.h>
+
+// Singleton instance of the radio driver
+RH_RF95 rf95;
+float frequency = 434.0;
+
+//receiving
+int pin4 = 4;
+int pin5 = 5;
+int pin6 = 6;
+int pin7 = 7;
+
+//sending
+int pin8 = 8;
+int pin9 = 9;
+int pin10 = 10;
+int pin11 = 11;
+
+void setup() 
+{
+  Serial.begin(9600);
+  //while (!Serial) ; // Wait for serial port to be available
+  Serial.println("Start LoRa Client");
+  if (!rf95.init())
+    Serial.println("init failed");
+  // Setup ISM frequency
+  rf95.setFrequency(frequency);
+  // Setup Power,dBm
+  rf95.setTxPower(13);
+
+  // Setup Spreading Factor (6 ~ 12)
+  rf95.setSpreadingFactor(7);
+  
+  // Setup BandWidth, option: 7800,10400,15600,20800,31200,41700,62500,125000,250000,500000
+  //Lower BandWidth for longer distance.
+  rf95.setSignalBandwidth(125000);
+  
+  // Setup Coding Rate:5(4/5),6(4/6),7(4/7),8(4/8) 
+  rf95.setCodingRate4(5);
+}
+
+void loop()
+{
+uint8_t data[]="00000";
+  data[0]='c';
+
+  if(digitalRead(pin8))
+  data[1]='1';
+  else 
+  data[1]='0';
+
+
+  if(digitalRead(pin9))
+  data[2]='1';
+  else 
+  data[2]='0';
+
+  if(digitalRead(pin10))
+  data[3]='1';
+  else 
+  data[3]='0';
+
+  if(digitalRead(pin11))
+  data[4]='1';
+  else 
+  data[4]='0';
+  
+  Serial.println("Sending to LoRa Server");
+  // Send a message to LoRa Server
+  rf95.send(data, sizeof(data));
+  
+  rf95.waitPacketSent();
+  // Now wait for a reply
+  uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+  uint8_t len = sizeof(buf);
+
+  if (rf95.waitAvailableTimeout(3000))
+  { 
+    // Should be a reply message for us now   
+    if (rf95.recv(buf, &len))
+   {
+      Serial.print("got reply: ");
+      Serial.println((char*)buf);
+      Serial.print("RSSI: ");
+      Serial.println(rf95.lastRssi(), DEC);  
+
+         if(*(buf)=='s')  
+      {
+        if(*(buf+1)=='1')
+        digitalWrite(pin4, HIGH);
+        else
+        digitalWrite(pin4, LOW);
+        
+        if(*(buf+2)=='1')
+        digitalWrite(pin5, HIGH);
+        else
+        digitalWrite(pin5, LOW);
+
+        if(*(buf+3)=='1')
+        digitalWrite(pin6, HIGH);
+        else
+        digitalWrite(pin6, LOW);
+
+        if(*(buf+4)=='1')
+        digitalWrite(pin7, HIGH);
+        else
+        digitalWrite(pin7, LOW);
+        
+      }
+
+
+
+      
+    }
+    else
+    {
+      Serial.println("recv failed");
+    }
+  }
+  else
+  {
+    Serial.println("No reply, is LoRa server running?");
+  }
+  delay(5000);
+}
