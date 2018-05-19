@@ -10,14 +10,11 @@ float frequency = 434.0;
 //sending
 int pin4 = 4;
 int pin5 = 5;
-int pin6 = 6;
-int pin7 = 7;
+
 
 //receiving
-int pin8 = 8;
-int pin9 = 9;
-int pin10 = 10;
-int pin11 = 11;
+int pin6 = 6;
+int pin7 = 7;
 
 
 void setup() 
@@ -40,7 +37,7 @@ void setup()
 void loop()
 {
 
-uint8_t data[]="00000";
+uint8_t data[]="000";
   data[0]='s';
 
   if(digitalRead(pin4))
@@ -53,17 +50,6 @@ uint8_t data[]="00000";
   data[2]='1';
   else 
   data[2]='0';
-
-  if(digitalRead(pin6))
-  data[3]='1';
-  else 
-  data[3]='0';
-
-  if(digitalRead(pin7))
-  data[4]='1';
-  else 
-  data[4]='0';
-
   
   if (rf95.available())
   {
@@ -82,27 +68,22 @@ uint8_t data[]="00000";
       if(*(buf)=='c')  
       {
         if(*(buf+1)=='1')
-        digitalWrite(pin8, HIGH);
+        digitalWrite(pin6, HIGH);
         else
-        digitalWrite(pin8, LOW);
+        digitalWrite(pin6, LOW);
         
         if(*(buf+2)=='1')
-        digitalWrite(pin9, HIGH);
+        digitalWrite(pin7, HIGH);
         else
-        digitalWrite(pin9, LOW);
+        digitalWrite(pin7, LOW);
 
-        if(*(buf+3)=='1')
-        digitalWrite(pin10, HIGH);
-        else
-        digitalWrite(pin10, LOW);
-
-        if(*(buf+4)=='1')
-        digitalWrite(pin11, HIGH);
-        else
-        digitalWrite(pin11, LOW);
         
       }
-      
+     int i;
+  for (i = 0; i < 2; i = i + 1) 
+  {
+  Serial.print((char)*(data+i));
+  } 
       // Send a reply
       rf95.send(data, sizeof(data));
       rf95.waitPacketSent();
