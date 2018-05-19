@@ -8,14 +8,11 @@ float frequency = 434.0;
 //receiving
 int pin4 = 4;
 int pin5 = 5;
+
+//sending
 int pin6 = 6;
 int pin7 = 7;
 
-//sending
-int pin8 = 8;
-int pin9 = 9;
-int pin10 = 10;
-int pin11 = 11;
 
 void setup() 
 {
@@ -42,29 +39,25 @@ void setup()
 
 void loop()
 {
-uint8_t data[]="00000";
+uint8_t data[]="000";
   data[0]='c';
 
-  if(digitalRead(pin8))
+  if(digitalRead(pin6))
   data[1]='1';
   else 
   data[1]='0';
 
 
-  if(digitalRead(pin9))
+  if(digitalRead(pin7))
   data[2]='1';
   else 
   data[2]='0';
 
-  if(digitalRead(pin10))
-  data[3]='1';
-  else 
-  data[3]='0';
-
-  if(digitalRead(pin11))
-  data[4]='1';
-  else 
-  data[4]='0';
+  int i;
+  for (i = 0; i < 2; i = i + 1) 
+  {
+  Serial.print((char)*(data+i));
+  }
   
   Serial.println("Sending to LoRa Server");
   // Send a message to LoRa Server
@@ -96,16 +89,6 @@ uint8_t data[]="00000";
         digitalWrite(pin5, HIGH);
         else
         digitalWrite(pin5, LOW);
-
-        if(*(buf+3)=='1')
-        digitalWrite(pin6, HIGH);
-        else
-        digitalWrite(pin6, LOW);
-
-        if(*(buf+4)=='1')
-        digitalWrite(pin7, HIGH);
-        else
-        digitalWrite(pin7, LOW);
         
       }
 
