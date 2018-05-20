@@ -24,9 +24,6 @@ Serial.println(frequency);
 
 void loop()
 {
-
-uint8_t data[]="s0";
-
   if (rf95.available())
   {
     // Should be a message for us now   
