@@ -1,0 +1,22 @@
+##working with maps
+install.packages("maps")
+install.packages("mapdata")
+library(maps)
+library(mapdata)
+map('world')
+map('lakes', add=TRUE, fill=TRUE, col='white', boundary='black')
+
+Ref:  http://www.molecularecologist.com/2012/09/making-maps-with-r/
+
+##working with google map
+For google map do the followings
+
+install.packages("RgoogleMaps")
+install.packages("grid")
+install.packages("ggmap")
+install.packages("ggplot2")
+install.packages("RgoogleMaps")
+
+then as per the followings site.
+
+http://yarkerconsulting.com/index.php/blog/15-google-maps-and-r
