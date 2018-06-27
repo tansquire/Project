@@ -1,3 +1,7 @@
+##reading text file from windows 10
+inp <- read.table("C:/Program Files/R/R-3.5.0/test.txt",header=TRUE)
+inp
+
 ##working with maps
 install.packages("maps")
 install.packages("mapdata")
@@ -20,3 +24,4 @@ install.packages("RgoogleMaps")
 then as per the followings site.
 
 http://yarkerconsulting.com/index.php/blog/15-google-maps-and-r
+
