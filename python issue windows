@@ -1,0 +1,6 @@
+my comp->properties->advanced system settings->advanced tab->environment variable
+
+under system variable, click on path and then edit
+Click on new and add the following path
+C:\Python27             ...command like python C:\Users\00082964\Downloads\pymodbus-1.5.2\pymodbus-1.5.2\setup.py install will work
+C:\Python27\Scripts     ...pip will run after this
