@@ -75,8 +75,10 @@ void loop()
       Serial.println(value);
       count = Toint(value,j-i-1);
       Serial.println(count+1);
-      float count1=((count-204)*1024.0/819)*255/1024;
-      Serial.println((int)count1);
+      float count1=(((count-204)*1024.0/819)*255/1024);
+      float count2=count1*20.0/255.0;
+      //Serial.println((int)count2);
+      Serial.println(count2);
       analogWrite(analogOutPin, (int)count1);
 
   
