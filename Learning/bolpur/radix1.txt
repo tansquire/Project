@@ -1,0 +1,176 @@
+import time
+import mysql.connector
+import RPi.GPIO as GPIO
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+from pymodbus.register_read_message import ReadHoldingRegistersResponse
+sp=30
+#setpoint=30
+cylinder_high=5
+cylinder_dev=6
+gearbox_high=13
+pump_de_high=19
+pump_nde_high=26
+sensor_fault=21
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(cylinder_high, GPIO.OUT)
+GPIO.setup(cylinder_dev, GPIO.OUT)
+GPIO.setup(gearbox_high, GPIO.OUT)
+GPIO.setup(pump_de_high, GPIO.OUT)
+GPIO.setup(pump_nde_high, GPIO.OUT)
+GPIO.setup(sensor_fault, GPIO.OUT)
+GPIO.output(cylinder_high, GPIO.LOW)
+GPIO.output(cylinder_dev, GPIO.LOW)
+GPIO.output(gearbox_high, GPIO.LOW)
+GPIO.output(pump_de_high, GPIO.LOW)
+GPIO.output(pump_nde_high, GPIO.LOW)
+GPIO.output(sensor_fault, GPIO.LOW)
+
+
+def Average(lst):
+ return sum(lst) / len(lst)
+
+def Get_sp():
+    try:
+        conn = mysql.connector.connect(user='root', password='123456', host ='192.168.1.100', database='scanner')
+        if conn.is_connected():
+            print('getting remote SP..')
+            mycursor = conn.cursor()
+            mycursor.execute("select * from temperature2 where id =1")
+            list1=mycursor.fetchall()
+            #print(list1[0][23])
+            sp=list1[0][23]
+            
+ 
+    except:
+        print("Getting local set point")
+        sp=30
+        
+ 
+    finally:
+        conn.close()
+	mycursor.close()
+
+    return sp
+
+
+def Import(s,dev,x):
+    try:
+        conn = mysql.connector.connect(user='root', password='123456', host ='192.168.1.100', database='scanner')
+        if conn.is_connected():
+            print('Connected to MySQL database')
+            mycursor = conn.cursor()
+            mycursor.execute("update temperature2 set t1 = '%s',t2 = '%s',t3 = '%s',t4 = '%s',t5 = '%s',t6 = '%s',t7 = '%s', t8 = '%s', t9 = '%s',t10 = '%s',t11 = '%s',t12 = '%s',t13 = '%s', t14 = '%s', t15 = '%s',avg = '%s', dev1 = '%s',dev2 = '%s',dev3 = '%s',dev4 = '%s',dev5 = '%s',dev6 = '%s' where id =1" %(s[0]/10,s[1]/10, s[2]/10, s[3]/10, s[4]/10,s[5]/10,s[6]/10,s[7]/10,s[8]/10,s[9]/10,s[10]/10,s[11]/10,s[12]/10, s[13]/10, s[14]/10, x, dev[0]/10,dev[1]/10,dev[2]/10,dev[3]/10,dev[4]/10,dev[5]/10))
+            #print(Average (cylinder))
+            conn.commit()
+            
+ 
+    except:
+        print("MySQL connection lost")
+        client = ModbusClient(method='rtu', port='/dev/ttyUSB0', stopbits=1, timeout=5.0, bytesize=8, parity='N', baudrate='9600')
+        connection=client.connect()
+ 	value=client.read_holding_registers(0,15,unit=1)
+        if(value is not None):
+            print('Data available from scannar')
+            cylinder = (value.registers[0],value.registers[1],value.registers[2],value.registers[3],value.registers[4],value.registers[5])
+  	    y=Average (cylinder)
+            dev = (value.registers[0]-y,value.registers[1]-y,value.registers[2]-y,value.registers[3]-y,value.registers[4]-y,value.registers[5]-y)
+            print(value.registers)
+            print(dev)
+
+            if(value.registers[0]/10>430 or value.registers[1]/10>430 or value.registers[2]/10>430 or value.registers[3]/10>430 or value.registers[4]/10>430 or value.registers[5]/10>430):
+             print("cylinder temp high")
+             GPIO.output(cylinder_high, GPIO.HIGH)
+            else:
+             GPIO.output(cylinder_high, GPIO.LOW)
+            if(abs(dev[0])/10>setpoint or abs(dev[1])/10>setpoint or abs(dev[2])/10>setpoint or abs(dev[3])/10>setpoint or abs(dev[4])/10>setpoint or abs(dev[5])/10>setpoint):
+             print("exhaust temp deviation high")
+ 	     GPIO.output(cylinder_dev, GPIO.HIGH)
+	    else:
+ 	     GPIO.output(cylinder_dev, GPIO.LOW)
+	    if(value.registers[9]/10>90):
+             print("Gearbox LS shaft DE temp high")
+             GPIO.output(gearbox_high, GPIO.HIGH)
+	    else:
+             GPIO.output(gearbox_high, GPIO.LOW)
+            if(value.registers[13]/10>92):
+             print("Pump DE bearing temp high")
+             GPIO.output(pump_de_high, GPIO.HIGH)
+	    else:
+             GPIO.output(pump_de_high, GPIO.LOW)
+	    if(value.registers[14]/10>92):
+             print("Pump NDE bearing temp high")
+             GPIO.output(pump_nde_high, GPIO.HIGH)
+	    else:
+             GPIO.output(pump_nde_high, GPIO.LOW)
+        client.close()
+
+
+
+ 
+    finally:
+        conn.close()
+	mycursor.close()
+
+    return 
+
+
+
+
+while (1):
+    setpoint=Get_sp()
+    print setpoint
+    try:
+        client = ModbusClient(method='rtu', port='/dev/ttyUSB0', stopbits=1, timeout=2.0, bytesize=8, parity='N', baudrate='9600')
+        connection=client.connect()
+ 	value=client.read_holding_registers(0,15,unit=1)
+        if(value is not None):
+            print('Data available from scannar')
+            cylinder = (value.registers[0],value.registers[1],value.registers[2],value.registers[3],value.registers[4],value.registers[5])
+  	    y=Average (cylinder)
+            dev = (value.registers[0]-y,value.registers[1]-y,value.registers[2]-y,value.registers[3]-y,value.registers[4]-y,value.registers[5]-y)
+            print(value.registers)
+            print(dev)
+            
+
+            if(value.registers[0]/10>430 or value.registers[1]/10>430 or value.registers[2]/10>430 or value.registers[3]/10>430 or value.registers[4]/10>430 or value.registers[5]/10>430):
+             print("cylinder temp high")
+             GPIO.output(cylinder_high, GPIO.HIGH)
+            else:
+             GPIO.output(cylinder_high, GPIO.LOW)
+            if(dev[0]/10>setpoint or dev[1]/10>setpoint or dev[2]/10>setpoint or dev[3]/10>setpoint or dev[4]/10>setpoint or dev[5]/10>setpoint):
+             print("exhaust temp deviation high")
+ 	     GPIO.output(cylinder_dev, GPIO.HIGH)
+	    else:
+ 	     GPIO.output(cylinder_dev, GPIO.LOW)
+	    if(value.registers[9]/10>90):
+             print("Gearbox LS shaft DE temp high")
+             GPIO.output(gearbox_high, GPIO.HIGH)
+	    else:
+             GPIO.output(gearbox_high, GPIO.LOW)
+            if(value.registers[13]/10>92):
+             print("Pump DE bearing temp high")
+             GPIO.output(pump_de_high, GPIO.HIGH)
+	    else:
+             GPIO.output(pump_de_high, GPIO.LOW)
+	    if(value.registers[14]/10>92):
+             print("Pump NDE bearing temp high")
+             GPIO.output(pump_nde_high, GPIO.HIGH)
+	    else:
+             GPIO.output(pump_nde_high, GPIO.LOW)
+            
+            
+
+            Import(value.registers,dev,y)
+            
+ 
+    except:
+        print("No data coming from scannar")
+ 
+    finally:
+        client.close()
+	
+
+    time.sleep(0.25)
+
+
+
