@@ -1,0 +1,20 @@
+my comp->properties->advanced system settings->advanced tab->environment variable
+
+under system variable, click on path and then edit
+Click on new and add the following path
+C:\Python27
+C:\Python27\Scripts     ...pip will run after this
+
+
+python C:\Users\00082964\Downloads\pymodbus-1.5.2\pymodbus-1.5.2\setup.py install
+
+
+python C:\Users\00082964\Downloads\six-1.11.0\six-1.11.0\setup.py install
+
+
+for both pymodbus and six
+
+
+python C:\Users\00082964\Downloads\pymodbus-1.5.2\pymodbus-1.5.2\setup.py install --proxy="00082964:pass@123@plproxy.ds.indianoil.in:8080"
+
+\\.\COM10
