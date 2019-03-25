@@ -1,0 +1,35 @@
+//Capacitor used=100 micro Farad. Resistor used=220 ohm..
+
+
+
+int DigitalIn13 = 13; //Input of pulses
+int Voltage = 9; //Voltage from frequency conversion (output pin supporting PWM)
+
+float Frequency = 0; //Frequency of the pulses
+unsigned long HighTime; //the HIGH time of pulses
+unsigned long LowTime; //the LOW time of pulses
+unsigned long Period; //period = HighTime + LowTime
+unsigned int volt = 0; // Variable to hold the voltage read
+//int frequen = 100; //Set frequency in Hertz
+//double delayTime = 1000 / (frequen * 2);
+void setup() {
+   Serial.begin(9600);
+   pinMode(DigitalIn13, INPUT); //sets pulses pin as input
+   pinMode(Voltage, OUTPUT); // sets voltage pin as output
+   //pinMode(11, OUTPUT);// For generating frequency
+   pinMode(10, INPUT);
+}
+
+void loop() {
+
+HighTime = pulseIn(DigitalIn13, HIGH); //the HIGH time of pulses in ms
+LowTime = pulseIn(DigitalIn13, LOW); //the LOW time of pulses
+Period = HighTime + LowTime; //period
+Frequency = 1/(Period * 0.000001); //Frequency
+
+ volt = map(Frequency, 0, 180, 0, 255); //maps the frequency into voltage
+analogWrite(Voltage,volt); //writes voltage from frequency
+int sensorValue = analogRead(A0);
+Serial.println(sensorValue);
+Serial.println(Frequency);
+}
