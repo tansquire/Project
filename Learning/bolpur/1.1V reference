@@ -1,0 +1,38 @@
+#include <LiquidCrystal.h>
+
+// initialize the library by associating any needed LCD interface pin
+// with the arduino pin number it is connected to
+const int rs = 2, en = 3, d4 = 4, d5 = 5, d6 = 6, d7 = 7;
+float vol, rpm_float, rpm_float_abs,vol_count;
+int rpm ;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+void setup() {
+  // put your setup code here, to run once:
+lcd.begin(16, 2);
+  // Print a message to the LCD.
+  analogReference(INTERNAL);
+  lcd.print("ENGINE RPM");
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  rpm =0;
+vol_count=analogRead (A0);
+vol= (vol_count/1023.0)*1.1;
+if((vol-0.24)>0){
+rpm_float = ((vol-0.24)/(1.1-0.24))*900.0;
+//rpm_float_abs= abs(rpm_float);
+rpm = (int) rpm_float;
+
+}
+lcd.setCursor(0, 1);
+lcd.print(rpm);
+
+
+Serial.println(vol);
+Serial.println(rpm_float);
+Serial.println(rpm);
+delay (500);
+}
