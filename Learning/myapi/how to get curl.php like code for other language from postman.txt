@@ -1,0 +1,42 @@
+<?php
+// write $curl = curl_init();
+//extract token here
+// write curl_close($curl);
+
+//following part got from postman
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => "http://localhost/test/jwt-api/",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => "{\r\n\"name\":\"getCustomerDetails\",\r\n\"param\":{\r\n\"customerId\":6\r\n}\r\n}",  //give input JSON request here
+  CURLOPT_HTTPHEADER => array(
+    "Accept: */*",
+    "Accept-Encoding: gzip, deflate",
+    "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjY4MzMwNzUsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTU2NjgzMzk3NSwidXNlcklkIjoiMSJ9.D01NSRi7dnh1JAKdraSKvxWY84Ksc6Gx78RhFLwDOFM", //write here Bearer $token",
+    "Cache-Control: no-cache",
+    "Connection: keep-alive",
+    "Content-Length: 64",
+    "Content-Type: application/json", //ensure that application/json  here
+    "Host: localhost",
+    "Postman-Token: 3294f987-a9a2-434c-8142-ca298bb111bd,1e0f0583-a2e2-49ab-8a7a-24182f12ab17",
+    "User-Agent: PostmanRuntime/7.15.2",
+    "cache-control: no-cache"
+  ),
+));
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}

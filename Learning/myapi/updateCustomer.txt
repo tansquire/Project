@@ -1,0 +1,9 @@
+{
+"name":"updateCustomer",
+"param":{
+"customerId":1,
+"name":"biplab",
+"addr":"pune",
+"mobile":"9999888"
+}
+}

@@ -1,0 +1,6 @@
+{
+"name":"getCustomerDetails",
+"param":{
+"customerId":1
+}
+}

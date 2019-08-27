@@ -1,0 +1,7 @@
+{
+"name":"generateToken",
+"param":{
+"email":"dsahani@gmail.com",
+"pass":"pass123"
+}
+}

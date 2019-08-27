@@ -1,0 +1,6 @@
+{
+"name":"deleteCustomer",
+"param":{
+"customerId":1
+}
+}

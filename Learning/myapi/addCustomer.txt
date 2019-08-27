@@ -1,0 +1,13 @@
+Enter the json under body
+
+{
+"name":"addCustomer",
+"param":{
+"name":"partha",
+"email":"gaahg@f",
+"addr":"kolkata",
+"mobile":"9999999"
+}
+}
+
+Enter Brarer "token" under Header tab with key "Authorization"
