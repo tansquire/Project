@@ -1,0 +1,6 @@
+{
+"name":"deleteWord",
+"param":{
+"wordId":1
+}
+}

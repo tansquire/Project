@@ -1,0 +1,9 @@
+{
+"name":"updateWord",
+"param":{
+"wordId":1,
+"pos1":"biplab",
+"sentence":"pune",
+"meaning":"9999888"
+}
+}
