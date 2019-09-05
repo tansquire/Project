@@ -1,0 +1,13 @@
+Enter the json under body
+
+{
+"name":"addWord",
+"param":{
+"pos1":"noun",
+"word":"proud",
+"sentence":"I am proud of you",
+"meaning":"সুন্দর"
+}
+}
+
+Enter Brarer "token" under Header tab with key "Authorization"
