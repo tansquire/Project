@@ -1,0 +1,6 @@
+{
+"name":"getWordDetails1",
+"param":{
+"wordName":"abandon"
+}
+}

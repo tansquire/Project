@@ -1,0 +1,2 @@
+id	name	email	address		mobile		updated_by	updated_on	created_by	created_on
+id	pos1	word	sentence 	meaning		updated_by	updated_on	created_by	created_on

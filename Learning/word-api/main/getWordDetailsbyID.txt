@@ -1,0 +1,6 @@
+{
+"name":"getWordDetails",
+"param":{
+"wordId":1
+}
+}
