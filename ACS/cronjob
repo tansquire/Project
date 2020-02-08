@@ -1,0 +1,11 @@
+
+
+
+
+
+
+@reboot sudo python /home/pi/acs.py > /home/pi/acslog.txt
+
+
+
+grep cron /var/log/syslog      (check bootlog)
