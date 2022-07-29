@@ -1,0 +1,41 @@
+#!/bin/python
+
+from pyModbusTCP.server import ModbusServer, DataBank
+from time import sleep
+from random import uniform
+
+# Create an instance of ModbusServer
+server = ModbusServer("127.0.0.1", 502, no_block=True)
+
+try:
+    print("Start server...")
+    server.start()
+    print("Server is online")
+    state = [0]
+    while True:
+        server.data_bank.set_holding_registers(0, [int(uniform(0, 100))]*8)
+        if state != server.data_bank.get_holding_registers(1,8):
+            state = server.data_bank.get_holding_registers(1,8)
+            print("Value of Register 1 has changed to " +str(state))
+            
+        server.data_bank.set_input_registers(0, [int(uniform(0, 100))]*8)
+        if state != server.data_bank.get_input_registers(1,8):
+            state = server.data_bank.get_input_registers(1,8)
+            print("Value of Register 1 has changed to " +str(state))
+        
+        server.data_bank.set_discrete_inputs(0, [True]*8)
+        if state != server.data_bank.get_discrete_inputs(1,8):
+            state = server.data_bank.get_discrete_inputs(1,8)
+            print("Value of Register 1 has changed to " +str(state))
+            
+        server.data_bank.set_coils(0, [True]*8)
+        if state != server.data_bank.get_coils(1,8):
+            state = server.data_bank.get_coils(1,8)
+            print("Value of Register 1 has changed to " +str(state))
+            
+        sleep(0.5)
+
+except:
+    print("Shutdown server ...")
+    server.stop()
+    print("Server is offline")
